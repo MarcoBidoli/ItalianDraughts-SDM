@@ -15,4 +15,8 @@ public class Cell {
     public Color getColor() {
         return this.cellColor;
     }
+
+    public void setColor(Color cellColor) {
+        this.cellColor = cellColor;
+    }
 }
