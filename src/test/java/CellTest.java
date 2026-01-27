@@ -22,32 +22,38 @@ public class CellTest {
     }
 
     @Test
-    void putWhitePieceOnCell() {
+    void putWhitePieceOnCell() throws InvalidMoveException {
         Cell target = new Cell(Color.BLACK);
-        assertTrue(target.putPieceOn(new Piece(Color.WHITE)));
+        target.putPieceOn(new Piece(Color.WHITE));
+        assertNotNull(target.getPiece());
     }
 
     @Test
-    void putBlackPieceOnCell() {
+    void putBlackPieceOnCell() throws InvalidMoveException {
         Cell target = new Cell(Color.BLACK);
-        assertTrue(target.putPieceOn(new Piece(Color.BLACK)));
+        target.putPieceOn(new Piece(Color.BLACK));
+        assertNotNull(target.getPiece());
     }
 
     @Test
-    void putPieceOnOccupiedCell() {
+    void putPieceOnOccupiedCell() throws InvalidMoveException {
         Cell target = new Cell(Color.BLACK);
-        target.putPieceOn(new Piece(Color.WHITE)); // First piece on cell target
-        assertFalse(target.putPieceOn(new Piece(Color.BLACK))); // Putting another piece should return a false
+
+        target.putPieceOn(new Piece(Color.WHITE));  // Place the first piece normally
+
+        assertThrows(InvalidMoveException.class, () -> {
+            target.putPieceOn(new Piece(Color.BLACK));   // Putting another piece
+        });
     }
 
     @Test
     void putPieceOnWhiteCell() {
-        Cell target = new Cell(Color.WHITE); // Pieces on white cells are not allowed
-        assertFalse(target.putPieceOn(new Piece(Color.BLACK)));
+        Cell target = new Cell(Color.WHITE);
+        assertThrows(InvalidMoveException.class, () -> target.putPieceOn(new Piece(Color.BLACK)));
     }
 
     @Test
-    void emptyCell() {
+    void emptyCell() throws InvalidMoveException {
         Cell target = new Cell(Color.BLACK);
         target.putPieceOn(new Piece(Color.WHITE));
         target.empty();// Piece on cell target
