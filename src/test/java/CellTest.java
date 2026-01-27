@@ -45,4 +45,12 @@ public class CellTest {
         Cell target = new Cell(Color.WHITE); // Pieces on white cells are not allowed
         assertFalse(target.putPieceOn(new Piece(Color.BLACK)));
     }
+
+    @Test
+    void emptyCell() {
+        Cell target = new Cell(Color.BLACK);
+        target.putPieceOn(new Piece(Color.WHITE));
+        target.empty();// Piece on cell target
+        assertEquals(null, target.getPiece());
+    }
 }
