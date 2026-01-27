@@ -9,4 +9,16 @@ public class BoardTest {
         Board board = new Board();
         assertEquals(Color.BLACK, board.getCellColor(7,7));
     }
+
+    @Test
+    public void checkNWBlack() {
+        Board board = new Board();
+        assertEquals(Color.BLACK, board.getCellColor(0,0));
+    }
+
+    @Test
+    public void emptyTest() {
+        Board board = new Board();
+        assertEquals(true, board.isEmpty());
+    }
 }
