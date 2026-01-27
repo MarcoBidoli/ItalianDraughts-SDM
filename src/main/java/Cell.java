@@ -9,9 +9,7 @@ public class Cell {
     }
 
     public boolean isEmpty() {
-        if(this.piece == null)
-            return true;
-        else return false;
+        return this.piece == null;
     }
 
     public Color getColor() {
