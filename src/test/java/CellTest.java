@@ -51,6 +51,6 @@ public class CellTest {
         Cell target = new Cell(Color.BLACK);
         target.putPieceOn(new Piece(Color.WHITE));
         target.empty();// Piece on cell target
-        assertEquals(null, target.getPiece());
+        assertNull(target.getPiece());
     }
 }
