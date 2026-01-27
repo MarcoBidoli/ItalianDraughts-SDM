@@ -15,4 +15,18 @@ public class Cell {
     public Color getColor() {
         return this.cellColor;
     }
+
+    public void setColor(Color color) {
+        this.cellColor = color;
+    }
+
+    public boolean putPieceOn(Piece p) {
+        if(this.getColor() == Color.BLACK) {
+            if(this.piece == null) {
+                this.piece = p;
+                return true;
+            }
+        }
+        return false;
+    }
 }
