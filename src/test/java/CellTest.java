@@ -53,4 +53,10 @@ public class CellTest {
         target.empty();// Piece on cell target
         assertNull(target.getPiece());
     }
+
+    @Test
+    public void nonEmptyCell() {
+        Cell cell = new Cell(Color.BLACK);
+        assertNull(cell.getPiece());
+    }
 }
