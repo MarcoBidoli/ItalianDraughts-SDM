@@ -29,4 +29,12 @@ public class Cell {
         }
         return false;
     }
+
+    public void empty() {
+        this.piece = null;
+    }
+
+    public Piece getPiece() {
+        return this.piece;
+    }
 }
