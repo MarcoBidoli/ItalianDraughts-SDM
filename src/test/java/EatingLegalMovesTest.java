@@ -6,5 +6,8 @@ public class EatingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.WHITE, 5, 2);
         board.placePiece(Color.BLACK, 4, 3);
+
+        Action action = new Action(board, Color.WHITE);
+
     }
 }
