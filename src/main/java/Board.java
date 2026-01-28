@@ -92,4 +92,29 @@ public class Board {
     public boolean isOnBoard(int i, int j) {
         return i >= 0 && i < 8 && j >= 0 && j < 8;
     }
+
+    public void printBoard() {
+        IO.println(this.getBoardRepresentation());
+    }
+
+    public String getBoardRepresentation() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("   0  1  2  3  4  5  6  7\n");
+
+        for(int i = 0; i < board.length; i++) {
+            sb.append(i).append(" ");
+            for(int j = 0; j < board[i].length; j++) {
+                if (board[i][j].isEmpty()) {
+                    sb.append(" . ");
+                } else {
+                    Piece p = board[i][j].getPiece();
+                    char symbol = (p.getColor() == Color.WHITE) ? '⛀' : '⛂';
+                    if(p.isKing()) symbol = (p.getColor() == Color.WHITE) ? '⛁' : '⛃';;
+                    sb.append(" ").append(symbol).append(" ");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

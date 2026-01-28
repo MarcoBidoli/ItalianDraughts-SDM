@@ -54,4 +54,11 @@ public class BoardTest {
         assertEquals(12, w);
         assertEquals(12, b);
     }
+
+    @Test
+    public void printBoard() {
+        Board board = new Board();
+        board.setGame();
+        board.printBoard();
+    }
 }
