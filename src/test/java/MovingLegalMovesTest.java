@@ -20,7 +20,7 @@ public class MovingLegalMovesTest {
         // Result should contain one sub-list (for one piece) with two moves: (1,1) and (1,3)
         assertEquals(1, result.size());
 
-        List<Move> pieceMoves = result.get(0);
+        List<Move> pieceMoves = result.getFirst();
         assertEquals(2, pieceMoves.size()); // 2 moves for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 1 && m.toCol == 1)); // (2,2) -> (1,1)
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 1 && m.toCol == 3)); // (2,2) -> (1,3)
@@ -38,7 +38,7 @@ public class MovingLegalMovesTest {
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
 
-        List<Move> pieceMoves = result.get(0);
+        List<Move> pieceMoves = result.getFirst();
         assertEquals(1, pieceMoves.size()); // 1 move for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 4 && m.toCol == 6)); // (5,7) -> (4,6)
     }
@@ -55,7 +55,7 @@ public class MovingLegalMovesTest {
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
 
-        List<Move> pieceMoves = result.get(0);
+        List<Move> pieceMoves = result.getFirst();
         assertEquals(1, pieceMoves.size()); // 1 move for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 1)); // (4,0) -> (3,1)
     }
@@ -92,7 +92,7 @@ public class MovingLegalMovesTest {
         // Result should contain one sub-list (for one piece) with two moves: (1,1) and (1,3)
         assertEquals(1, result.size());
 
-        List<Move> pieceMoves = result.get(0);
+        List<Move> pieceMoves = result.getFirst();
         assertEquals(2, pieceMoves.size()); // 2 moves for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 3)); // (2,4) -> (4,3)
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 5)); // (2,4) -> (4,5)
@@ -110,7 +110,7 @@ public class MovingLegalMovesTest {
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
 
-        List<Move> pieceMoves = result.get(0);
+        List<Move> pieceMoves = result.getFirst();
         assertEquals(1, pieceMoves.size()); // 1 move for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 4 && m.toCol == 6)); // (3,7) -> (4,6)
     }
@@ -127,7 +127,7 @@ public class MovingLegalMovesTest {
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
 
-        List<Move> pieceMoves = result.get(0);
+        List<Move> pieceMoves = result.getFirst();
         assertEquals(1, pieceMoves.size()); // 1 move for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 1)); // (2,0) -> (3,1)
     }
