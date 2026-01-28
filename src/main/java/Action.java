@@ -34,15 +34,11 @@ public class Action {
 
         // Putting all player pieces coordinates in a list
         List<Coords> myPiecesCoords = new ArrayList<>();
-        for(int i=0; i < 8; i++) {
-            for(int j=0; j < 8; j++) {
-                if(gameBoard.getCell(i,j).getPiece()!=null) {
-                    if(gameBoard.getCell(i,j).getPiece().getColor().equals(player)) {
+        for(int i=0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (gameBoard.getCell(i, j).getPiece() != null)
+                    if (gameBoard.getCell(i, j).getPiece().getColor().equals(player))
                         myPiecesCoords.add(new Coords(i, j));
-                    }
-                }
-            }
-        }
 
         // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
@@ -73,13 +69,13 @@ public class Action {
     }
 
     private void addCoordToLegalMoves(Coords coord, Coords destCellCoord, List<Move> movesForThisPiece) {
-        Cell destinationCell;
-        Move myMove;
-        destinationCell = gameBoard.getCell(destCellCoord.i(), destCellCoord.j());
-        if(destinationCell.isEmpty()) {
-             myMove = new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j());
-             movesForThisPiece.add(myMove);
-        }
+        // Avoid out of board moves
+        if ( !gameBoard.isOnBoard(destCellCoord.i(), destCellCoord.j()) ) return;
+
+        // The standard way
+        // check destination is empty
+        if(gameBoard.getCell(destCellCoord.i(), destCellCoord.j()).isEmpty())
+            movesForThisPiece.add(new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j()));
     }
 
     private List<List<Move>> kingEating() {
