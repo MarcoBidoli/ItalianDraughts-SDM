@@ -14,7 +14,7 @@ public class Action {
         this.direction = this.player.equals(Color.BLACK) ? 1 : -1;
     }
 
-    public List<List<Move>> possibleMoves() {
+    public List<List<Move>> possibleMoves() throws InvalidMoveException {
         List<List<Move>> moves = new ArrayList<>();
         moves.addAll(kingEating());
         if(!moves.isEmpty())
@@ -24,7 +24,7 @@ public class Action {
         return moves;
     }
 
-    private List<List<Move>> eating () {
+    private List<List<Move>> eating () throws InvalidMoveException {
         List<List<Move>> allEatings = new ArrayList<>();
         for(int i=0; i<8; i++) {
             for (int j = 0; j < 8; j++) {
