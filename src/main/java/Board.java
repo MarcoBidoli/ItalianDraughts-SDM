@@ -87,4 +87,9 @@ public class Board {
         emptyBoard();
         setGame();
     }
+
+    // Added for action branch support
+    public boolean isOnBoard(int i, int j) {
+        return i >= 0 && i < 8 && j >= 0 && j < 8;
+    }
 }
