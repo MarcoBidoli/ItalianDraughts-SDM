@@ -10,10 +10,26 @@ public class Action {
         this.player = player;
     }
 
-    public List<Move> possibleMoves() {
-        List<Move> moves = new ArrayList<>();
-
+    public List<List<Move>> possibleMoves() {
+        List<List<Move>> moves = new ArrayList<>();
+        moves.addAll(kingEating());
+        if(!moves.isEmpty())
+            moves.addAll(eating());
+        if(!moves.isEmpty())
+            moves.addAll(moving());
         return moves;
+    }
+
+    private List<List<Move>> eating () {
+
+    }
+
+    private List<List<Move>> moving() {
+
+    }
+
+    private List<List<Move>> kingEating() {
+
     }
 
 }
