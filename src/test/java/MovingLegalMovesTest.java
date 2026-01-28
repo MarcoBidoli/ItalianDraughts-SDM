@@ -7,6 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MovingLegalMovesTest {
 
+    private List<Move> getMovesForPiece(List<List<Move>> allMoves, int testedPieceRow, int testedPieceCol) {
+        return allMoves.stream()
+                .filter(list -> !list.isEmpty() &&
+                        list.getFirst().fromRow == testedPieceRow &&
+                        list.getFirst().fromCol == testedPieceCol)
+                .findFirst()// single list for each piece
+                .orElse(List.of()); // Return empty list if no moves found
+    }
+
     // All tests regarding WHITE standard moves
     @Test
     void whitePieceMovesFrontwards() throws InvalidMoveException {
@@ -77,7 +86,29 @@ public class MovingLegalMovesTest {
         assertTrue(allMoves.stream().noneMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 2 && m.toCol == 4)); // the move on the occupied cell does not
     }
 
-    /* TODO: insert tests for multiple sub-lists with legal moves here */
+    @Test
+    void multipleWhitePieces() throws InvalidMoveException {
+        Board board = new Board();
+        board.placePiece(Color.WHITE, 5, 3); // Expected moves (4,2) and (4,4)
+        board.placePiece(Color.WHITE, 5, 7); // Expected move (4,6)
+
+        Action action = new Action(board, Color.WHITE);
+        List<List<Move>> result = action.moving();
+
+        // moves for exactly 2 pieces
+        assertEquals(2, result.size());
+
+        // First piece
+        List<Move> movesA = getMovesForPiece(result, 5, 3);
+        assertEquals(2, movesA.size());
+        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 5 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 2));
+        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 5 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4));
+
+        // Second piece
+        List<Move> movesB = getMovesForPiece(result, 5, 7);
+        assertEquals(1, movesB.size());
+        assertTrue(movesB.stream().anyMatch(m -> m.fromRow == 5 && m.fromCol == 7 && m.toRow == 4 && m.toCol == 6));
+    }
 
     // All tests regarding BLACK standard moves
     @Test
@@ -149,5 +180,27 @@ public class MovingLegalMovesTest {
         assertTrue(allMoves.stream().noneMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4)); // the move on the occupied cell does not
     }
 
-    /* TODO: insert tests for multiple sub-lists with legal moves here */
+    @Test
+    void multipleBlackPieces() throws InvalidMoveException {
+        Board board = new Board();
+        board.placePiece(Color.BLACK, 3, 3); // Expected moves (4,2) and (4,4)
+        board.placePiece(Color.BLACK, 6, 0); // Expected move (7,1)
+
+        Action action = new Action(board, Color.BLACK);
+        List<List<Move>> result = action.moving();
+
+        // moves for exactly 2 pieces
+        assertEquals(2, result.size());
+
+        // First piece
+        List<Move> movesA = getMovesForPiece(result, 3, 3);
+        assertEquals(2, movesA.size());
+        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 2));
+        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4));
+
+        // Second piece
+        List<Move> movesB = getMovesForPiece(result, 6, 0);
+        assertEquals(1, movesB.size());
+        assertTrue(movesB.stream().anyMatch(m -> m.fromRow == 6 && m.fromCol == 0 && m.toRow == 7 && m.toCol == 1));
+    }
 }
