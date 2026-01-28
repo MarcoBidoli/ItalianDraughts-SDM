@@ -60,6 +60,23 @@ public class MovingLegalMovesTest {
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 1)); // (4,0) -> (3,1)
     }
 
+    @Test
+    void whitePieceBlockedByFriend() throws InvalidMoveException {
+        Board board = new Board();
+        board.placePiece(Color.WHITE, 2, 4); // Block the left diagonal
+        board.placePiece(Color.WHITE, 3, 3);
+
+        Action action = new Action(board, Color.WHITE);
+        List<List<Move>> result = action.moving();
+
+        List<Move> allMoves = result.stream()
+                .flatMap(List::stream)
+                .toList();
+
+        assertTrue(allMoves.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 2 && m.toCol == 2)); // legal move exists
+        assertTrue(allMoves.stream().noneMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 2 && m.toCol == 4)); // the move on the occupied cell does not
+    }
+
     /* TODO: insert tests for multiple sub-lists with legal moves here */
 
     // All tests regarding BLACK standard moves
@@ -102,9 +119,9 @@ public class MovingLegalMovesTest {
     void blackPieceMovesFrontwardFromLeftEdgeOfBoard() throws InvalidMoveException {
         // Empty board with one White piece
         Board board = new Board();
-        board.placePiece(Color.WHITE, 2, 0);
+        board.placePiece(Color.BLACK, 2, 0);
 
-        Action action = new Action(board, Color.WHITE); // WHITE turn
+        Action action = new Action(board, Color.BLACK); // WHITE turn
         List<List<Move>> result = action.moving();
 
         // Result should contain one sub-list (for one piece) with one move
@@ -113,6 +130,23 @@ public class MovingLegalMovesTest {
         List<Move> pieceMoves = result.get(0);
         assertEquals(1, pieceMoves.size()); // 1 move for this piece
         assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 1)); // (2,0) -> (3,1)
+    }
+
+    @Test
+    void blackPieceBlockedByFriend() throws InvalidMoveException {
+        Board board = new Board();
+        board.placePiece(Color.BLACK, 3, 3);
+        board.placePiece(Color.BLACK, 4, 4); // Block the left diagonal
+
+        Action action = new Action(board, Color.BLACK);
+        List<List<Move>> result = action.moving();
+
+        List<Move> allMoves = result.stream()
+                .flatMap(List::stream)
+                .toList();
+
+        assertTrue(allMoves.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 2)); // legal move exists
+        assertTrue(allMoves.stream().noneMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4)); // the move on the occupied cell does not
     }
 
     /* TODO: insert tests for multiple sub-lists with legal moves here */
