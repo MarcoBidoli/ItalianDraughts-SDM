@@ -1,6 +1,14 @@
 public class Board {
     Cell[][] board;
 
+
+    /* TODO
+    * - add methods to work with pieces from a Board obj
+    *   e.g. instead of gameBoard[i][j].getCell().getPiece().getColor() -> gameBoard[i][j].getPlayerColor()
+    *       or gameBoard[i][j].isPieceKing() etc.
+    *
+     */
+
     public Board() {
         board = new Cell[8][8];
         initCells();
