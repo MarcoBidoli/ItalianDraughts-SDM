@@ -37,7 +37,7 @@ public class Action {
         return allEatings;
     }
 
-    private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) {
+    private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) throws InvalidMoveException {
         boolean hasEat = false;
         int[] dirs = new int[]{1, -1}; //possible directions (L/R)
 
