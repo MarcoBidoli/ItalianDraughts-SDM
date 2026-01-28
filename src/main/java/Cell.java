@@ -9,9 +9,7 @@ public class Cell {
     }
 
     public boolean isEmpty() {
-        if(this.piece == null)
-            return true;
-        else return false;
+        return this.piece == null;
     }
 
     public Color getColor() {
@@ -22,14 +20,14 @@ public class Cell {
         this.cellColor = color;
     }
 
-    public boolean putPieceOn(Piece p) {
-        if(this.getColor() == Color.BLACK) {
-            if(this.piece == null) {
-                this.piece = p;
-                return true;
-            }
+    public void putPieceOn(Piece p) throws InvalidMoveException {
+        if (this.getColor() != Color.BLACK) {
+            throw new InvalidMoveException("Pieces can only be placed on black cells");
         }
-        return false;
+        if (this.piece != null) {
+            throw new InvalidMoveException("Cell already occupied");
+        }
+        this.piece = p;
     }
 
     public void empty() {
