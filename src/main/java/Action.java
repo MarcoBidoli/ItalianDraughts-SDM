@@ -77,8 +77,7 @@ public class Action {
     private boolean canEat(int x, int y, int xOpp, int yOpp, int finX, int finY) {
         //compute whether the eating id doable or not
 
-        //TODO: substitute with isOnBoard Board method
-        if(finX < 0 || finX >= 8 || finY < 0 || finY >= 8)
+        if(!gameBoard.isOnBoard(finX, finY))
             return false;
 
         if(gameBoard.getCell(xOpp, yOpp).isEmpty() || gameBoard.getCell(xOpp, yOpp).getPiece().getColor() == player)
