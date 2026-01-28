@@ -1,5 +1,5 @@
 public class Board {
-    Cell[][] board;
+    private Cell[][] board;
 
 
     /* TODO
