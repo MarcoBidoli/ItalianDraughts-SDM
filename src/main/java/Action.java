@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public record Coords(int i, int j) {}
+record Coords(int i, int j) {}
 
 public class Action {
     private Board gameBoard;
@@ -25,72 +25,65 @@ public class Action {
     }
 
     private List<List<Move>> eating () {
-
+        return new ArrayList<>();
     }
 
     // TODO @MarcoBidoli
-    private List<List<Move>> moving() {
+    protected List<List<Move>> moving() {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 
+        // Putting all player pieces coordinates in a list
         List<Coords> myPiecesCoords = new ArrayList<>();
         for(int i=0; i < 8; i++) {
             for(int j=0; j < 8; j++) {
-                if(gameBoard.getCell(i,j).getPiece().getColor().equals(player)) {
-                    myPiecesCoords.add(new Coords(i,j));
+                if(gameBoard.getCell(i,j).getPiece()!=null) {
+                    if(gameBoard.getCell(i,j).getPiece().getColor().equals(player)) {
+                        myPiecesCoords.add(new Coords(i, j));
+                    }
                 }
             }
         }
 
+        // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
         for(Coords coord : myPiecesCoords) {
             List<Move> movesForThisPiece = new ArrayList<>();
-            Cell destinationCell;
             Coords destCellCoord;
-            Move myMove;
 
             // for all pieces, checking the frontwards moves
-
             // i+direction j+1
             destCellCoord = new Coords(coord.i()+direction, coord.j()+1);
-            destinationCell = gameBoard.getCell(destCellCoord.i(), destCellCoord.j());
-            if(destinationCell.isEmpty()) {
-                 myMove = new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j());
-                 movesForThisPiece.add(myMove);
-            }
+            addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
             // i+direction j-1
             destCellCoord = new Coords(coord.i()+direction, coord.j()-1);
-            destinationCell = gameBoard.getCell(destCellCoord.i(), destCellCoord.j());
-            if(destinationCell.isEmpty()) {
-                myMove = new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j());
-                movesForThisPiece.add(myMove);
-            }
+            addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
 
             // if king, checking the backwards moves
             if(gameBoard.getCell(coord.i(), coord.j()).getPiece().isKing()) {
                 // i-direction j+1
                 destCellCoord = new Coords(coord.i()-direction, coord.j()+1);
-                destinationCell = gameBoard.getCell(destCellCoord.i(), destCellCoord.j());
-                if(destinationCell.isEmpty()) {
-                    myMove = new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j());
-                    movesForThisPiece.add(myMove);
-                }
-
+                addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
                 // i-direction j-1
                 destCellCoord = new Coords(coord.i()-direction, coord.j()-1);
-                destinationCell = gameBoard.getCell(destCellCoord.i(), destCellCoord.j());
-                if(destinationCell.isEmpty()) {
-                    myMove = new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j());
-                    movesForThisPiece.add(myMove);
-                }
+                addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
             }
-
             listOfAllMoves.add(movesForThisPiece);
         }
         return listOfAllMoves;
     }
 
-    private List<List<Move>> kingEating() {
+    private void addCoordToLegalMoves(Coords coord, Coords destCellCoord, List<Move> movesForThisPiece) {
+        Cell destinationCell;
+        Move myMove;
+        destinationCell = gameBoard.getCell(destCellCoord.i(), destCellCoord.j());
+        if(destinationCell.isEmpty()) {
+             myMove = new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j());
+             movesForThisPiece.add(myMove);
+        }
+    }
 
+    private List<List<Move>> kingEating() {
+        return new ArrayList<>();
     }
 
 }
