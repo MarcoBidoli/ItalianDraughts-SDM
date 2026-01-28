@@ -25,10 +25,74 @@ public class Action {
     }
 
     private List<List<Move>> eating () {
-        return new ArrayList<>();
+        List<List<Move>> allEatings = new ArrayList<>();
+        for(int i=0; i<8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Cell c = gameBoard.getCell(i, j);
+                if (!c.isEmpty() && c.getPiece().getColor().equals(player)) {
+                    findEatings(i, j, new ArrayList<>(), allEatings);
+                }
+            }
+        }
+        return allEatings;
     }
 
-    // TODO @MarcoBidoli
+    private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) {
+        boolean hasEat = false;
+        int[] dirs = new int[]{1, -1}; //possible directions (L/R)
+
+        for(int i : dirs) { //do it for every direction
+            //eating "positions" - opponent and "over opponent"
+            int xOpp = x + direction;
+            int yOpp = y + i;
+            int finX = x + 2*direction;
+            int finY = y + 2*i;
+
+            if(canEat(x, y, xOpp, yOpp, finX, finY)){ //check if an eating is doable
+                hasEat = true;
+                eatings.add(new Move(x, y, finX, finY));
+                //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
+                Piece eaten = gameBoard.getCell(xOpp, yOpp).getPiece();
+                gameBoard.getCell(xOpp, yOpp).empty();
+                Piece moved = gameBoard.getCell(x, y).getPiece();
+                gameBoard.getCell(x, y).empty();
+                gameBoard.getCell(finX, finY).putPieceOn(moved);
+
+                //recursive call
+                findEatings(finX, finY, eatings, allEatings);
+
+                //restore the board
+                gameBoard.getCell(finX, finY).empty();
+                gameBoard.getCell(x, y).putPieceOn(moved);
+                eatings.removeLast();
+                gameBoard.getCell(xOpp, yOpp).putPieceOn(eaten);
+            }
+        }
+
+        //add the possible eating to the total possible eats list
+        if(!hasEat && !eatings.isEmpty())
+            allEatings.add(new ArrayList<>(eatings));
+    }
+
+    private boolean canEat(int x, int y, int xOpp, int yOpp, int finX, int finY) {
+        //compute whether the eating id doable or not
+
+        //TODO: substitute with isOnBoard Board method
+        if(finX < 0 || finX >= 8 || finY < 0 || finY >= 8)
+            return false;
+
+        if(gameBoard.getCell(xOpp, yOpp).isEmpty() || gameBoard.getCell(xOpp, yOpp).getPiece().getColor() == player)
+            return false;
+
+        if(!gameBoard.getCell(finX, finY).isEmpty())
+            return false;
+
+        if(!gameBoard.getCell(x,y).getPiece().isKing() && gameBoard.getCell(xOpp,yOpp).getPiece().isKing())
+            return false;
+
+        return true;
+    }
+
     protected List<List<Move>> moving() {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 
