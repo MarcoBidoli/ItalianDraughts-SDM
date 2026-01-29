@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestPiece {
+public class PieceTest {
     @Test
     void isKing() {
         Piece piece = new Piece(Color.BLACK);
