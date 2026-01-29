@@ -24,7 +24,7 @@ public class Action {
         return moves;
     }
 
-    private List<List<Move>> eating () throws InvalidMoveException {
+    protected List<List<Move>> eating () throws InvalidMoveException {
         List<List<Move>> allEatings = new ArrayList<>();
         for(int i=0; i<8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -35,6 +35,11 @@ public class Action {
             }
         }
         return allEatings;
+    }
+
+    private List<List<Move>> kingEating() {
+
+        return new ArrayList<>();
     }
 
     private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) throws InvalidMoveException {
@@ -141,8 +146,5 @@ public class Action {
             movesForThisPiece.add(new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j()));
     }
 
-    private List<List<Move>> kingEating() {
-        return new ArrayList<>();
-    }
 
 }
