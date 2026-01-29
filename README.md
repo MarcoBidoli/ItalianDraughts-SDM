@@ -34,6 +34,11 @@ This project is built using Gradle and programmed in Java.
 ./gradlew test
 ```
 
+# Javadocs
+```sh
+javadoc -d docs/javadocs src/main/java/*.java
+```
+
 # Authors
 - **Elisabetta Grandi**: https://github.com/ElisabettaGrandi
 - **Federico Castelli**: https://github.com/Red0210
