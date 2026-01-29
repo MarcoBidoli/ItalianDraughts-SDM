@@ -1,7 +1,9 @@
+import javax.management.monitor.GaugeMonitor;
 import java.util.ArrayList;
 import java.util.List;
 
-record Coords(int i, int j) {}
+record Coords(int i, int j) {
+}
 
 public class Action {
     private Board gameBoard;
@@ -16,17 +18,15 @@ public class Action {
 
     public List<List<Move>> possibleMoves() throws InvalidMoveException {
         List<List<Move>> moves = new ArrayList<>();
-        moves.addAll(kingEating());
-        if(!moves.isEmpty())
-            moves.addAll(eating());
-        if(!moves.isEmpty())
+        moves.addAll(eating());
+        if (!moves.isEmpty())
             moves.addAll(moving());
         return moves;
     }
 
-    protected List<List<Move>> eating () throws InvalidMoveException {
+    protected List<List<Move>> eating() throws InvalidMoveException {
         List<List<Move>> allEatings = new ArrayList<>();
-        for(int i=0; i<8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Cell c = gameBoard.getCell(i, j);
                 if (!c.isEmpty() && c.getPiece().getColor().equals(player)) {
@@ -34,28 +34,66 @@ public class Action {
                 }
             }
         }
+
+        if (!allEatings.isEmpty())
+            sortEatings(allEatings);
+
         return allEatings;
     }
 
-    private List<List<Move>> kingEating() {
+    private void sortEatings(List<List<Move>> allEatings) {
+        allEatings.sort((e1, e2) -> {
+            //eating length first
+            int l = Integer.compare(e2.size(), e1.size());
+            if (l != 0)
+                return l;
 
-        return new ArrayList<>();
+            //who eats
+            boolean isP1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
+            boolean isP2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
+            l = Boolean.compare(isP2K, isP1K);
+            if (l != 0)
+                return l;
+
+            //#kings eaten
+            int k1 = countKingsEaten(e1);
+            int k2 = countKingsEaten(e2);
+            int cmpK = Integer.compare(k1, k2);
+            if (cmpK != 0)
+                return cmpK;
+
+            return 0;
+        });
+    }
+
+    private int countKingsEaten(List<Move> eatings) {
+        int c = 0;
+        for (Move m : eatings) {
+            if (m instanceof EatingMove em)
+                if (em.kingEaten())
+                    c++;
+        }
+        return c;
     }
 
     private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) throws InvalidMoveException {
         boolean hasEat = false;
-        int[] dirs = new int[]{1, -1}; //possible directions (L/R)
+        int[][] dirs;
+        if(gameBoard.getCell(x,y).getPiece().isKing())
+            dirs = new int[][]{{1, -1}, {1, 1}, {-1, -1}, {-1, 1}};
+        else
+            dirs = new int[][]{{direction, -1}, {direction, 1}};
 
-        for(int i : dirs) { //do it for every direction
+        for (int i[] : dirs) { //do it for every direction
             //eating "positions" - opponent and "over opponent"
-            int xOpp = x + direction;
-            int yOpp = y + i;
-            int finX = x + 2*direction;
-            int finY = y + 2*i;
+            int xOpp = x + i[0];
+            int yOpp = y + i[1];
+            int finX = x + 2 * i[0];
+            int finY = y + 2 * i[1];
 
-            if(canEat(x, y, xOpp, yOpp, finX, finY)){ //check if an eating is doable
+            if (canEat(x, y, xOpp, yOpp, finX, finY)) { //check if an eating is doable
                 hasEat = true;
-                eatings.add(new Move(x, y, finX, finY));
+                eatings.add(new EatingMove(x, y, finX, finY, gameBoard.getCell(xOpp, yOpp).getPiece().isKing()));
                 //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
                 Piece eaten = gameBoard.getCell(xOpp, yOpp).getPiece();
                 gameBoard.getCell(xOpp, yOpp).empty();
@@ -75,23 +113,22 @@ public class Action {
         }
 
         //add the possible eating to the total possible eats list
-        if(!hasEat && !eatings.isEmpty())
+        if (!hasEat && !eatings.isEmpty())
             allEatings.add(new ArrayList<>(eatings));
     }
 
     private boolean canEat(int x, int y, int xOpp, int yOpp, int finX, int finY) {
-        //compute whether the eating id doable or not
-
-        if(!gameBoard.isOnBoard(finX, finY))
+        //compute whether the eating is doable or not
+        if (!gameBoard.isOnBoard(finX, finY))
             return false;
 
-        if(gameBoard.getCell(xOpp, yOpp).isEmpty() || gameBoard.getCell(xOpp, yOpp).getPiece().getColor() == player)
+        if (gameBoard.getCell(xOpp, yOpp).isEmpty() || gameBoard.getCell(xOpp, yOpp).getPiece().getColor().equals(player))
             return false;
 
-        if(!gameBoard.getCell(finX, finY).isEmpty())
+        if (!gameBoard.getCell(finX, finY).isEmpty())
             return false;
 
-        if(!gameBoard.getCell(x,y).getPiece().isKing() && gameBoard.getCell(xOpp,yOpp).getPiece().isKing())
+        if (gameBoard.getCell(x, y).getPiece() != null && !gameBoard.getCell(x, y).getPiece().isKing() && gameBoard.getCell(xOpp, yOpp).getPiece().isKing())
             return false;
 
         return true;
@@ -102,7 +139,7 @@ public class Action {
 
         // Putting all player pieces coordinates in a list
         List<Coords> myPiecesCoords = new ArrayList<>();
-        for(int i=0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 if (gameBoard.getCell(i, j).getPiece() != null)
                     if (gameBoard.getCell(i, j).getPiece().getColor().equals(player))
@@ -110,25 +147,25 @@ public class Action {
 
         // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
-        for(Coords coord : myPiecesCoords) {
+        for (Coords coord : myPiecesCoords) {
             List<Move> movesForThisPiece = new ArrayList<>();
             Coords destCellCoord;
 
             // for all pieces, checking the frontwards moves
             // i+direction j+1
-            destCellCoord = new Coords(coord.i()+direction, coord.j()+1);
+            destCellCoord = new Coords(coord.i() + direction, coord.j() + 1);
             addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
             // i+direction j-1
-            destCellCoord = new Coords(coord.i()+direction, coord.j()-1);
+            destCellCoord = new Coords(coord.i() + direction, coord.j() - 1);
             addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
 
             // if king, checking the backwards moves
-            if(gameBoard.getCell(coord.i(), coord.j()).getPiece().isKing()) {
+            if (gameBoard.getCell(coord.i(), coord.j()).getPiece().isKing()) {
                 // i-direction j+1
-                destCellCoord = new Coords(coord.i()-direction, coord.j()+1);
+                destCellCoord = new Coords(coord.i() - direction, coord.j() + 1);
                 addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
                 // i-direction j-1
-                destCellCoord = new Coords(coord.i()-direction, coord.j()-1);
+                destCellCoord = new Coords(coord.i() - direction, coord.j() - 1);
                 addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
             }
             listOfAllMoves.add(movesForThisPiece);
@@ -138,11 +175,11 @@ public class Action {
 
     private void addCoordToLegalMoves(Coords coord, Coords destCellCoord, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if ( !gameBoard.isOnBoard(destCellCoord.i(), destCellCoord.j()) ) return;
+        if (!gameBoard.isOnBoard(destCellCoord.i(), destCellCoord.j())) return;
 
         // The standard way
         // check destination is empty
-        if(gameBoard.getCell(destCellCoord.i(), destCellCoord.j()).isEmpty())
+        if (gameBoard.getCell(destCellCoord.i(), destCellCoord.j()).isEmpty())
             movesForThisPiece.add(new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j()));
     }
 
