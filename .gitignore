@@ -4,4 +4,4 @@ build/
 out/
 .DS_Store
 bin
-docs/api/
+docs/javadocs/
