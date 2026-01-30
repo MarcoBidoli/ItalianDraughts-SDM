@@ -26,6 +26,7 @@ jobs:
     #   run: gradle build
 
   test:
+    name: gradle-tests
     runs-on: ubuntu-latest
     permissions:
       contents: read
