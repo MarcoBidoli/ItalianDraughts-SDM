@@ -36,6 +36,9 @@ public class Game {
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
             Piece pieceToMove = board.getCell(currentMove.fromRow, currentMove.fromCol).getPiece();
+            if(currentMove.toRow == 0 || currentMove.toRow == 7 && !pieceToMove.isKing()){
+                pieceToMove.setKing(true);
+            }
             board.getCell(currentMove.toRow, currentMove.toCol).putPieceOn(pieceToMove);
             board.getCell(currentMove.fromRow, currentMove.fromCol).empty();
             if (Math.abs(currentMove.fromRow - currentMove.toRow) == 2) {
