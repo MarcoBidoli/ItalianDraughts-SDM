@@ -16,10 +16,25 @@ public class LegalMoves {
     }
 
     public List<List<Move>> getLegalMoves() throws InvalidMoveException {
-        List<List<Move>> moves = new ArrayList<>();
-        moves.addAll(eating());
-        if (moves.isEmpty())
-            moves.addAll(moving());
+        List<List<Move>> moves = new ArrayList<>(eating()); // initialize the moves with legal eatings
+
+        // if none, check for legal simple moves
+        /* the complex return is a workaround behind the fact that this returns a
+        * [[moves for piece 1], [moves for piece 2], ...]
+        * instead of
+        * [[move 1 for piece 1], [move 2 for piece 1], [move 1 for piece 2], ...]
+        * TODO: rewrite moving() to return the correct structure and rethink tests of MovingLegalMovesTest
+        */
+        if (moves.isEmpty()) {
+            return moving().stream()
+                    .flatMap(List::stream)
+                    .map(m -> {
+                        List<Move> tmpList = new ArrayList<>();
+                        tmpList.add(m);
+                        return tmpList;
+                    })
+                    .toList();
+        }
         return moves;
     }
 
