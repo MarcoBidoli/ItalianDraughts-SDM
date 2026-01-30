@@ -69,4 +69,14 @@ public class ActualMovingTest {
         assertTrue(board.getCell(1,1).isEmpty());
         assertSame(Color.WHITE, board.getCell(0, 0).getPiece().getColor());
     }
+    @Test
+    public void testPromotion() throws InvalidMoveException {
+        board.initCells();
+        board.placePiece(Color.WHITE, 6, 6);
+        List<Move> moves = new ArrayList<>();
+        moves.add(new Move(6, 6, 7, 7));
+        Game game = new Game();
+        game.movePieces(moves, board);
+        assertTrue(board.getCell(7,7).getPiece().isKing());
+    }
 }
