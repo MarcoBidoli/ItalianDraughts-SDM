@@ -18,7 +18,7 @@ public class LegalMoves {
     public List<List<Move>> getLegalMoves() throws InvalidMoveException {
         List<List<Move>> moves = new ArrayList<>();
         moves.addAll(eating());
-        if (!moves.isEmpty())
+        if (moves.isEmpty())
             moves.addAll(moving());
         return moves;
     }
