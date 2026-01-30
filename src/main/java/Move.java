@@ -16,4 +16,10 @@ public class Move {
             this.toCol = toCol;
         }
     }
+
+    // Temporarily needed for display moves
+    @Override
+    public String toString() {
+        return String.format("(%d,%d) -> (%d,%d)", fromRow, fromCol, toRow, toCol);
+    }
 }
