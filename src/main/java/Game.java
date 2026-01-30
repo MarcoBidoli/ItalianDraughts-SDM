@@ -3,11 +3,13 @@ import java.util.List;
 public class Game {
     private final Board gameBoard;
     private Color currentPlayer;
+    private GameStatus status;
 
     public Game() {
         this.gameBoard = new Board();      // crea una nuoca scacchiera vuota
         this.gameBoard.setGame();          // imposta la configurazione iniziale
         this.currentPlayer = Color.WHITE;  // scelta: parte il bianco
+        this.status = GameStatus.ONGOING;
     }
 
     public Color getCurrentPlayer() {
@@ -40,6 +42,30 @@ public class Game {
                 board.getCell((currentMove.fromRow + currentMove.toRow) / 2, (currentMove.toCol + currentMove.fromCol) / 2).empty();
             }
         }
+        updateStatusByPieces(board);
         return board;
+    }
+
+    public GameStatus getStatus() {
+        return status;
+    }
+
+    private void updateStatusByPieces(Board board) {
+        int white = 0;
+        int black = 0;
+
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece p = board.getCell(r, c).getPiece();
+                if (p != null) {
+                    if (p.getColor() == Color.WHITE) white++;
+                    else if (p.getColor() == Color.BLACK) black++;
+                }
+            }
+        }
+
+        if (white == 0) status = GameStatus.BLACK_WINS;
+        else if (black == 0) status = GameStatus.WHITE_WINS;
+        else status = GameStatus.ONGOING;
     }
 }
