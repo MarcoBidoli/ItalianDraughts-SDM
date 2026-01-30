@@ -32,7 +32,7 @@ public class Game {
         return (player == Color.BLACK) ? Color.WHITE : Color.BLACK;
     }
 
-    public Board movePieces(List<Move> move, Board board) throws InvalidMoveException {
+    public void movePieces(List<Move> move, Board board) throws InvalidMoveException {
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
             Piece pieceToMove = board.getCell(currentMove.fromRow, currentMove.fromCol).getPiece();
@@ -44,7 +44,6 @@ public class Game {
             }
         }
         updateStatusByPieces(board);
-        return board;
     }
 
     private static void promotionCheck(Move currentMove, Piece pieceToMove) {
