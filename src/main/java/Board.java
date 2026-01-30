@@ -59,6 +59,12 @@ public class Board {
         board[x][y].putPieceOn(new Piece(color));
     }
 
+    public void placeKing(Color color, int x, int y) throws InvalidMoveException {
+        Piece p = new Piece(color);
+        p.setKing(true);
+        board[x][y].putPieceOn(p);
+    }
+
     public void setGame() {
         for(int i=0; i<3; i++) {
             for(int j=0; j<8; j++) {
