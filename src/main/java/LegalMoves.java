@@ -1,22 +1,21 @@
-import javax.management.monitor.GaugeMonitor;
 import java.util.ArrayList;
 import java.util.List;
 
 record Coords(int i, int j) {
 }
 
-public class Action {
+public class LegalMoves {
     private Board gameBoard;
     private Color player;
     private int direction;
 
-    public Action(Board gameBoard, Color player) {
+    public LegalMoves(Board gameBoard, Color player) {
         this.gameBoard = gameBoard;
         this.player = player;
         this.direction = this.player.equals(Color.BLACK) ? 1 : -1;
     }
 
-    public List<List<Move>> possibleMoves() throws InvalidMoveException {
+    public List<List<Move>> getLegalMoves() throws InvalidMoveException {
         List<List<Move>> moves = new ArrayList<>();
         moves.addAll(eating());
         if (!moves.isEmpty())
@@ -94,6 +93,7 @@ public class Action {
             if (canEat(x, y, xOpp, yOpp, finX, finY)) { //check if an eating is doable
                 hasEat = true;
                 eatings.add(new EatingMove(x, y, finX, finY, gameBoard.getCell(xOpp, yOpp).getPiece().isKing()));
+
                 //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
                 Piece eaten = gameBoard.getCell(xOpp, yOpp).getPiece();
                 gameBoard.getCell(xOpp, yOpp).empty();
