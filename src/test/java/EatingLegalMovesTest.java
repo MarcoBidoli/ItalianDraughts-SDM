@@ -50,4 +50,69 @@ public class EatingLegalMovesTest {
         assertTrue(board.getCell(3, 1).isEmpty());
         assertTrue(board.getCell(1, 3).isEmpty());
     }
+
+    @Test
+    public void pieceEatingKing() throws InvalidMoveException {
+        Board board = new Board();
+        board.placePiece(Color.WHITE, 5, 3);
+        board.placeKing(Color.BLACK, 4, 2);
+
+        Action action = new Action(board, Color.WHITE);
+        List<List<Move>> result = action.eating();
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void kingEatsFirst() throws InvalidMoveException {
+        Board board = new Board();
+        board.placeKing(Color.WHITE, 4, 2);
+        board.placePiece(Color.WHITE, 4, 4);
+        board.placePiece(Color.BLACK, 3, 3);
+
+        Action action = new Action(board, Color.WHITE);
+        List<List<Move>> result = action.eating();
+        assertEquals(2, result.size());
+
+        List<Move> pieceEatings = result.getFirst();
+        assertEquals(1, pieceEatings.size());
+        assertEquals(2, pieceEatings.get(0).toRow, "Obtained a wrong piece eaten - rows");
+        assertEquals(4, pieceEatings.get(0).toCol,  "Obtained a wrong piece eaten - cols");
+
+        pieceEatings = result.get(1);
+        assertEquals(1, pieceEatings.size());
+        assertEquals(2, pieceEatings.get(0).toRow);
+        assertEquals(2, pieceEatings.get(0).toCol);
+    }
+
+    @Test
+    public void kingEatenFirst() throws InvalidMoveException {
+        Board board = new Board();
+        board.placeKing(Color.WHITE, 4, 2);
+        board.placePiece(Color.BLACK, 3, 1);
+        board.placePiece(Color.BLACK, 3, 3);
+
+        Action action = new Action(board, Color.WHITE);
+        List<List<Move>> result = action.eating();
+        assertEquals(2, result.size());
+
+        List<Move> pieceEatings = result.getFirst();
+        assertEquals(1, pieceEatings.size());
+        assertEquals(2, pieceEatings.get(0).toRow, "Obtained a wrong piece eaten - rows");
+        assertEquals(0, pieceEatings.get(0).toCol,  "Obtained a wrong piece eaten - cols");
+
+        pieceEatings = result.get(1);
+        assertEquals(1, pieceEatings.size());
+        assertEquals(2, pieceEatings.get(0).toRow);
+        assertEquals(4, pieceEatings.get(0).toCol);
+    }
+
+    @Test
+    public void eatTheMostPieces() throws InvalidMoveException {
+
+    }
+
+    @Test
+    public void eatTheMostKings() throws InvalidMoveException {
+
+    }
 }
