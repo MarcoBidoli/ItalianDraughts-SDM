@@ -168,7 +168,8 @@ public class LegalMoves {
                 destCellCoord = new Coords(coord.i() - direction, coord.j() - 1);
                 addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
             }
-            listOfAllMoves.add(movesForThisPiece);
+            if(!movesForThisPiece.isEmpty())
+                listOfAllMoves.add(movesForThisPiece);
         }
         return listOfAllMoves;
     }
