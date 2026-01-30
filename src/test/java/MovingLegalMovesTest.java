@@ -23,8 +23,8 @@ public class MovingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.WHITE, 2, 2);
 
-        Action action = new Action(board, Color.WHITE); // WHITE turn
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+        List<List<Move>> result = legalMoves.moving();
 
         // Result should contain one sub-list (for one piece) with two moves: (1,1) and (1,3)
         assertEquals(1, result.size());
@@ -41,8 +41,8 @@ public class MovingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.WHITE, 5, 7);
 
-        Action action = new Action(board, Color.WHITE); // WHITE turn
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+        List<List<Move>> result = legalMoves.moving();
 
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
@@ -58,8 +58,8 @@ public class MovingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.WHITE, 4, 0);
 
-        Action action = new Action(board, Color.WHITE); // WHITE turn
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+        List<List<Move>> result = legalMoves.moving();
 
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
@@ -75,8 +75,8 @@ public class MovingLegalMovesTest {
         board.placePiece(Color.WHITE, 2, 4); // Block the left diagonal
         board.placePiece(Color.WHITE, 3, 3);
 
-        Action action = new Action(board, Color.WHITE);
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        List<List<Move>> result = legalMoves.moving();
 
         List<Move> allMoves = result.stream()
                 .flatMap(List::stream)
@@ -92,8 +92,8 @@ public class MovingLegalMovesTest {
         board.placePiece(Color.WHITE, 5, 3); // Expected moves (4,2) and (4,4)
         board.placePiece(Color.WHITE, 5, 7); // Expected move (4,6)
 
-        Action action = new Action(board, Color.WHITE);
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        List<List<Move>> result = legalMoves.moving();
 
         // moves for exactly 2 pieces
         assertEquals(2, result.size());
@@ -117,8 +117,8 @@ public class MovingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.BLACK, 2, 4);
 
-        Action action = new Action(board, Color.BLACK); // BLACK turn
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
+        List<List<Move>> result = legalMoves.moving();
 
         // Result should contain one sub-list (for one piece) with two moves: (1,1) and (1,3)
         assertEquals(1, result.size());
@@ -135,8 +135,8 @@ public class MovingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.BLACK, 3, 7);
 
-        Action action = new Action(board, Color.BLACK); // BLACK turn
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
+        List<List<Move>> result = legalMoves.moving();
 
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
@@ -152,8 +152,8 @@ public class MovingLegalMovesTest {
         Board board = new Board();
         board.placePiece(Color.BLACK, 2, 0);
 
-        Action action = new Action(board, Color.BLACK); // WHITE turn
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // WHITE turn
+        List<List<Move>> result = legalMoves.moving();
 
         // Result should contain one sub-list (for one piece) with one move
         assertEquals(1, result.size());
@@ -169,8 +169,8 @@ public class MovingLegalMovesTest {
         board.placePiece(Color.BLACK, 3, 3);
         board.placePiece(Color.BLACK, 4, 4); // Block the left diagonal
 
-        Action action = new Action(board, Color.BLACK);
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK);
+        List<List<Move>> result = legalMoves.moving();
 
         List<Move> allMoves = result.stream()
                 .flatMap(List::stream)
@@ -186,8 +186,8 @@ public class MovingLegalMovesTest {
         board.placePiece(Color.BLACK, 3, 3); // Expected moves (4,2) and (4,4)
         board.placePiece(Color.BLACK, 6, 0); // Expected move (7,1)
 
-        Action action = new Action(board, Color.BLACK);
-        List<List<Move>> result = action.moving();
+        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK);
+        List<List<Move>> result = legalMoves.moving();
 
         // moves for exactly 2 pieces
         assertEquals(2, result.size());

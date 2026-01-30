@@ -11,9 +11,9 @@ public class EatingLegalMovesTest {
         board.placePiece(Color.WHITE, 5, 3);
         board.placePiece(Color.BLACK, 4, 2);
 
-        Action action = new Action(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
 
-        List<List<Move>> result = action.eating();
+        List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size());
 
         List<Move> pieceEatings = result.getFirst();
@@ -32,9 +32,9 @@ public class EatingLegalMovesTest {
         board.placePiece(Color.BLACK, 4, 2);
         board.placePiece(Color.BLACK, 2, 2);
 
-        Action action = new Action(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
 
-        List<List<Move>> result = action.eating();
+        List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size());
 
         List<Move> pieceEatings = result.getFirst();
@@ -57,8 +57,8 @@ public class EatingLegalMovesTest {
         board.placePiece(Color.WHITE, 5, 3);
         board.placeKing(Color.BLACK, 4, 2);
 
-        Action action = new Action(board, Color.WHITE);
-        List<List<Move>> result = action.eating();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        List<List<Move>> result = legalMoves.eating();
         assertEquals(0, result.size());
     }
 
@@ -69,8 +69,8 @@ public class EatingLegalMovesTest {
         board.placePiece(Color.WHITE, 4, 4);
         board.placePiece(Color.BLACK, 3, 3);
 
-        Action action = new Action(board, Color.WHITE);
-        List<List<Move>> result = action.eating();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        List<List<Move>> result = legalMoves.eating();
         assertEquals(2, result.size());
 
         List<Move> pieceEatings = result.getFirst();
@@ -91,8 +91,8 @@ public class EatingLegalMovesTest {
         board.placePiece(Color.BLACK, 3, 1);
         board.placePiece(Color.BLACK, 3, 3);
 
-        Action action = new Action(board, Color.WHITE);
-        List<List<Move>> result = action.eating();
+        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        List<List<Move>> result = legalMoves.eating();
         assertEquals(2, result.size());
 
         List<Move> pieceEatings = result.getFirst();
