@@ -16,10 +16,17 @@ public class LegalMoves {
     }
 
     public List<List<Move>> getLegalMoves() throws InvalidMoveException {
-        List<List<Move>> moves = new ArrayList<>();
-        moves.addAll(eating());
-        if (!moves.isEmpty())
-            moves.addAll(moving());
+        List<List<Move>> moves = new ArrayList<>(eating()); // initialize the moves with legal eatings
+
+        // if none, check for legal simple moves
+        /* the complex return is a workaround behind the fact that this returns a
+         * [[moves for piece 1], [moves for piece 2], ...]
+         * instead of
+         * [[move 1 for piece 1], [move 2 for piece 1], [move 1 for piece 2], ...]
+         */
+        if (moves.isEmpty()) {
+            return moving();
+        }
         return moves;
     }
 
@@ -37,9 +44,22 @@ public class LegalMoves {
         if (!allEatings.isEmpty())
             sortEatings(allEatings);
 
-        return allEatings;
+        return allEatings.stream()
+                .filter(eating -> checkBest(eating, allEatings.get(0)))
+                .toList();
     }
 
+    private boolean checkBest(List<Move> e1, List<Move> e2) {
+        if(e1.size() != e2.size())
+            return false;
+
+        boolean isE1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
+        boolean isE2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
+        if(isE1K != isE2K)
+            return false;
+
+        return countKingsEaten(e1) == countKingsEaten(e2);
+    }
     private void sortEatings(List<List<Move>> allEatings) {
         allEatings.sort((e1, e2) -> {
             //eating length first
@@ -48,9 +68,9 @@ public class LegalMoves {
                 return l;
 
             //who eats
-            boolean isP1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
-            boolean isP2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
-            l = Boolean.compare(isP2K, isP1K);
+            boolean isE1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
+            boolean isE2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
+            l = Boolean.compare(isE2K, isE1K);
             if (l != 0)
                 return l;
 
@@ -78,7 +98,7 @@ public class LegalMoves {
     private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) throws InvalidMoveException {
         boolean hasEat = false;
         int[][] dirs;
-        if(gameBoard.getCell(x,y).getPiece().isKing())
+        if (gameBoard.getCell(x, y).getPiece().isKing())
             dirs = new int[][]{{1, -1}, {1, 1}, {-1, -1}, {-1, 1}};
         else
             dirs = new int[][]{{direction, -1}, {direction, 1}};
@@ -149,38 +169,35 @@ public class LegalMoves {
         // If player == BLACK front moves are increasing i
         for (Coords coord : myPiecesCoords) {
             List<Move> movesForThisPiece = new ArrayList<>();
-            Coords destCellCoord;
 
             // for all pieces, checking the frontwards moves
-            // i+direction j+1
-            destCellCoord = new Coords(coord.i() + direction, coord.j() + 1);
-            addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
-            // i+direction j-1
-            destCellCoord = new Coords(coord.i() + direction, coord.j() - 1);
-            addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
+
+            // (coord) -> (i+direction, j+1)
+            addCoordToLegalMoves(coord, new Coords(coord.i() + direction, coord.j() + 1), movesForThisPiece);
+            // (coord) -> (i+direction, j-1)
+            addCoordToLegalMoves(coord, new Coords(coord.i() + direction, coord.j() - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
             if (gameBoard.getCell(coord.i(), coord.j()).getPiece().isKing()) {
-                // i-direction j+1
-                destCellCoord = new Coords(coord.i() - direction, coord.j() + 1);
-                addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
-                // i-direction j-1
-                destCellCoord = new Coords(coord.i() - direction, coord.j() - 1);
-                addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
+                // (coord) -> (i-direction, j+1)
+                addCoordToLegalMoves(coord, new Coords(coord.i() - direction, coord.j() + 1), movesForThisPiece);
+                // (coord) -> (i-direction, j-1)
+                addCoordToLegalMoves(coord, new Coords(coord.i() - direction, coord.j() - 1), movesForThisPiece);
             }
-            listOfAllMoves.add(movesForThisPiece);
+
+            if (!movesForThisPiece.isEmpty())
+                movesForThisPiece.forEach(m -> listOfAllMoves.add(new ArrayList<>(List.of(m))));
         }
         return listOfAllMoves;
     }
 
-    private void addCoordToLegalMoves(Coords coord, Coords destCellCoord, List<Move> movesForThisPiece) {
+    private void addCoordToLegalMoves(Coords fromCoord, Coords toCoord, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if (!gameBoard.isOnBoard(destCellCoord.i(), destCellCoord.j())) return;
+        if (!gameBoard.isOnBoard(toCoord.i(), toCoord.j())) return;
 
-        // The standard way
         // check destination is empty
-        if (gameBoard.getCell(destCellCoord.i(), destCellCoord.j()).isEmpty())
-            movesForThisPiece.add(new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j()));
+        if (gameBoard.getCell(toCoord.i(), toCoord.j()).isEmpty())
+            movesForThisPiece.add(new Move(fromCoord.i(), fromCoord.j(), toCoord.i(), toCoord.j()));
     }
 
 
