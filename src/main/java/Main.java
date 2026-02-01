@@ -16,17 +16,16 @@ public class Main {
             game.getBoard().printBoard();
             currentPlayerLegalMoves = new LegalMoves(game.getBoard(), game.getCurrentPlayer()).getLegalMoves();
 
-            // IO.println(currentPlayerLegalMoves.toString()); // TODO: debug only - remove before commit
-
             // display legal moves to the player where to choose from
-            // TODO: If a single move is present, force it
             printMoves(currentPlayerLegalMoves);
 
             // input move from the list proposed
-            String prompt = String.format("Choose move (1-%d): ", currentPlayerLegalMoves.size());
-            String input = IO.readln(prompt);
-            int choice = Integer.parseInt(input) - 1;
-            List<Move> selectedMove = currentPlayerLegalMoves.get(choice);
+            String input = getValidInput(currentPlayerLegalMoves.size());
+            if (input.equals("q"))
+                break;
+
+            // Applying the selected move
+            List<Move> selectedMove = currentPlayerLegalMoves.get(Integer.parseInt(input)-1);
             game.movePieces(selectedMove, game.getBoard());
 
             // Show updated board
@@ -37,6 +36,11 @@ public class Main {
             // Switch player
             game.nextTurn();
         }
+
+        if(game.getStatus() == GameStatus.DRAW)
+            IO.println("DRAW!");
+        else
+            IO.println(game.getStatus() == GameStatus.BLACK_WINS ? "BLACK WINS!" : "WHITE WINS!");
     }
 
 
@@ -64,5 +68,26 @@ public class Main {
         IO.println(player + "'s TURN");
         IO.println("Turn count: " + turnCounter);
         IO.println("Game status: " + game.getStatus());
+    }
+
+    // Input validator, just for this simple input implementation
+    public String getValidInput(int moveCount) {
+        while (true) {
+            String prompt = String.format("Choose move (1-%d) or 'q' to quit: ", moveCount);
+            String input = IO.readln(prompt).trim().toLowerCase();
+
+            if (input.equals("q"))
+                return "q";
+
+            try {
+                int choice = Integer.parseInt(input);
+                if (choice >= 1 && choice <= moveCount)
+                    return String.valueOf(choice);
+                else
+                    IO.println("Enter a number between 1 and " + moveCount);
+            } catch (NumberFormatException e) {
+                IO.println("Error: Invalid input. Enter a number or 'q'.");
+            }
+        }
     }
 }
