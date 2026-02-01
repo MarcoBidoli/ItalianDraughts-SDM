@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,13 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MovingLegalMovesTest {
 
-    private List<Move> getMovesForPiece(List<List<Move>> allMoves, int testedPieceRow, int testedPieceCol) {
+    private List<List<Move>> getMovesForPiece(List<List<Move>> allMoves, int pieceFromRow, int pieceFromCol) {
         return allMoves.stream()
                 .filter(list -> !list.isEmpty() &&
-                        list.getFirst().fromRow == testedPieceRow &&
-                        list.getFirst().fromCol == testedPieceCol)
-                .findFirst()// single list for each piece
-                .orElse(List.of()); // Return empty list if no moves found
+                        list.getFirst().fromRow == pieceFromRow &&
+                        list.getFirst().fromCol == pieceFromCol)
+                .toList();
     }
 
     // All tests regarding WHITE standard moves
@@ -24,15 +24,30 @@ public class MovingLegalMovesTest {
         board.placePiece(Color.WHITE, 2, 2);
 
         LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+
+        // Fake implementation
+//        List<List<Move>> result = List.of(
+//                List.of(new Move(2, 2, 1, 1)),
+//                List.of(new Move(2, 2, 1, 3))
+//        );
         List<List<Move>> result = legalMoves.moving();
 
-        // Result should contain one sub-list (for one piece) with two moves: (1,1) and (1,3)
-        assertEquals(1, result.size());
+        // expected 2 distinct List<Move> sequences (paths)
+        assertEquals(2, result.size());
 
-        List<Move> pieceMoves = result.getFirst();
-        assertEquals(2, pieceMoves.size()); // 2 moves for this piece
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 1 && m.toCol == 1)); // (2,2) -> (1,1)
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 1 && m.toCol == 3)); // (2,2) -> (1,3)
+        // Each sub-list should contain exactly 1 move for a standard move
+        for (List<Move> path : result) {
+            assertEquals(1, path.size());
+        }
+
+        // Both intended destinations are covered by the paths
+        boolean foundLeft = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 1 && path.getFirst().toCol == 1); // (2,2) -> (1,1)
+        boolean foundRight = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 1 && path.getFirst().toCol == 3); // (2,2) -> (1,3)
+
+        assertTrue(foundLeft);
+        assertTrue(foundRight);
     }
 
     @Test
@@ -44,12 +59,14 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
 
-        // Result should contain one sub-list (for one piece) with one move
+        // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
+        assertEquals(1, result.getFirst().size());
 
-        List<Move> pieceMoves = result.getFirst();
-        assertEquals(1, pieceMoves.size()); // 1 move for this piece
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 4 && m.toCol == 6)); // (5,7) -> (4,6)
+        boolean foundLeft = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 6); // (5,7) -> (4,6)
+
+        assertTrue(foundLeft);
     }
 
     @Test
@@ -61,29 +78,38 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
 
-        // Result should contain one sub-list (for one piece) with one move
+        // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
+        assertEquals(1, result.getFirst().size());
 
-        List<Move> pieceMoves = result.getFirst();
-        assertEquals(1, pieceMoves.size()); // 1 move for this piece
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 1)); // (4,0) -> (3,1)
+        boolean foundRight = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 1); // (4,0) -> (3,1)
+
+        assertTrue(foundRight);
     }
 
     @Test
     void whitePieceBlockedByFriend() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.WHITE, 2, 4); // Block the left diagonal
+        board.placePiece(Color.WHITE, 2, 4);
         board.placePiece(Color.WHITE, 3, 3);
 
         LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
         List<List<Move>> result = legalMoves.moving();
 
-        List<Move> allMoves = result.stream()
-                .flatMap(List::stream)
-                .toList();
+        List<List<Move>> pathsForPiece = getMovesForPiece(result, 3, 3);
 
-        assertTrue(allMoves.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 2 && m.toCol == 2)); // legal move exists
-        assertTrue(allMoves.stream().noneMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 2 && m.toCol == 4)); // the move on the occupied cell does not
+        // Only 1 path expected
+        assertEquals(1, pathsForPiece.size());
+        // Only 1 move for this path
+        assertEquals(1, pathsForPiece.getFirst().size());
+
+        Move m = pathsForPiece.getFirst().getFirst();
+        // check the only available move
+        assertEquals(3, m.fromRow);
+        assertEquals(3, m.fromCol);
+        assertEquals(2, m.toRow);
+        assertEquals(2, m.toCol);
     }
 
     @Test
@@ -95,22 +121,20 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
         List<List<Move>> result = legalMoves.moving();
 
-        // moves for exactly 2 pieces
-        assertEquals(2, result.size());
-
         // First piece
-        List<Move> movesA = getMovesForPiece(result, 5, 3);
+        List<List<Move>> movesA = getMovesForPiece(result, 5, 3);
         assertEquals(2, movesA.size());
-        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 5 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 2));
-        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 5 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4));
+        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 3 && path.getFirst().toRow == 4 && path.getFirst().toCol == 2));
+        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 3 && path.getFirst().toRow == 4 && path.getFirst().toCol == 4));
 
         // Second piece
-        List<Move> movesB = getMovesForPiece(result, 5, 7);
+        List<List<Move>> movesB = getMovesForPiece(result, 5, 7);
         assertEquals(1, movesB.size());
-        assertTrue(movesB.stream().anyMatch(m -> m.fromRow == 5 && m.fromCol == 7 && m.toRow == 4 && m.toCol == 6));
+        assertTrue(movesB.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 7 && path.getFirst().toRow == 4 && path.getFirst().toCol == 6));
     }
 
-    // All tests regarding BLACK standard moves
+    // ----------------------------------- All tests regarding BLACK standard moves ------------------------------------
+
     @Test
     void blackPieceMovesFrontwards() throws InvalidMoveException {
         // Empty board with one Black piece
@@ -120,13 +144,22 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
         List<List<Move>> result = legalMoves.moving();
 
-        // Result should contain one sub-list (for one piece) with two moves: (1,1) and (1,3)
-        assertEquals(1, result.size());
+        // expected 2 distinct List<Move> sequences (paths)
+        assertEquals(2, result.size());
 
-        List<Move> pieceMoves = result.getFirst();
-        assertEquals(2, pieceMoves.size()); // 2 moves for this piece
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 3)); // (2,4) -> (4,3)
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 5)); // (2,4) -> (4,5)
+        // Each sub-list should contain exactly 1 move for a standard move
+        for (List<Move> path : result) {
+            assertEquals(1, path.size());
+        }
+
+        // Both intended destinations are covered by the paths
+        boolean foundLeft = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 3); // (2,4) -> (4,3)
+        boolean foundRight = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 5); // (2,4) -> (4,5)
+
+        assertTrue(foundLeft);
+        assertTrue(foundRight);
     }
 
     @Test
@@ -138,12 +171,13 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
         List<List<Move>> result = legalMoves.moving();
 
-        // Result should contain one sub-list (for one piece) with one move
+        // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
+        assertEquals(1, result.getFirst().size());
 
-        List<Move> pieceMoves = result.getFirst();
-        assertEquals(1, pieceMoves.size()); // 1 move for this piece
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 4 && m.toCol == 6)); // (3,7) -> (4,6)
+        boolean foundLeft = result.stream()
+                       .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 6); // (3,7) -> (4,6)
+        assertTrue(foundLeft);
     }
 
     @Test
@@ -155,12 +189,14 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
 
-        // Result should contain one sub-list (for one piece) with one move
+        // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
+        assertEquals(1, result.getFirst().size());
 
-        List<Move> pieceMoves = result.getFirst();
-        assertEquals(1, pieceMoves.size()); // 1 move for this piece
-        assertTrue(pieceMoves.stream().anyMatch(m -> m.toRow == 3 && m.toCol == 1)); // (2,0) -> (3,1)
+        boolean foundRight = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 1); // (2,0) -> (3,1)
+
+        assertTrue(foundRight);
     }
 
     @Test
@@ -172,12 +208,19 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.BLACK);
         List<List<Move>> result = legalMoves.moving();
 
-        List<Move> allMoves = result.stream()
-                .flatMap(List::stream)
-                .toList();
+        List<List<Move>> pathsForPiece = getMovesForPiece(result, 3, 3);
 
-        assertTrue(allMoves.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 2)); // legal move exists
-        assertTrue(allMoves.stream().noneMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4)); // the move on the occupied cell does not
+        // Only 1 path expected
+        assertEquals(1, pathsForPiece.size());
+        // Only 1 move for this path
+        assertEquals(1, pathsForPiece.getFirst().size());
+
+        Move m = pathsForPiece.getFirst().getFirst();
+        // check the only available move
+        assertEquals(3, m.fromRow);
+        assertEquals(3, m.fromCol);
+        assertEquals(4, m.toRow);
+        assertEquals(2, m.toCol);
     }
 
     @Test
@@ -189,18 +232,15 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, Color.BLACK);
         List<List<Move>> result = legalMoves.moving();
 
-        // moves for exactly 2 pieces
-        assertEquals(2, result.size());
-
         // First piece
-        List<Move> movesA = getMovesForPiece(result, 3, 3);
+        List<List<Move>> movesA = getMovesForPiece(result, 3, 3);
         assertEquals(2, movesA.size());
-        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 2));
-        assertTrue(movesA.stream().anyMatch(m -> m.fromRow == 3 && m.fromCol == 3 && m.toRow == 4 && m.toCol == 4));
+        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 2));
+        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 4));
 
         // Second piece
-        List<Move> movesB = getMovesForPiece(result, 6, 0);
+        List<List<Move>> movesB = getMovesForPiece(result, 6, 0);
         assertEquals(1, movesB.size());
-        assertTrue(movesB.stream().anyMatch(m -> m.fromRow == 6 && m.fromCol == 0 && m.toRow == 7 && m.toCol == 1));
+        assertTrue(movesB.stream().anyMatch(path -> path.getFirst().toRow == 7 && path.getFirst().toCol == 1));
     }
 }
