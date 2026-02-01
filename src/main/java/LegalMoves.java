@@ -44,9 +44,22 @@ public class LegalMoves {
         if (!allEatings.isEmpty())
             sortEatings(allEatings);
 
-        return allEatings;
+        return allEatings.stream()
+                .filter(eating -> checkBest(eating, allEatings.get(0)))
+                .toList();
     }
 
+    private boolean checkBest(List<Move> e1, List<Move> e2) {
+        if(e1.size() != e2.size())
+            return false;
+
+        boolean isE1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
+        boolean isE2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
+        if(isE1K != isE2K)
+            return false;
+
+        return countKingsEaten(e1) == countKingsEaten(e2);
+    }
     private void sortEatings(List<List<Move>> allEatings) {
         allEatings.sort((e1, e2) -> {
             //eating length first
@@ -55,9 +68,9 @@ public class LegalMoves {
                 return l;
 
             //who eats
-            boolean isP1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
-            boolean isP2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
-            l = Boolean.compare(isP2K, isP1K);
+            boolean isE1K = gameBoard.getCell(e1.get(0).fromRow, e1.get(0).fromCol).getPiece().isKing();
+            boolean isE2K = gameBoard.getCell(e2.get(0).fromRow, e2.get(0).fromCol).getPiece().isKing();
+            l = Boolean.compare(isE2K, isE1K);
             if (l != 0)
                 return l;
 
