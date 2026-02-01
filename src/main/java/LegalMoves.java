@@ -20,20 +20,12 @@ public class LegalMoves {
 
         // if none, check for legal simple moves
         /* the complex return is a workaround behind the fact that this returns a
-        * [[moves for piece 1], [moves for piece 2], ...]
-        * instead of
-        * [[move 1 for piece 1], [move 2 for piece 1], [move 1 for piece 2], ...]
-        * TODO: rewrite moving() to return the correct structure and rethink tests of MovingLegalMovesTest
-        */
+         * [[moves for piece 1], [moves for piece 2], ...]
+         * instead of
+         * [[move 1 for piece 1], [move 2 for piece 1], [move 1 for piece 2], ...]
+         */
         if (moves.isEmpty()) {
-            return moving().stream()
-                    .flatMap(List::stream)
-                    .map(m -> {
-                        List<Move> tmpList = new ArrayList<>();
-                        tmpList.add(m);
-                        return tmpList;
-                    })
-                    .toList();
+            return moving();
         }
         return moves;
     }
@@ -93,7 +85,7 @@ public class LegalMoves {
     private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) throws InvalidMoveException {
         boolean hasEat = false;
         int[][] dirs;
-        if(gameBoard.getCell(x,y).getPiece().isKing())
+        if (gameBoard.getCell(x, y).getPiece().isKing())
             dirs = new int[][]{{1, -1}, {1, 1}, {-1, -1}, {-1, 1}};
         else
             dirs = new int[][]{{direction, -1}, {direction, 1}};
@@ -164,39 +156,35 @@ public class LegalMoves {
         // If player == BLACK front moves are increasing i
         for (Coords coord : myPiecesCoords) {
             List<Move> movesForThisPiece = new ArrayList<>();
-            Coords destCellCoord;
 
             // for all pieces, checking the frontwards moves
-            // i+direction j+1
-            destCellCoord = new Coords(coord.i() + direction, coord.j() + 1);
-            addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
-            // i+direction j-1
-            destCellCoord = new Coords(coord.i() + direction, coord.j() - 1);
-            addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
+
+            // (coord) -> (i+direction, j+1)
+            addCoordToLegalMoves(coord, new Coords(coord.i() + direction, coord.j() + 1), movesForThisPiece);
+            // (coord) -> (i+direction, j-1)
+            addCoordToLegalMoves(coord, new Coords(coord.i() + direction, coord.j() - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
             if (gameBoard.getCell(coord.i(), coord.j()).getPiece().isKing()) {
-                // i-direction j+1
-                destCellCoord = new Coords(coord.i() - direction, coord.j() + 1);
-                addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
-                // i-direction j-1
-                destCellCoord = new Coords(coord.i() - direction, coord.j() - 1);
-                addCoordToLegalMoves(coord, destCellCoord, movesForThisPiece);
+                // (coord) -> (i-direction, j+1)
+                addCoordToLegalMoves(coord, new Coords(coord.i() - direction, coord.j() + 1), movesForThisPiece);
+                // (coord) -> (i-direction, j-1)
+                addCoordToLegalMoves(coord, new Coords(coord.i() - direction, coord.j() - 1), movesForThisPiece);
             }
-            if(!movesForThisPiece.isEmpty())
-                listOfAllMoves.add(movesForThisPiece);
+
+            if (!movesForThisPiece.isEmpty())
+                movesForThisPiece.forEach(m -> listOfAllMoves.add(new ArrayList<>(List.of(m))));
         }
         return listOfAllMoves;
     }
 
-    private void addCoordToLegalMoves(Coords coord, Coords destCellCoord, List<Move> movesForThisPiece) {
+    private void addCoordToLegalMoves(Coords fromCoord, Coords toCoord, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if (!gameBoard.isOnBoard(destCellCoord.i(), destCellCoord.j())) return;
+        if (!gameBoard.isOnBoard(toCoord.i(), toCoord.j())) return;
 
-        // The standard way
         // check destination is empty
-        if (gameBoard.getCell(destCellCoord.i(), destCellCoord.j()).isEmpty())
-            movesForThisPiece.add(new Move(coord.i(), coord.j(), destCellCoord.i(), destCellCoord.j()));
+        if (gameBoard.getCell(toCoord.i(), toCoord.j()).isEmpty())
+            movesForThisPiece.add(new Move(fromCoord.i(), fromCoord.j(), toCoord.i(), toCoord.j()));
     }
 
 
