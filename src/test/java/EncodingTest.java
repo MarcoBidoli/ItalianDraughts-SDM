@@ -46,7 +46,6 @@ public class EncodingTest {
         board.placePiece(Color.BLACK, 3, 3);
         Game game = new Game();
         game.boardEncoder(board);
-        Map<List<TileEnc>, Integer> visits = game.getVisits();
         List<TileEnc> enc = game.getVisits().keySet().iterator().next();
         TileEnc tile1 = new TileEnc(2,1);
         TileEnc tile2 = new TileEnc(2,14);
