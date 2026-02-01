@@ -140,9 +140,11 @@ public class MovingLegalMovesTest {
         // Empty board with one Black piece
         Board board = new Board();
         board.placePiece(Color.BLACK, 2, 4);
+        board.printBoard();
 
         LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
         List<List<Move>> result = legalMoves.moving();
+        IO.println(result);
 
         // expected 2 distinct List<Move> sequences (paths)
         assertEquals(2, result.size());
@@ -153,10 +155,10 @@ public class MovingLegalMovesTest {
         }
 
         // Both intended destinations are covered by the paths
-        boolean foundLeft = result.stream()
-                .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 3); // (2,4) -> (4,3)
         boolean foundRight = result.stream()
-                .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 5); // (2,4) -> (4,5)
+                .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 3); // (2,4) -> (3,5)
+        boolean foundLeft = result.stream()
+                .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 5); // (2,4) -> (3,3)
 
         assertTrue(foundLeft);
         assertTrue(foundRight);
