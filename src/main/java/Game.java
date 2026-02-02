@@ -4,6 +4,8 @@ public class Game {
     private final Board gameBoard;
     private Color currentPlayer;
     private GameStatus status;
+    private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
+    private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
 
     public Game() {
         this.gameBoard = new Board();      // crea una nuoca scacchiera vuota
@@ -30,6 +32,32 @@ public class Game {
             throw new IllegalArgumentException("player cannot be null");
         }
         return (player == Color.BLACK) ? Color.WHITE : Color.BLACK;
+    }
+
+    public void applyTurn(List<Move> moves) throws InvalidMoveException {
+        // 1) Calcolo: il turno contiene almeno una cattura?
+        boolean captureOccurred = moves.stream()
+                .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
+
+        // 2) Applica le mosse alla board (riutilizzo il codice di Fede)
+        movePieces(moves, this.gameBoard);
+
+        // 3) Qui dopo aggiungo: update draw counters usando captureOccurred
+        // 4) Poi: nextTurn() se la partita è ancora ONGOING
+    }
+
+    private boolean hasKing(Color color) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece piece = gameBoard.getCell(r, c).getPiece();
+                if (piece != null &&
+                        piece.getColor() == color &&
+                        piece.isKing()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void movePieces(List<Move> move, Board board) throws InvalidMoveException {
