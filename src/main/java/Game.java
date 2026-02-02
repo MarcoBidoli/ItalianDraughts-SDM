@@ -84,7 +84,7 @@ public class Game {
         return false;
     }
 
-    public Map<List<TileEnc>, Integer> getVisits() {
+    protected Map<List<TileEnc>, Integer> getVisits() {
         return visits;
     }
 
