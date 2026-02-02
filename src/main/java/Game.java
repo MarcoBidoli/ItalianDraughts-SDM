@@ -119,7 +119,7 @@ public class Game {
     }
 
     private static void promotionCheck(Move currentMove, Piece pieceToMove) {
-        if(currentMove.toRow == 0 || currentMove.toRow == 7 && !pieceToMove.isKing()){
+        if((currentMove.toRow == 0 || currentMove.toRow == 7) && !pieceToMove.isKing()){
             pieceToMove.setKing(true);
         }
     }
