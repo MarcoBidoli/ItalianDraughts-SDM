@@ -1,17 +1,22 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+record TileEnc(int pieceEnc, int positionEnc) {}
 public class Game {
     private final Board gameBoard;
     private Color currentPlayer;
     private GameStatus status;
     private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
     private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
+    private final Map<List<TileEnc>, Integer> visits;
 
     public Game() {
-        this.gameBoard = new Board();      // crea una nuoca scacchiera vuota
+        this.gameBoard = new Board();      // crea una nuova scacchiera vuota
         this.gameBoard.setGame();          // imposta la configurazione iniziale
         this.currentPlayer = Color.WHITE;  // scelta: parte il bianco
         this.status = GameStatus.ONGOING;
+        this.visits = new HashMap<>();
     }
 
     public Color getCurrentPlayer() {
@@ -113,9 +118,46 @@ public class Game {
             board.getCell(currentMove.fromRow, currentMove.fromCol).empty();
             if (Math.abs(currentMove.fromRow - currentMove.toRow) == 2) {
                 board.getCell((currentMove.fromRow + currentMove.toRow) / 2, (currentMove.toCol + currentMove.fromCol) / 2).empty();
+            visits.clear();
             }
         }
+        boardEncoder(board);
         updateStatusByPieces(board);
+    }
+
+    public void boardEncoder(Board board) {
+        List<TileEnc> encoding = new ArrayList<>();
+        int counter = 0;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if((i + j) % 2 == 0){
+                    int value;
+                    counter++;
+                    if (board.getCell(i,j).getPiece() != null) {
+                        if (board.getCell(i, j).getPiece().getColor() == Color.BLACK) {
+                            value = board.getCell(i, j).getPiece().isKing() ? 4 : 2;
+                        } else {
+                            value = board.getCell(i, j).getPiece().isKing() ? 3 : 1;
+                        }
+                        encoding.add(new TileEnc(value, counter));
+                    }
+                }
+            }
+        }
+        visits.merge(encoding, 1, Integer::sum);
+    }
+
+    public boolean checkRepetition() {
+        for (int count : visits.values()) {
+            if (count >= 3) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected Map<List<TileEnc>, Integer> getVisits() {
+        return visits;
     }
 
     private static void promotionCheck(Move currentMove, Piece pieceToMove) {
