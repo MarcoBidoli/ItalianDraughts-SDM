@@ -7,6 +7,8 @@ public class Game {
     private final Board gameBoard;
     private Color currentPlayer;
     private GameStatus status;
+    private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
+    private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
     private final Map<List<TileEnc>, Integer> visits;
 
     public Game() {
@@ -35,6 +37,76 @@ public class Game {
             throw new IllegalArgumentException("player cannot be null");
         }
         return (player == Color.BLACK) ? Color.WHITE : Color.BLACK;
+    }
+
+    public void applyTurn(List<Move> moves) throws InvalidMoveException {
+        // Salviamo chi sta giocando ORA (prima di eventuali cambi turno)
+        Color playerWhoMoved = currentPlayer;
+
+        // 1) Il turno contiene almeno una cattura?
+        boolean captureOccurred = moves.stream()
+                .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
+
+        // 2) Applica le mosse alla board (riutilizzo il codice di Federico)
+        movePieces(moves, this.gameBoard);
+
+        // Se qualcuno ha vinto per eliminazione pezzi, non ha senso calcolare draw o cambiare turno
+        if (status != GameStatus.ONGOING) {
+            return;
+        }
+
+        // 3) Update contatori draw (Move-Count Rule)
+        updateDrawCounters(playerWhoMoved, captureOccurred);
+
+        // Se la regola draw ha dichiarato DRAW, non cambia turno
+        if (status != GameStatus.ONGOING) {
+            return;
+        }
+
+        // 4) Turno successivo
+        nextTurn();
+    }
+
+
+    private boolean hasKing(Color color) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece piece = gameBoard.getCell(r, c).getPiece();
+                if (piece != null &&
+                        piece.getColor() == color &&
+                        piece.isKing()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void updateDrawCounters(Color playerWhoMoved, boolean captureOccurred) {
+        // Se c'è stata una cattura, la sequenza "senza catture" si interrompe: reset totale
+        if (captureOccurred) {
+            quietMovesWhite = 0;
+            quietMovesBlack = 0;
+            return;
+        }
+
+        // La Move-Count Rule si applica solo se entrambi hanno almeno un king
+        boolean bothHaveKings = hasKing(Color.WHITE) && hasKing(Color.BLACK);
+        if (!bothHaveKings) {
+            return;
+        }
+
+        // Incremento il contatore del giocatore che ha appena mosso
+        if (playerWhoMoved == Color.WHITE) {
+            quietMovesWhite++;
+        } else if (playerWhoMoved == Color.BLACK) {
+            quietMovesBlack++;
+        }
+
+        // Trigger draw: 40 mosse consecutive per ciascun giocatore senza catture
+        if (quietMovesWhite >= 40 && quietMovesBlack >= 40) {
+            status = GameStatus.DRAW;
+        }
     }
 
     public void movePieces(List<Move> move, Board board) throws InvalidMoveException {
@@ -89,7 +161,7 @@ public class Game {
     }
 
     private static void promotionCheck(Move currentMove, Piece pieceToMove) {
-        if(currentMove.toRow == 0 || currentMove.toRow == 7 && !pieceToMove.isKing()){
+        if((currentMove.toRow == 0 || currentMove.toRow == 7) && !pieceToMove.isKing()){
             pieceToMove.setKing(true);
         }
     }
