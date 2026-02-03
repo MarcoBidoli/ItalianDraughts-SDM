@@ -14,7 +14,7 @@ public class GameStatusTest {
     void whiteWinsWhenNoBlackPiecesRemain() throws InvalidMoveException {
         Board board = new Board();
         board.initCells();
-        board.placePiece(Color.WHITE, 4, 4); // c'è solo bianco
+        board.placePiece(GameColor.WHITE, 4, 4); // c'è solo bianco
 
         Game game = new Game();
         game.movePieces(new java.util.ArrayList<>(), board); // forza update status senza mosse

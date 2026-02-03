@@ -13,19 +13,19 @@ public class GameDrawTest {
         board.initCells();
 
         // Mettiamo un solo pezzo bianco e uno nero e li rendiamo king
-        board.placePiece(Color.WHITE, 4, 4);
+        board.placePiece(GameColor.WHITE, 4, 4);
         board.getCell(4, 4).getPiece().setKing(true);
 
-        board.placePiece(Color.BLACK, 3, 3);
+        board.placePiece(GameColor.BLACK, 3, 3);
         board.getCell(3, 3).getPiece().setKing(true);
 
         Game game = new Game();
 
         Board gb = game.getBoard();
         gb.initCells();
-        gb.placePiece(Color.WHITE, 4, 4);
+        gb.placePiece(GameColor.WHITE, 4, 4);
         gb.getCell(4, 4).getPiece().setKing(true);
-        gb.placePiece(Color.BLACK, 3, 3);
+        gb.placePiece(GameColor.BLACK, 3, 3);
         gb.getCell(3, 3).getPiece().setKing(true);
 
         // Ora muoviamo i due king avanti/indietro senza catture.

@@ -1,15 +1,15 @@
 public class Piece {
-    private Color color;
+    private GameColor color;
     private boolean king;
 
-    public Piece(Color color){
+    public Piece(GameColor color){
         this.color = color;
         this.king = false;
     }
-    public Color getColor() {
+    public GameColor getColor() {
         return color;
     }
-    public void setColor(Color color) {
+    public void setColor(GameColor color) {
         this.color = color;
     }
     public boolean isKing() {

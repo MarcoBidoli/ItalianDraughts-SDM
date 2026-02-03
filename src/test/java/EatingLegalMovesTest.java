@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import java.text.CollationElementIterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,10 +8,10 @@ public class EatingLegalMovesTest {
     @Test
     public void singleEat() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.WHITE, 5, 3);
-        board.placePiece(Color.BLACK, 4, 2);
+        board.placePiece(GameColor.WHITE, 5, 3);
+        board.placePiece(GameColor.BLACK, 4, 2);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
 
         List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size());
@@ -29,11 +28,11 @@ public class EatingLegalMovesTest {
     @Test
     public void doubleEat() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.WHITE, 5, 3);
-        board.placePiece(Color.BLACK, 4, 2);
-        board.placePiece(Color.BLACK, 2, 2);
+        board.placePiece(GameColor.WHITE, 5, 3);
+        board.placePiece(GameColor.BLACK, 4, 2);
+        board.placePiece(GameColor.BLACK, 2, 2);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
 
         List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size());
@@ -55,10 +54,10 @@ public class EatingLegalMovesTest {
     @Test
     public void pieceEatingKing() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.WHITE, 5, 3);
-        board.placeKing(Color.BLACK, 4, 2);
+        board.placePiece(GameColor.WHITE, 5, 3);
+        board.placeKing(GameColor.BLACK, 4, 2);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(0, result.size());
     }
@@ -66,11 +65,11 @@ public class EatingLegalMovesTest {
     @Test
     public void kingEatsFirst() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(Color.WHITE, 4, 2);
-        board.placePiece(Color.WHITE, 4, 4);
-        board.placePiece(Color.BLACK, 3, 3);
+        board.placeKing(GameColor.WHITE, 4, 2);
+        board.placePiece(GameColor.WHITE, 4, 4);
+        board.placePiece(GameColor.BLACK, 3, 3);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size());
 
@@ -83,11 +82,11 @@ public class EatingLegalMovesTest {
     @Test
     public void kingEatenFirst() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(Color.WHITE, 4, 2);
-        board.placePiece(Color.BLACK, 3, 1);
-        board.placePiece(Color.BLACK, 3, 3);
+        board.placeKing(GameColor.WHITE, 4, 2);
+        board.placePiece(GameColor.BLACK, 3, 1);
+        board.placePiece(GameColor.BLACK, 3, 3);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(2, result.size());
 
@@ -105,13 +104,13 @@ public class EatingLegalMovesTest {
     @Test
     public void eatTheMostPieces() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(Color.WHITE, 5, 3);
-        board.placeKing(Color.BLACK, 4, 2);
-        board.placePiece(Color.WHITE, 5, 5);
-        board.placePiece(Color.BLACK, 4, 6);
-        board.placePiece(Color.BLACK, 2, 6);
+        board.placeKing(GameColor.WHITE, 5, 3);
+        board.placeKing(GameColor.BLACK, 4, 2);
+        board.placePiece(GameColor.WHITE, 5, 5);
+        board.placePiece(GameColor.BLACK, 4, 6);
+        board.placePiece(GameColor.BLACK, 2, 6);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size(), "Found too much best eatings");
 
@@ -126,12 +125,12 @@ public class EatingLegalMovesTest {
     @Test
     public void eatTheMostKings() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(Color.WHITE, 5, 3);
-        board.placeKing(Color.BLACK, 4, 2);
-        board.placeKing(Color.BLACK, 4, 4);
-        board.placeKing(Color.BLACK, 2, 4);
+        board.placeKing(GameColor.WHITE, 5, 3);
+        board.placeKing(GameColor.BLACK, 4, 2);
+        board.placeKing(GameColor.BLACK, 4, 4);
+        board.placeKing(GameColor.BLACK, 2, 4);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(1, result.size(), "Found too much best eatings");
 
@@ -146,11 +145,11 @@ public class EatingLegalMovesTest {
     @Test
     public void multipleBestEatings() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(Color.WHITE, 5, 3);
-        board.placeKing(Color.BLACK, 4, 2);
-        board.placeKing(Color.BLACK, 4, 4);
+        board.placeKing(GameColor.WHITE, 5, 3);
+        board.placeKing(GameColor.BLACK, 4, 2);
+        board.placeKing(GameColor.BLACK, 4, 4);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(2, result.size(), "Couldn't find all best eatings");
 
@@ -160,9 +159,9 @@ public class EatingLegalMovesTest {
             assertTrue(result.get(i).get(0).toCol == 5 || result.get(i).get(0).toCol == 1, "wrong column - " + Integer.toString(i));
         }
 
-        board.placeKing(Color.BLACK, 2, 4);
-        board.placeKing(Color.BLACK, 2, 6);
-        legalMoves = new LegalMoves(board, Color.WHITE);
+        board.placeKing(GameColor.BLACK, 2, 4);
+        board.placeKing(GameColor.BLACK, 2, 6);
+        legalMoves = new LegalMoves(board, GameColor.WHITE);
         result = legalMoves.eating();
         assertEquals(2, result.size(), "Couldn't find all best eatings");
 

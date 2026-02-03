@@ -19,9 +19,9 @@ public class MovingLegalMovesTest {
     void whitePieceMovesFrontwards() throws InvalidMoveException {
         // Empty board with one White piece at (2, 2)
         Board board = new Board();
-        board.placePiece(Color.WHITE, 2, 2);
+        board.placePiece(GameColor.WHITE, 2, 2);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
 
         // Fake implementation
 //        List<List<Move>> result = List.of(
@@ -52,9 +52,9 @@ public class MovingLegalMovesTest {
     void whitePieceMovesFrontwardFromRightEdgeOfBoard() throws InvalidMoveException {
         // Empty board with one White piece
         Board board = new Board();
-        board.placePiece(Color.WHITE, 5, 7);
+        board.placePiece(GameColor.WHITE, 5, 7);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
 
         // Expected 1 sub-list with exactly 1 move
@@ -71,9 +71,9 @@ public class MovingLegalMovesTest {
     void whitePieceMovesFrontwardFromLeftEdgeOfBoard() throws InvalidMoveException {
         // Empty board with one White piece
         Board board = new Board();
-        board.placePiece(Color.WHITE, 4, 0);
+        board.placePiece(GameColor.WHITE, 4, 0);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE); // WHITE turn
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
 
         // Expected 1 sub-list with exactly 1 move
@@ -89,10 +89,10 @@ public class MovingLegalMovesTest {
     @Test
     void whitePieceBlockedByFriend() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.WHITE, 2, 4);
-        board.placePiece(Color.WHITE, 3, 3);
+        board.placePiece(GameColor.WHITE, 2, 4);
+        board.placePiece(GameColor.WHITE, 3, 3);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.moving();
 
         List<List<Move>> pathsForPiece = getMovesForPiece(result, 3, 3);
@@ -113,10 +113,10 @@ public class MovingLegalMovesTest {
     @Test
     void multipleWhitePieces() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.WHITE, 5, 3); // Expected moves (4,2) and (4,4)
-        board.placePiece(Color.WHITE, 5, 7); // Expected move (4,6)
+        board.placePiece(GameColor.WHITE, 5, 3); // Expected moves (4,2) and (4,4)
+        board.placePiece(GameColor.WHITE, 5, 7); // Expected move (4,6)
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.WHITE);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.moving();
 
         // First piece
@@ -137,10 +137,10 @@ public class MovingLegalMovesTest {
     void blackPieceMovesFrontwards() throws InvalidMoveException {
         // Empty board with one Black piece
         Board board = new Board();
-        board.placePiece(Color.BLACK, 2, 4);
+        board.placePiece(GameColor.BLACK, 2, 4);
         board.printBoard();
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK); // BLACK turn
         List<List<Move>> result = legalMoves.moving();
         IO.println(result);
 
@@ -166,9 +166,9 @@ public class MovingLegalMovesTest {
     void blackPieceMovesFrontwardFromRightEdgeOfBoard() throws InvalidMoveException {
         // Empty board with one Black piece
         Board board = new Board();
-        board.placePiece(Color.BLACK, 3, 7);
+        board.placePiece(GameColor.BLACK, 3, 7);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // BLACK turn
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK); // BLACK turn
         List<List<Move>> result = legalMoves.moving();
 
         // Expected 1 sub-list with exactly 1 move
@@ -184,9 +184,9 @@ public class MovingLegalMovesTest {
     void blackPieceMovesFrontwardFromLeftEdgeOfBoard() throws InvalidMoveException {
         // Empty board with one White piece
         Board board = new Board();
-        board.placePiece(Color.BLACK, 2, 0);
+        board.placePiece(GameColor.BLACK, 2, 0);
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK); // WHITE turn
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
 
         // Expected 1 sub-list with exactly 1 move
@@ -202,10 +202,10 @@ public class MovingLegalMovesTest {
     @Test
     void blackPieceBlockedByFriend() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.BLACK, 3, 3);
-        board.placePiece(Color.BLACK, 4, 4); // Block the left diagonal
+        board.placePiece(GameColor.BLACK, 3, 3);
+        board.placePiece(GameColor.BLACK, 4, 4); // Block the left diagonal
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK);
         List<List<Move>> result = legalMoves.moving();
 
         List<List<Move>> pathsForPiece = getMovesForPiece(result, 3, 3);
@@ -226,10 +226,10 @@ public class MovingLegalMovesTest {
     @Test
     void multipleBlackPieces() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(Color.BLACK, 3, 3); // Expected moves (4,2) and (4,4)
-        board.placePiece(Color.BLACK, 6, 0); // Expected move (7,1)
+        board.placePiece(GameColor.BLACK, 3, 3); // Expected moves (4,2) and (4,4)
+        board.placePiece(GameColor.BLACK, 6, 0); // Expected move (7,1)
 
-        LegalMoves legalMoves = new LegalMoves(board, Color.BLACK);
+        LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK);
         List<List<Move>> result = legalMoves.moving();
 
         // First piece
