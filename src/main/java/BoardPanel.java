@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 
-public class BoardPanel extends JComponent {
+public class BoardPanel extends JComponent implements GameListener{
     private Board gameBoard;
     private final int TILE_SIZE = 80;
     private final Color WHITE;
@@ -33,5 +33,11 @@ public class BoardPanel extends JComponent {
     private void drawPiece(Graphics g, int row, int col, Piece p) {
         g.setColor((p.getColor().equals(GameColor.WHITE)) ? this.WHITE : this.BLACK);
         g.fillOval(col * TILE_SIZE + 10, row * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
+    }
+
+
+    @Override
+    public void onBoardChanged() {
+        this.repaint();
     }
 }

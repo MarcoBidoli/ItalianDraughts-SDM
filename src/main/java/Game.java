@@ -11,6 +11,7 @@ public class Game {
     private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
     private final Map<List<TileEnc>, Integer> visits;
 
+
     public Game() {
         this.gameBoard = new Board();      // crea una nuova scacchiera vuota
         this.gameBoard.setGame();          // imposta la configurazione iniziale
