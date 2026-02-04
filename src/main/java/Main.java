@@ -25,7 +25,8 @@ public class Main {
         frame.add(dashboardPanel, BorderLayout.NORTH);
         frame.add(boardPanel, BorderLayout.SOUTH);
 
-        frame.setSize(655, 680);
+        frame.pack();
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
