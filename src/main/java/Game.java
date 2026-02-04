@@ -15,7 +15,6 @@ public class Game {
 
     public Game() {
         this.gameBoard = new Board();      // crea una nuova scacchiera vuota
-        this.gameBoard.setGame();          // imposta la configurazione iniziale
         this.currentPlayer = GameColor.WHITE;  // scelta: parte il bianco
         this.status = GameStatus.ONGOING;
         this.visits = new HashMap<>();

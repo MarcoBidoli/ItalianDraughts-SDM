@@ -17,7 +17,7 @@ public class Main {
         BoardPanel panel = new BoardPanel(game.getBoard(), game);
 
         frame.add(panel);
-        frame.setSize(656, 679);
+        frame.setSize(655, 680);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

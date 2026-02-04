@@ -30,7 +30,7 @@ public class BoardPanel extends JComponent implements GameListener {
         });
     }
 
-    private void handleLogic(int row, int col) {
+    protected void handleLogic(int row, int col) {
         //click on a suggersted move
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
@@ -125,5 +125,17 @@ public class BoardPanel extends JComponent implements GameListener {
     @Override
     public void onBoardChanged() {
         this.repaint();
+    }
+
+    public Coords getSelectedCoords() {
+        return selectedCoords;
+    }
+
+    public void setSelectedCoords(Coords selectedCoords) {
+        this.selectedCoords = selectedCoords;
+    }
+
+    public List<List<Move>> getFilteredMoves() {
+        return filteredMoves;
     }
 }
