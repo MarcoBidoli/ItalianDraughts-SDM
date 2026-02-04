@@ -20,8 +20,8 @@ public class DashboardPanelTest {
 
         assertTrue(dBP.getStatusText().contains("WHITE"));
         String countTxt = dBP.getCountText();
-        assertTrue(countTxt.contains("WHITES: 2"));
-        assertTrue(countTxt.contains("BLACKS: 1"));
+        assertTrue(countTxt.contains("WHITE 2"));
+        assertTrue(countTxt.contains("BLACK 1"));
     }
 
     @Test

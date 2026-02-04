@@ -119,6 +119,10 @@ public class BoardPanel extends JComponent {
             g.setColor(Color.LIGHT_GRAY);
             g.drawOval(x, y, size, size);
         }
+        if (p.getColor() == GameColor.BLACK) {
+            g.setColor(Color.DARK_GRAY);
+            g.drawOval(x, y, size, size);
+        }
 
         //inner gold circle if king
         if (p.isKing()) {

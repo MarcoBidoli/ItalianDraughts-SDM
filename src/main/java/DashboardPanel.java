@@ -27,6 +27,8 @@ public class DashboardPanel extends JPanel {
 
         JPanel btnPan = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         btnPan.setOpaque(false);
+        resign = new JButton("Resign");
+        draw = new JButton("Draw");
         resign.setBackground(new Color(231, 76, 60));
         resign.setForeground(Color.WHITE);
 
@@ -47,7 +49,7 @@ public class DashboardPanel extends JPanel {
         GameColor req = game.getCurrentPlayer();
         GameColor opp = Game.opposite(req);
 
-        int resp = JOptionPane.showConfirmDialog(this, req + "asks for DRAW. " + opp + " do you agree?", "Draw request", JOptionPane.YES_NO_OPTION);
+        int resp = JOptionPane.showConfirmDialog(this, req + " asks for DRAW. " + opp + " do you agree?", "Draw request", JOptionPane.YES_NO_OPTION);
 
         if(resp == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(this, "Game ends in an AGREED DRAW.");
@@ -59,7 +61,7 @@ public class DashboardPanel extends JPanel {
         GameColor loser = game.getCurrentPlayer();
         String winner = (loser == GameColor.WHITE) ? "BLACK" : "WHITE";
 
-        int conf = JOptionPane.showConfirmDialog(this, "Are you sure you want to call RESIGN?", "Resign", JOptionPane.YES_NO_OPTION);
+        int conf = JOptionPane.showConfirmDialog(this, loser + ", are you sure you want to call RESIGN?", "Resign", JOptionPane.YES_NO_OPTION);
 
         if(conf == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(this, loser + " RESIGNED, " + winner + " WINS!");
@@ -70,7 +72,7 @@ public class DashboardPanel extends JPanel {
     public void updateInfo(Game game) {
         String turn = game.getCurrentPlayer() == GameColor.WHITE ? "WHITE" : "BLACK";
         status.setText(turn + "'S TURN");
-        status.setForeground(game.getCurrentPlayer() == GameColor.WHITE ? Color.BLUE : Color.RED);
+        status.setForeground(game.getCurrentPlayer() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
 
         int w = 0, b = 0;
         Board board = game.getBoard();
@@ -83,7 +85,7 @@ public class DashboardPanel extends JPanel {
                 }
             }
         }
-        count.setText("WHITES: " + w + " | BLACKS: " + b);
+        count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
         if(game.getStatus() != GameStatus.ONGOING) {
             status.setText("GAME STATUS: " + game.getStatus());
