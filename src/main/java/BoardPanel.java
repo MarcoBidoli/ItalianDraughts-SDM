@@ -11,6 +11,7 @@ public class BoardPanel extends JComponent {
     private Game game;
     private List<List<Move>> filteredMoves = new ArrayList<>();
     private Coords selectedCoords = null;
+    private DashboardPanel dashboardPanel;
     private final Color WHITE;
     private final Color BLACK;
 
@@ -19,6 +20,7 @@ public class BoardPanel extends JComponent {
         this.game = game;
         this.BLACK = new Color(0, 0, 0);
         this.WHITE = new Color(255, 255, 255);
+        this.setPreferredSize(new Dimension(80 * 8, 80 * 8));
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -37,6 +39,8 @@ public class BoardPanel extends JComponent {
             if (lastMove.toRow == row && lastMove.toCol == col) {
                 try {
                     game.applyTurn((new ArrayList<>(move)));
+                    if(dashboardPanel != null)
+                        dashboardPanel.updateInfo(game);
                     selectedCoords = null;
                     filteredMoves = new ArrayList<>();
                     repaint();
@@ -115,6 +119,10 @@ public class BoardPanel extends JComponent {
             g.setColor(Color.LIGHT_GRAY);
             g.drawOval(x, y, size, size);
         }
+        if (p.getColor() == GameColor.BLACK) {
+            g.setColor(Color.DARK_GRAY);
+            g.drawOval(x, y, size, size);
+        }
 
         //inner gold circle if king
         if (p.isKing()) {
@@ -152,6 +160,10 @@ public class BoardPanel extends JComponent {
 
             System.exit(0);
         }
+    }
 
+    public void setDashboardPanel(DashboardPanel dBP) {
+        this.dashboardPanel = dBP;
+        this.dashboardPanel.updateInfo(game);
     }
 }
