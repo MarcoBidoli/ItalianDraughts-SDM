@@ -147,6 +147,7 @@ public class BoardPanel extends JComponent {
                 case GameStatus.BLACK_WINS -> msg = "BLACK WINS!";
                 case GameStatus.DRAW -> msg = "DRAW!";
             }
+
             JOptionPane.showMessageDialog(this, msg, "End of the game", JOptionPane.INFORMATION_MESSAGE);
 
             System.exit(0);
