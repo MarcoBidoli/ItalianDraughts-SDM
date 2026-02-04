@@ -1,9 +1,9 @@
 public class Cell {
 
     private Piece piece;
-    Color cellColor;
+    GameColor cellColor;
 
-    public Cell(Color cellColor) {
+    public Cell(GameColor cellColor) {
         piece = null;
         this.cellColor = cellColor;
     }
@@ -12,16 +12,16 @@ public class Cell {
         return this.piece == null;
     }
 
-    public Color getColor() {
+    public GameColor getColor() {
         return this.cellColor;
     }
 
-    public void setColor(Color color) {
+    public void setColor(GameColor color) {
         this.cellColor = color;
     }
 
     public void putPieceOn(Piece p) throws InvalidMoveException {
-        if (this.getColor() != Color.BLACK) {
+        if (this.getColor() != GameColor.BLACK) {
             throw new InvalidMoveException("Pieces can only be placed on black cells");
         }
         if (this.piece != null) {

@@ -11,8 +11,8 @@ public class EncodingTest {
     @Test
     public void testEncode() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(Color.WHITE, 4, 4);
-        board.placePiece(Color.BLACK, 0, 0);
+        board.placePiece(GameColor.WHITE, 4, 4);
+        board.placePiece(GameColor.BLACK, 0, 0);
         Game game = new Game();
         game.boardEncoder(board);
         Map<List<TileEnc>, Integer> visits = game.getVisits();
@@ -40,10 +40,10 @@ public class EncodingTest {
     @Test
     public void removalTest() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(Color.WHITE, 3, 7);
-        board.placePiece(Color.BLACK, 0, 0);
-        board.placePiece(Color.WHITE, 4, 4);
-        board.placePiece(Color.BLACK, 3, 3);
+        board.placePiece(GameColor.WHITE, 3, 7);
+        board.placePiece(GameColor.BLACK, 0, 0);
+        board.placePiece(GameColor.WHITE, 4, 4);
+        board.placePiece(GameColor.BLACK, 3, 3);
         Game game = new Game();
         game.boardEncoder(board);
         List<TileEnc> enc = game.getVisits().keySet().iterator().next();

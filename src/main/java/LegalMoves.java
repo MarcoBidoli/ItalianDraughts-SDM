@@ -6,13 +6,13 @@ record Coords(int i, int j) {
 
 public class LegalMoves {
     private Board gameBoard;
-    private Color player;
+    private GameColor player;
     private int direction;
 
-    public LegalMoves(Board gameBoard, Color player) {
+    public LegalMoves(Board gameBoard, GameColor player) {
         this.gameBoard = gameBoard;
         this.player = player;
-        this.direction = this.player.equals(Color.BLACK) ? 1 : -1;
+        this.direction = this.player.equals(GameColor.BLACK) ? 1 : -1;
     }
 
     public List<List<Move>> getLegalMoves() throws InvalidMoveException {

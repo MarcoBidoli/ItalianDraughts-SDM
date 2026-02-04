@@ -18,15 +18,15 @@ public class Board {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 == 0) {
-                    board[i][j] = new Cell(Color.BLACK);
+                    board[i][j] = new Cell(GameColor.BLACK);
                 } else {
-                    board[i][j] = new Cell(Color.WHITE);
+                    board[i][j] = new Cell(GameColor.WHITE);
                 }
             }
         }
     }
 
-    public Color getCellColor(int x, int y) {
+    public GameColor getCellColor(int x, int y) {
         return board[x][y].getColor();
     }
 
@@ -55,11 +55,11 @@ public class Board {
         return true;
     }
 
-    public void placePiece(Color color, int x, int y) throws InvalidMoveException {
+    public void placePiece(GameColor color, int x, int y) throws InvalidMoveException {
         board[x][y].putPieceOn(new Piece(color));
     }
 
-    public void placeKing(Color color, int x, int y) throws InvalidMoveException {
+    public void placeKing(GameColor color, int x, int y) throws InvalidMoveException {
         Piece p = new Piece(color);
         p.setKing(true);
         board[x][y].putPieceOn(p);
@@ -68,9 +68,9 @@ public class Board {
     public void setGame() {
         for(int i=0; i<3; i++) {
             for(int j=0; j<8; j++) {
-                if (board[i][j].getColor() == Color.BLACK)
+                if (board[i][j].getColor() == GameColor.BLACK)
                     try {
-                        placePiece(Color.BLACK, i, j);
+                        placePiece(GameColor.BLACK, i, j);
                     } catch (InvalidMoveException e) {
                         // TODO: Handle error message
                     }
@@ -79,9 +79,9 @@ public class Board {
 
         for(int i=5; i<8; i++) {
             for(int j=0; j<8; j++) {
-                if (board[i][j].getColor() == Color.BLACK)
+                if (board[i][j].getColor() == GameColor.BLACK)
                     try {
-                        placePiece(Color.WHITE, i, j);
+                        placePiece(GameColor.WHITE, i, j);
                     } catch (InvalidMoveException e) {
                         // TODO: Handle error message
                     }
@@ -114,8 +114,8 @@ public class Board {
                     sb.append(" . ");
                 } else {
                     Piece p = board[i][j].getPiece();
-                    char symbol = (p.getColor() == Color.WHITE) ? '⛀' : '⛂';
-                    if(p.isKing()) symbol = (p.getColor() == Color.WHITE) ? '⛁' : '⛃';;
+                    char symbol = (p.getColor() == GameColor.WHITE) ? '⛀' : '⛂';
+                    if(p.isKing()) symbol = (p.getColor() == GameColor.WHITE) ? '⛁' : '⛃';;
                     sb.append(" ").append(symbol).append(" ");
                 }
             }

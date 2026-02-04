@@ -5,22 +5,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PieceTest {
     @Test
     void isKing() {
-        Piece piece = new Piece(Color.BLACK);
+        Piece piece = new Piece(GameColor.BLACK);
         assertFalse(piece.isKing());
     }
     @Test
     void isBlack() {
-        Piece piece = new Piece(Color.BLACK);
-        assertEquals(Color.BLACK, piece.getColor());
+        Piece piece = new Piece(GameColor.BLACK);
+        assertEquals(GameColor.BLACK, piece.getColor());
     }
     @Test
     void isWhite() {
-        Piece piece = new Piece(Color.WHITE);
-        assertEquals(Color.WHITE, piece.getColor());
+        Piece piece = new Piece(GameColor.WHITE);
+        assertEquals(GameColor.WHITE, piece.getColor());
     }
     @Test
     void becomesKing() {
-        Piece piece = new Piece(Color.BLACK);
+        Piece piece = new Piece(GameColor.BLACK);
         piece.setKing(true);
         assertTrue(piece.isKing());
     }

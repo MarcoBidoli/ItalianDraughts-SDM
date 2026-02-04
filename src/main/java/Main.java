@@ -1,16 +1,30 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main {
-    private final Game game = new Game();
+    //private final Game game = new Game();
     private int turnCounter = 1;
 
     void main() throws InvalidMoveException {
 
+        Game game = new Game();
+        game.getBoard().setGame();
+        game.calculateLegalMoves();
+
+        JFrame frame = new JFrame("Italian Draughts");
+        BoardPanel panel = new BoardPanel(game.getBoard(), game);
+
+        frame.add(panel);
+        frame.setSize(655, 680);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+
+        /*
         List<List<Move>> currentPlayerLegalMoves = new ArrayList<>();
-
-
         while(game.getStatus() == GameStatus.ONGOING) {
             printGameStatus();
             game.getBoard().printBoard();
@@ -41,9 +55,12 @@ public class Main {
             IO.println("DRAW!");
         else
             IO.println(game.getStatus() == GameStatus.BLACK_WINS ? "BLACK WINS!" : "WHITE WINS!");
+    */
     }
+}
 
 
+    /*
     // Helper to display moves to the player
     private void printMoves(List<List<Move>> allLegalMoves) {
         if (allLegalMoves == null || allLegalMoves.isEmpty()) {
@@ -91,3 +108,4 @@ public class Main {
         }
     }
 }
+*/

@@ -7,7 +7,7 @@ public class GameTurnTest {
     @Test
     void gameStartsWithWhiteTurn() {
         Game game = new Game();
-        assertEquals(Color.WHITE, game.getCurrentPlayer());
+        assertEquals(GameColor.WHITE, game.getCurrentPlayer());
     }
 
     @Test
@@ -15,16 +15,16 @@ public class GameTurnTest {
         Game game = new Game();
 
         game.nextTurn();
-        assertEquals(Color.BLACK, game.getCurrentPlayer());
+        assertEquals(GameColor.BLACK, game.getCurrentPlayer());
 
         game.nextTurn();
-        assertEquals(Color.WHITE, game.getCurrentPlayer());
+        assertEquals(GameColor.WHITE, game.getCurrentPlayer());
     }
 
     @Test
     void oppositeReturnsOtherColor() {
-        assertEquals(Color.WHITE, Game.opposite(Color.BLACK));
-        assertEquals(Color.BLACK, Game.opposite(Color.WHITE));
+        assertEquals(GameColor.WHITE, Game.opposite(GameColor.BLACK));
+        assertEquals(GameColor.BLACK, Game.opposite(GameColor.WHITE));
     }
 
     @Test
