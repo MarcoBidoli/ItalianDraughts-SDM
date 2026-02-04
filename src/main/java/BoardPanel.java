@@ -13,14 +13,17 @@ public class BoardPanel extends JComponent {
     private Coords selectedCoords = null;
     private DashboardPanel dashboardPanel;
     private final int OFFSET = 30;
+
     private final Color WHITE;
     private final Color BLACK;
+    private final Color MARGIN_COLOR;
 
     public BoardPanel(Board gameBoard, Game game) {
         this.gameBoard = gameBoard;
         this.game = game;
         this.BLACK = new Color(0, 0, 0);
         this.WHITE = new Color(255, 255, 255);
+        this.MARGIN_COLOR = new Color(115, 74, 33);
         this.setPreferredSize(new Dimension(80 * 8 + OFFSET, 80 * 8 + OFFSET));
 
         this.addMouseListener(new MouseAdapter() {
@@ -78,7 +81,12 @@ public class BoardPanel extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        g2.setColor(MARGIN_COLOR);
+        g2.fillRect(0, 0, OFFSET, 8 * TILE_SIZE);
+        g2.fillRect(0, 8 * TILE_SIZE, 8 * TILE_SIZE + OFFSET, OFFSET);
         for (int i = 0; i < 8; i++) {
+            g2.setColor(Color.BLACK);
+            g2.setFont(new Font("SansSerif", Font.BOLD, 14));
             g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 5);
             g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + OFFSET - 10);
 
@@ -102,7 +110,7 @@ public class BoardPanel extends JComponent {
             }
         }
 
-        //draw possible destinations
+       //draw possible destinations
         g.setColor(new Color(46, 204, 113, 180));
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
