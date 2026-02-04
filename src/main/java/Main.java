@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,9 +15,16 @@ public class Main {
         game.calculateLegalMoves();
 
         JFrame frame = new JFrame("Italian Draughts");
-        BoardPanel panel = new BoardPanel(game.getBoard(), game);
+        frame.setLayout(new BorderLayout());
 
-        frame.add(panel);
+        BoardPanel boardPanel = new BoardPanel(game.getBoard(), game);
+        DashboardPanel dashboardPanel = new DashboardPanel();
+
+        boardPanel.setDashboardPanel(dashboardPanel);
+
+        frame.add(dashboardPanel, BorderLayout.NORTH);
+        frame.add(boardPanel, BorderLayout.SOUTH);
+
         frame.setSize(655, 680);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);

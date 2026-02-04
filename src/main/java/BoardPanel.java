@@ -11,6 +11,7 @@ public class BoardPanel extends JComponent {
     private Game game;
     private List<List<Move>> filteredMoves = new ArrayList<>();
     private Coords selectedCoords = null;
+    private DashboardPanel dashboardPanel;
     private final Color WHITE;
     private final Color BLACK;
 
@@ -37,6 +38,8 @@ public class BoardPanel extends JComponent {
             if (lastMove.toRow == row && lastMove.toCol == col) {
                 try {
                     game.applyTurn((new ArrayList<>(move)));
+                    if(dashboardPanel != null)
+                        dashboardPanel.updateInfo(game);
                     selectedCoords = null;
                     filteredMoves = new ArrayList<>();
                     repaint();
@@ -152,6 +155,10 @@ public class BoardPanel extends JComponent {
 
             System.exit(0);
         }
+    }
 
+    public void setDashboardPanel(DashboardPanel dBP) {
+        this.dashboardPanel = dBP;
+        this.dashboardPanel.updateInfo(game);
     }
 }
