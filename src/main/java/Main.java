@@ -18,7 +18,7 @@ public class Main {
         frame.setLayout(new BorderLayout());
 
         BoardPanel boardPanel = new BoardPanel(game.getBoard(), game);
-        DashboardPanel dashboardPanel = new DashboardPanel();
+        DashboardPanel dashboardPanel = new DashboardPanel(game);
 
         boardPanel.setDashboardPanel(dashboardPanel);
 

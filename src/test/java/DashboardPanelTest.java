@@ -15,7 +15,7 @@ public class DashboardPanelTest {
         board.placePiece(GameColor.WHITE, 7, 3);
         board.placePiece(GameColor.BLACK, 0, 0);
 
-        DashboardPanel dBP = new DashboardPanel();
+        DashboardPanel dBP = new DashboardPanel(game);
         dBP.updateInfo(game);
 
         assertTrue(dBP.getStatusText().contains("WHITE"));
@@ -29,7 +29,7 @@ public class DashboardPanelTest {
         Game game = new Game();
         Board board = game.getBoard();
 
-        DashboardPanel dBP = new DashboardPanel();
+        DashboardPanel dBP = new DashboardPanel(game);
         dBP.updateInfo(game);
 
         board.placePiece(GameColor.WHITE, 7, 1);
