@@ -21,6 +21,8 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+
         /*
         List<List<Move>> currentPlayerLegalMoves = new ArrayList<>();
         while(game.getStatus() == GameStatus.ONGOING) {

@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardPanel extends JComponent implements GameListener {
+public class BoardPanel extends JComponent {
     private Board gameBoard;
     private final int TILE_SIZE = 80;
     private Game game;
@@ -40,6 +40,9 @@ public class BoardPanel extends JComponent implements GameListener {
                     selectedCoords = null;
                     filteredMoves = new ArrayList<>();
                     repaint();
+
+                    checkGameOver();
+
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,12 +124,6 @@ public class BoardPanel extends JComponent implements GameListener {
         }
     }
 
-
-    @Override
-    public void onBoardChanged() {
-        this.repaint();
-    }
-
     public Coords getSelectedCoords() {
         return selectedCoords;
     }
@@ -137,5 +134,23 @@ public class BoardPanel extends JComponent implements GameListener {
 
     public List<List<Move>> getFilteredMoves() {
         return filteredMoves;
+    }
+
+    private void checkGameOver() {
+        GameStatus status = game.getStatus();
+
+        if(status != GameStatus.ONGOING) {
+            String msg = "";
+
+            switch (status) {
+                case GameStatus.WHITE_WINS -> msg = "WHITE WINS!";
+                case GameStatus.BLACK_WINS -> msg = "BLACK WINS!";
+                case GameStatus.DRAW -> msg = "DRAW!";
+            }
+            JOptionPane.showMessageDialog(this, msg, "End of the game", JOptionPane.INFORMATION_MESSAGE);
+
+            System.exit(0);
+        }
+
     }
 }
