@@ -20,6 +20,7 @@ public class BoardPanel extends JComponent {
         this.game = game;
         this.BLACK = new Color(0, 0, 0);
         this.WHITE = new Color(255, 255, 255);
+        this.setPreferredSize(new Dimension(80 * 8, 80 * 8));
 
         this.addMouseListener(new MouseAdapter() {
             @Override
