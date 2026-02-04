@@ -140,12 +140,14 @@ public class BoardPanel extends JComponent {
             g.drawOval(x, y, size, size);
         }
 
+        Stroke oldStroke = g.getStroke();
         //inner gold circle if king
         if (p.isKing()) {
             g.setColor(new Color(255, 215, 0));
             g.setStroke(new BasicStroke(3));
             g.drawOval(x + 15, y + 15, size - 30, size - 30);
         }
+        g.setStroke(oldStroke);
     }
 
     public Coords getSelectedCoords() {
