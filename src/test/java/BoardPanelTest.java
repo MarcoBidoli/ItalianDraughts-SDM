@@ -13,7 +13,7 @@ public class BoardPanelTest {
         Game game = new Game();
         game.getBoard().setGame();
         BoardPanel panel = new BoardPanel(game.getBoard(), game);
-        panel.setSize(655, 680);
+        panel.setSize(panel.getPreferredSize());
 
         BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
@@ -21,9 +21,13 @@ public class BoardPanelTest {
         panel.paintComponent(g2);
         g2.dispose();
 
-        int pixelColor = img.getRGB(10, 10);
-        Color expected = new Color(153, 102, 51);
-        assertEquals(expected.getRGB(), pixelColor);
+        int marginPixel = img.getRGB(10, 10);
+        Color expectedMargin = new Color(115, 74, 33);
+        assertEquals(expectedMargin.getRGB(), marginPixel);
+
+        int  boardPixel = img.getRGB(30 + 5, 5);
+        Color expectedBoard = new Color (153, 102, 51);
+        assertEquals(expectedBoard.getRGB(), boardPixel);
     }
 
     @Test
