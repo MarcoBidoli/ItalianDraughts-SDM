@@ -9,40 +9,48 @@ public class GameDrawTest {
 
     @Test
     void drawTriggeredAfter40QuietMovesEachWhenBothHaveKings() throws InvalidMoveException {
-        Board board = new Board();
-        board.initCells();
-
-        // Mettiamo un solo pezzo bianco e uno nero e li rendiamo king
-        board.placePiece(GameColor.WHITE, 4, 4);
-        board.getCell(4, 4).getPiece().setKing(true);
-
-        board.placePiece(GameColor.BLACK, 3, 3);
-        board.getCell(3, 3).getPiece().setKing(true);
-
         Game game = new Game();
-
         Board gb = game.getBoard();
         gb.initCells();
-        gb.placePiece(GameColor.WHITE, 4, 4);
-        gb.getCell(4, 4).getPiece().setKing(true);
-        gb.placePiece(GameColor.BLACK, 3, 3);
-        gb.getCell(3, 3).getPiece().setKing(true);
 
-        // Ora muoviamo i due king avanti/indietro senza catture.
-        // White: (4,4) <-> (5,5)
-        // Black: (3,3) <-> (2,2)
+        // White king in basso a sinistra (celle nere, cioè pari)
+        gb.placePiece(GameColor.WHITE, 6, 2);
+        gb.getCell(6, 2).getPiece().setKing(true);
+
+        // Black king in alto a destra (celle nere, cioè pari)
+        gb.placePiece(GameColor.BLACK, 0, 6);
+        gb.getCell(0, 6).getPiece().setKing(true);
+
+        // Percorsi ciclici (4 posizioni) per evitare avanti-indietro ripetuto
+        // White cycle: (6,2) -> (5,1) -> (4,2) -> (5,3) -> (6,2) ...
+        int[][] whitePath = {
+                {6, 2}, {5, 1}, {4, 2}, {5, 3}
+        };
+
+        // Black cycle: (0,6) -> (1,5) -> (2,6) -> (1,7) -> (0,6) ...
+        int[][] blackPath = {
+                {0, 6}, {1, 5}, {2, 6}, {1, 7}
+        };
+
+        int wIdx = 0;
+        int bIdx = 0;
+
         for (int i = 0; i < 40; i++) {
-            // turno White
+            // turno White: sposta lungo il ciclo
             List<Move> w = new ArrayList<>();
-            if (i % 2 == 0) w.add(new Move(4, 4, 5, 5));
-            else w.add(new Move(5, 5, 4, 4));
+            int[] wFrom = whitePath[wIdx];
+            int[] wTo = whitePath[(wIdx + 1) % whitePath.length];
+            w.add(new Move(wFrom[0], wFrom[1], wTo[0], wTo[1]));
             game.applyTurn(w);
+            wIdx = (wIdx + 1) % whitePath.length;
 
-            // turno Black
+            // turno Black: sposta lungo il ciclo
             List<Move> b = new ArrayList<>();
-            if (i % 2 == 0) b.add(new Move(3, 3, 2, 2));
-            else b.add(new Move(2, 2, 3, 3));
+            int[] bFrom = blackPath[bIdx];
+            int[] bTo = blackPath[(bIdx + 1) % blackPath.length];
+            b.add(new Move(bFrom[0], bFrom[1], bTo[0], bTo[1]));
             game.applyTurn(b);
+            bIdx = (bIdx + 1) % blackPath.length;
         }
 
         assertEquals(GameStatus.DRAW, game.getStatus());
