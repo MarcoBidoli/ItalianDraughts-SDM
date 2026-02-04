@@ -11,6 +11,7 @@ public class Game {
     private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
     private final Map<List<TileEnc>, Integer> visits;
 
+    private List<List<Move>> currentLegalMoves;
 
     public Game() {
         this.gameBoard = new Board();      // crea una nuova scacchiera vuota
@@ -18,6 +19,7 @@ public class Game {
         this.currentPlayer = GameColor.WHITE;  // scelta: parte il bianco
         this.status = GameStatus.ONGOING;
         this.visits = new HashMap<>();
+        this.currentLegalMoves = new ArrayList<>();
     }
 
     public GameColor getCurrentPlayer() {
@@ -41,6 +43,8 @@ public class Game {
     }
 
     public void applyTurn(List<Move> moves) throws InvalidMoveException {
+        if(status != GameStatus.ONGOING) return;
+
         // Salviamo chi sta giocando ORA (prima di eventuali cambi turno)
         GameColor playerWhoMoved = currentPlayer;
 
@@ -49,15 +53,17 @@ public class Game {
                 .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
 
         // 2) Applica le mosse alla board (riutilizzo il codice di Federico)
-        movePieces(moves, this.gameBoard);
+        movePieces(new ArrayList<>(moves), this.gameBoard);
 
-        // Se qualcuno ha vinto per eliminazione pezzi, non ha senso calcolare draw o cambiare turno
-        if (status != GameStatus.ONGOING) {
+        //check move repetition
+        if(checkRepetition()) {
+            status = GameStatus.DRAW;
             return;
         }
 
         // 3) Update contatori draw (Move-Count Rule)
         updateDrawCounters(playerWhoMoved, captureOccurred);
+        updateStatusByPieces(this.gameBoard);
 
         // Se la regola draw ha dichiarato DRAW, non cambia turno
         if (status != GameStatus.ONGOING) {
@@ -66,6 +72,7 @@ public class Game {
 
         // 4) Turno successivo
         nextTurn();
+        calculateLegalMoves();
     }
 
 
@@ -114,9 +121,15 @@ public class Game {
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
             Piece pieceToMove = board.getCell(currentMove.fromRow, currentMove.fromCol).getPiece();
+
+            //promotion
             promotionCheck(currentMove, pieceToMove);
+
+            //moving
             board.getCell(currentMove.toRow, currentMove.toCol).putPieceOn(pieceToMove);
             board.getCell(currentMove.fromRow, currentMove.fromCol).empty();
+
+            //if a capture, empty middle cell
             if (Math.abs(currentMove.fromRow - currentMove.toRow) == 2) {
                 board.getCell((currentMove.fromRow + currentMove.toRow) / 2, (currentMove.toCol + currentMove.fromCol) / 2).empty();
             visits.clear();
@@ -189,4 +202,21 @@ public class Game {
         else if (black == 0) status = GameStatus.WHITE_WINS;
         else status = GameStatus.ONGOING;
     }
+
+    public void calculateLegalMoves() {
+        try {
+            LegalMoves lm = new LegalMoves(gameBoard, currentPlayer);
+            this.currentLegalMoves = lm.getLegalMoves();
+
+            if(this.currentLegalMoves.isEmpty() && status == GameStatus.ONGOING)
+                status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+        } catch (InvalidMoveException e) {
+            this.currentLegalMoves = new ArrayList<>();
+        }
+    }
+
+    public List<List<Move>> getCurrentLegalMoves() {
+        return currentLegalMoves;
+    }
+
 }
