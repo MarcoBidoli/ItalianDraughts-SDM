@@ -12,6 +12,7 @@ public class BoardPanel extends JComponent {
     private List<List<Move>> filteredMoves = new ArrayList<>();
     private Coords selectedCoords = null;
     private DashboardPanel dashboardPanel;
+    private final int OFFSET = 30;
     private final Color WHITE;
     private final Color BLACK;
 
@@ -20,14 +21,16 @@ public class BoardPanel extends JComponent {
         this.game = game;
         this.BLACK = new Color(0, 0, 0);
         this.WHITE = new Color(255, 255, 255);
-        this.setPreferredSize(new Dimension(80 * 8, 80 * 8));
+        this.setPreferredSize(new Dimension(80 * 8 + OFFSET, 80 * 8 + OFFSET));
 
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int col = e.getX() / TILE_SIZE;
+                int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
-                handleLogic(row, col);
+                if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+                    handleLogic(row, col);
+                }
             }
         });
     }
@@ -39,7 +42,7 @@ public class BoardPanel extends JComponent {
             if (lastMove.toRow == row && lastMove.toCol == col) {
                 try {
                     game.applyTurn((new ArrayList<>(move)));
-                    if(dashboardPanel != null)
+                    if (dashboardPanel != null)
                         dashboardPanel.updateInfo(game);
                     selectedCoords = null;
                     filteredMoves = new ArrayList<>();
@@ -76,14 +79,19 @@ public class BoardPanel extends JComponent {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         for (int i = 0; i < 8; i++) {
+            g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 5);
+            g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + OFFSET - 10);
+
             for (int j = 0; j < 8; j++) {
+                int x = j * TILE_SIZE + OFFSET;
+                int y = i * TILE_SIZE;
                 g.setColor((i + j) % 2 == 0 ? new Color(153, 102, 51) : new Color(223, 191, 159));
-                g.fillRect(j * TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 //selected piece
                 if (selectedCoords != null && selectedCoords.i() == i && selectedCoords.j() == j) {
                     g.setColor(new Color(255, 255, 0, 150));
-                    g.fillRect(j * TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
                 //piece drawn
@@ -98,13 +106,13 @@ public class BoardPanel extends JComponent {
         g.setColor(new Color(46, 204, 113, 180));
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
-            g.fillOval(lastMove.toCol * TILE_SIZE + 30, lastMove.toRow * TILE_SIZE + 30, 20, 20);
+            g.fillOval(lastMove.toCol * TILE_SIZE + OFFSET + 30, lastMove.toRow * TILE_SIZE + 30, 20, 20);
         }
     }
 
     private void drawPiece(Graphics2D g, int row, int col, Piece p) {
         Color pieceColor = p.getColor() == GameColor.WHITE ? this.WHITE : this.BLACK;
-        int x = col * TILE_SIZE + 10;
+        int x = col * TILE_SIZE + OFFSET + 10;
         int y = row * TILE_SIZE + 10;
         int size = TILE_SIZE - 20;
 
@@ -147,7 +155,7 @@ public class BoardPanel extends JComponent {
     private void checkGameOver() {
         GameStatus status = game.getStatus();
 
-        if(status != GameStatus.ONGOING) {
+        if (status != GameStatus.ONGOING) {
             String msg = "";
 
             switch (status) {
