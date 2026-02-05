@@ -15,7 +15,7 @@ public class EncodingTest {
         board.placePiece(GameColor.BLACK, 0, 0);
         Game game = new Game();
         game.boardEncoder(board);
-        Map<List<TileEnc>, Integer> visits = game.getVisits();
+        Map<List<SquareEnc>, Integer> visits = game.getVisits();
         assertEquals(1, visits.size());
         for (Integer count : visits.values()) {
             assertEquals(1, count);
@@ -29,10 +29,10 @@ public class EncodingTest {
             assertEquals(3, count);
         }
         assertTrue(game.checkRepetition());
-        List<TileEnc> enc = game.getVisits().keySet().iterator().next();
-        TileEnc tile1 = new TileEnc(2,1);
-        TileEnc tile2 = new TileEnc(1,19);
-        List<TileEnc> testList = new ArrayList<>();
+        List<SquareEnc> enc = game.getVisits().keySet().iterator().next();
+        SquareEnc tile1 = new SquareEnc('b',1);
+        SquareEnc tile2 = new SquareEnc('w',19);
+        List<SquareEnc> testList = new ArrayList<>();
         testList.add(tile1);
         testList.add(tile2);
         assertEquals(testList, enc);
@@ -46,12 +46,12 @@ public class EncodingTest {
         board.placePiece(GameColor.BLACK, 3, 3);
         Game game = new Game();
         game.boardEncoder(board);
-        List<TileEnc> enc = game.getVisits().keySet().iterator().next();
-        TileEnc tile1 = new TileEnc(2,1);
-        TileEnc tile2 = new TileEnc(2,14);
-        TileEnc tile3 = new TileEnc(1,16);
-        TileEnc tile4 = new TileEnc(1,19);
-        List<TileEnc> testList = new ArrayList<>();
+        List<SquareEnc> enc = game.getVisits().keySet().iterator().next();
+        SquareEnc tile1 = new SquareEnc('b',1);
+        SquareEnc tile2 = new SquareEnc('b',14);
+        SquareEnc tile3 = new SquareEnc('w',16);
+        SquareEnc tile4 = new SquareEnc('w',19);
+        List<SquareEnc> testList = new ArrayList<>();
         testList.add(tile1);
         testList.add(tile2);
         testList.add(tile3);
@@ -61,13 +61,13 @@ public class EncodingTest {
         moves.add(new Move(4, 4, 2, 2));
         game.movePieces(moves, board);
         game.boardEncoder(board);
-        TileEnc tile6 = new TileEnc(1,10);
-        List<TileEnc> testList2 = new ArrayList<>();
+        SquareEnc tile6 = new SquareEnc('w',10);
+        List<SquareEnc> testList2 = new ArrayList<>();
         testList2.add(tile1);
         testList2.add(tile6);
         testList2.add(tile3);
 
-        List<TileEnc> enc2 = game.getVisits().keySet().iterator().next();
+        List<SquareEnc> enc2 = game.getVisits().keySet().iterator().next();
         assertEquals(testList2, enc2);
     }
 }
