@@ -100,26 +100,49 @@ public class Board {
     }
 
     public void printBoard() {
-        IO.println(this.getBoardRepresentation());
-    }
+        String repr = getBoardRepresentation();
 
-    public String getBoardRepresentation() {
         StringBuilder sb = new StringBuilder();
         sb.append("   0  1  2  3  4  5  6  7\n");
 
-        for(int i = 0; i < board.length; i++) {
+        int index = 0;
+        for (int i = 0; i < 8; i++) {
             sb.append(i).append(" ");
-            for(int j = 0; j < board[i].length; j++) {
-                if (board[i][j].isEmpty()) {
-                    sb.append(" . ");
-                } else {
-                    Piece p = board[i][j].getPiece();
-                    char symbol = (p.getColor() == GameColor.WHITE) ? '⛀' : '⛂';
-                    if(p.isKing()) symbol = (p.getColor() == GameColor.WHITE) ? '⛁' : '⛃';;
-                    sb.append(" ").append(symbol).append(" ");
-                }
+            for (int j = 0; j < 8; j++) {
+                char c = repr.charAt(index++);
+                char symbol = switch (c) {
+                    case 'w' -> '⛀';
+                    case 'W' -> '⛁';
+                    case 'b' -> '⛂';
+                    case 'B' -> '⛃';
+                    case '-' -> '.';
+                    default -> throw new IllegalArgumentException("Invalid character detected: '" + c + "'");
+                };
+                sb.append(" ").append(symbol).append(" ");
             }
             sb.append("\n");
+        }
+
+        IO.println(sb.toString());
+    }
+
+
+    public String getBoardRepresentation() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Cell[] cells : board) {
+            for (Cell cell : cells) {
+                if (cell.isEmpty()) {
+                    sb.append('-');
+                } else {
+                    Piece p = cell.getPiece();
+                    if (p.getColor() == GameColor.WHITE) {
+                        sb.append(p.isKing() ? 'W' : 'w');
+                    } else {
+                        sb.append(p.isKing() ? 'B' : 'b');
+                    }
+                }
+            }
         }
         return sb.toString();
     }
