@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
 
 public class DashboardPanel extends JPanel {
     private JLabel status;
@@ -27,13 +26,9 @@ public class DashboardPanel extends JPanel {
 
         JPanel btnPan = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         btnPan.setOpaque(false);
-        resign = new JButton("Resign");
-        draw = new JButton("Draw");
-        resign.setBackground(new Color(231, 76, 60));
-        resign.setForeground(Color.WHITE);
+        resign = new ModernButton("Resign", new Color(231, 76, 60), Color.WHITE);
+        draw = new ModernButton("Draw", new Color(52, 152, 219), Color.WHITE);
 
-        draw.setBackground(new Color(52, 152, 219));
-        draw.setForeground(Color.WHITE);
 
         resign.addActionListener(e -> handleResign());
         draw.addActionListener(e -> handleDrawRequest());
