@@ -218,4 +218,19 @@ public class Game {
         return currentLegalMoves;
     }
 
+    public List<List<Move>> getMovesFor(int row, int col) {
+        try {
+            return new LegalMoves(this.gameBoard, this.currentPlayer).getSinglePieceLegalMoves(row, col);
+        } catch (InvalidMoveException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void agreedDrawHandling(){
+        status = GameStatus.DRAW;
+    }
+
+    public void resignHandling(GameColor loser) {
+        status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+    }
 }

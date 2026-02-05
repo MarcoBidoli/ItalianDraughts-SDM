@@ -15,6 +15,13 @@ public class LegalMoves {
         this.direction = this.player.equals(GameColor.BLACK) ? 1 : -1;
     }
 
+    public List<List<Move>> getSinglePieceLegalMoves(int row, int col) throws InvalidMoveException {
+        List<List<Move>> allMoves = getLegalMoves();
+        return allMoves.stream()
+                .filter(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col)
+                .toList();
+    }
+
     public List<List<Move>> getLegalMoves() throws InvalidMoveException {
         List<List<Move>> moves = new ArrayList<>(eating()); // initialize the moves with legal eatings
 
