@@ -252,5 +252,10 @@ public class BoardPanel extends JComponent {
         if (this.dashboardPanel != null) this.dashboardPanel.updateInfo(game);
     }
 
+    public List<List<Move>> getFilteredMoves() {
+        return this.filteredMoves;
+    }
+
     public Coords getSelectedCoords() { return selectedCoords; }
+
 }
