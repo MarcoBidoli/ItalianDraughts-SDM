@@ -19,7 +19,7 @@ public class BoardTest {
     @Test
     public void emptyTest() {
         Board board = new Board();
-        assertEquals(true, board.isEmpty());
+        assertTrue(board.isEmpty());
     }
 
     @Test
