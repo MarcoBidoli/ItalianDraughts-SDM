@@ -11,7 +11,7 @@ public class Main {
     void main() throws InvalidMoveException {
 
         Game game = new Game();
-        game.getBoard().setGame();
+        game.getBoard().setGame(); // puts black and white pieces on starting positions
         game.calculateLegalMoves();
 
         JFrame frame = new JFrame("Italian Draughts");
@@ -29,6 +29,7 @@ public class Main {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
         frame.setVisible(true);
 
 

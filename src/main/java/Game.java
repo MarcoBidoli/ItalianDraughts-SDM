@@ -34,7 +34,7 @@ public class Game {
     }
 
     // opposite() = dato un colore, ritorna l'altro
-    public static GameColor opposite(GameColor player) {
+    protected static GameColor opposite(GameColor player) {
         if (player == null) {
             throw new IllegalArgumentException("player cannot be null");
         }

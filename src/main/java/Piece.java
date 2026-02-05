@@ -5,9 +5,9 @@
  * and its ability to capture specific opponent pieces.
  */
 public class Piece {
-    private GameColor color;
     /** The color of the piece, representing the player who owns it. */
-    private Color color;
+    private GameColor color;
+
     /** * Indicates whether the piece has been promoted to a King (Dama).
      * Regular pieces become Kings upon reaching the opponent's final row.
      */
@@ -16,7 +16,7 @@ public class Piece {
     /**
      * Constructs a new regular piece of the specified color.
      * By default, newly created pieces are not Kings.
-     * @param color The {@link Color} assigned to this piece.
+     * @param color The {@link GameColor} assigned to this piece.
      */
     public Piece(GameColor color) {
         this.color = color;
@@ -24,7 +24,7 @@ public class Piece {
     }
 
     /**
-     * @return The {@link Color} of this piece.
+     * @return The {@link GameColor} of this piece.
      */
     public GameColor getColor() {
         return color;
