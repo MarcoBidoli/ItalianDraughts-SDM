@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-record TileEnc(int pieceEnc, int positionEnc) {}
+record TileEnc(char pieceEnc, int positionEnc) {}
 public class Game {
     private final Board gameBoard;
     private GameColor currentPlayer;
@@ -144,13 +144,13 @@ public class Game {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if((i + j) % 2 == 0){
-                    int value;
+                    char value;
                     counter++;
                     if (board.getCell(i,j).getPiece() != null) {
                         if (board.getCell(i, j).getPiece().getColor() == GameColor.BLACK) {
-                            value = board.getCell(i, j).getPiece().isKing() ? 4 : 2;
+                            value = board.getCell(i, j).getPiece().isKing() ? 'N' : 'n';
                         } else {
-                            value = board.getCell(i, j).getPiece().isKing() ? 3 : 1;
+                            value = board.getCell(i, j).getPiece().isKing() ? 'W' : 'w';
                         }
                         encoding.add(new TileEnc(value, counter));
                     }
