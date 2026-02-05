@@ -40,7 +40,6 @@ public class Board {
      * @return The {@link GameColor} of the requested cell.
      */
     public GameColor getCellColor(int x, int y) {
-    public GameColor getCellColor(int x, int y) {
         return board[x][y].getColor();
     }
 
