@@ -17,8 +17,8 @@ public class Main {
         JFrame frame = new JFrame("Italian Draughts");
         frame.setLayout(new BorderLayout());
 
-        BoardPanel boardPanel = new BoardPanel(game.getBoard(), game);
         DashboardPanel dashboardPanel = new DashboardPanel(game);
+        BoardPanel boardPanel = new BoardPanel(game, dashboardPanel);
 
         boardPanel.setDashboardPanel(dashboardPanel);
 

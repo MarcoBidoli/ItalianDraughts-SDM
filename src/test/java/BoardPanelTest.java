@@ -12,7 +12,7 @@ public class BoardPanelTest {
     public void showCorrectBoard() {
         Game game = new Game();
         game.getBoard().setGame();
-        BoardPanel panel = new BoardPanel(game.getBoard(), game);
+        BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
         panel.setSize(panel.getPreferredSize());
 
         BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -37,7 +37,7 @@ public class BoardPanelTest {
         board.placePiece(GameColor.WHITE, 5, 1);
         game.calculateLegalMoves();
 
-        BoardPanel panel = new BoardPanel(board, game);
+        BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
 
         panel.handleLogic(5, 1);
 

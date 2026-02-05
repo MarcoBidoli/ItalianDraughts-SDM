@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardPanel extends JComponent {
-    private Board gameBoard;
     private final int TILE_SIZE = 80;
     private Game game;
     private List<List<Move>> filteredMoves = new ArrayList<>();
@@ -18,9 +17,10 @@ public class BoardPanel extends JComponent {
     private final Color BLACK;
     private final Color MARGIN_COLOR;
 
-    public BoardPanel(Board gameBoard, Game game) {
-        this.gameBoard = gameBoard;
+    public BoardPanel(Game game, DashboardPanel dashboardPanel) {
         this.game = game;
+        this.dashboardPanel = dashboardPanel;
+        this.dashboardPanel.updateInfo(game);
         this.BLACK = new Color(0, 0, 0);
         this.WHITE = new Color(255, 255, 255);
         this.MARGIN_COLOR = new Color(115, 74, 33);
@@ -103,7 +103,7 @@ public class BoardPanel extends JComponent {
                 }
 
                 //piece drawn
-                Cell cell = gameBoard.getCell(i, j);
+                Cell cell = game.getBoard().getCell(i, j);
                 if (!cell.isEmpty()) {
                     drawPiece(g2, i, j, cell.getPiece());
                 }
