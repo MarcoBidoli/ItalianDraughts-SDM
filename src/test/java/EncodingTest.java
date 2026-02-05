@@ -30,8 +30,8 @@ public class EncodingTest {
         }
         assertTrue(game.checkRepetition());
         List<TileEnc> enc = game.getVisits().keySet().iterator().next();
-        TileEnc tile1 = new TileEnc(2,1);
-        TileEnc tile2 = new TileEnc(1,19);
+        TileEnc tile1 = new TileEnc('n',1);
+        TileEnc tile2 = new TileEnc('w',19);
         List<TileEnc> testList = new ArrayList<>();
         testList.add(tile1);
         testList.add(tile2);
@@ -47,10 +47,10 @@ public class EncodingTest {
         Game game = new Game();
         game.boardEncoder(board);
         List<TileEnc> enc = game.getVisits().keySet().iterator().next();
-        TileEnc tile1 = new TileEnc(2,1);
-        TileEnc tile2 = new TileEnc(2,14);
-        TileEnc tile3 = new TileEnc(1,16);
-        TileEnc tile4 = new TileEnc(1,19);
+        TileEnc tile1 = new TileEnc('n',1);
+        TileEnc tile2 = new TileEnc('n',14);
+        TileEnc tile3 = new TileEnc('w',16);
+        TileEnc tile4 = new TileEnc('w',19);
         List<TileEnc> testList = new ArrayList<>();
         testList.add(tile1);
         testList.add(tile2);
@@ -61,7 +61,7 @@ public class EncodingTest {
         moves.add(new Move(4, 4, 2, 2));
         game.movePieces(moves, board);
         game.boardEncoder(board);
-        TileEnc tile6 = new TileEnc(1,10);
+        TileEnc tile6 = new TileEnc('w',10);
         List<TileEnc> testList2 = new ArrayList<>();
         testList2.add(tile1);
         testList2.add(tile6);
