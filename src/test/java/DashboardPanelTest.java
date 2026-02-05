@@ -16,7 +16,7 @@ public class DashboardPanelTest {
         board.placePiece(GameColor.BLACK, 0, 0);
 
         DashboardPanel dBP = new DashboardPanel(game);
-        dBP.updateInfo(game);
+        dBP.updateInfo();
 
         assertTrue(dBP.getStatusText().contains("WHITE"));
         String countTxt = dBP.getCountText();
@@ -30,7 +30,7 @@ public class DashboardPanelTest {
         Board board = game.getBoard();
 
         DashboardPanel dBP = new DashboardPanel(game);
-        dBP.updateInfo(game);
+        dBP.updateInfo();
 
         board.placePiece(GameColor.WHITE, 7, 1);
         board.placePiece(GameColor.WHITE, 7, 3);
@@ -39,7 +39,7 @@ public class DashboardPanelTest {
         move.add(new Move(7, 1, 6, 2));
         game.applyTurn(move);
 
-        dBP.updateInfo(game);
+        dBP.updateInfo();
 
         assertTrue(dBP.getStatusText().contains("BLACK"));
     }
