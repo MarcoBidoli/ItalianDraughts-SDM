@@ -152,4 +152,16 @@ public class Board {
         }
         return sb.toString();
     }
+    public int countColorPieces(GameColor color) {
+        int p=0;
+        for(int i=0; i<8; i++) {
+            for(int j=0; j<8; j++) {
+                if(!getCell(i,j).isEmpty()) {
+                    if(getCell(i,j).getPiece().getColor() == color)
+                        p++;
+                }
+            }
+        }
+        return p;
+    }
 }

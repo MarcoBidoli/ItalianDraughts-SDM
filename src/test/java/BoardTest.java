@@ -29,13 +29,7 @@ public class BoardTest {
     public void countPieces() {
         Board board = new Board();
         board.setGame();
-        int c = 0;
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                if(!board.getCell(i,j).isEmpty())
-                    c++;
-            }
-        }
+        int c = board.countColorPieces(GameColor.BLACK) + board.countColorPieces(GameColor.WHITE);
         assertEquals(24, c);
     }
 
@@ -43,17 +37,7 @@ public class BoardTest {
     public void countPiecesColor() {
         Board board = new Board();
         board.setGame();
-        int w = 0, b = 0;
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                if(!board.getCell(i,j).isEmpty()) {
-                    if(board.getCell(i,j).getPiece().getColor() == GameColor.WHITE)
-                        w++;
-                    if(board.getCell(i,j).getPiece().getColor() == GameColor.BLACK)
-                        b++;
-                }
-            }
-        }
+        int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         assertEquals(12, w);
         assertEquals(12, b);
     }

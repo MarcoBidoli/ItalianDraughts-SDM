@@ -75,18 +75,8 @@ public class DashboardPanel extends JPanel {
         String turn = this.game.getCurrentPlayer() == GameColor.WHITE ? "WHITE" : "BLACK";
         status.setText(turn + "'S TURN");
         status.setForeground(this.game.getCurrentPlayer() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
-
-        int w = 0, b = 0;
         Board board = this.game.getBoard();
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                Piece p = board.getCell(i,j).getPiece();
-                if(p != null) {
-                    if(p.getColor() == GameColor.WHITE) w++;
-                    else b++;
-                }
-            }
-        }
+        int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
         if(game.getStatus() != GameStatus.ONGOING) {
