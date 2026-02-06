@@ -38,7 +38,7 @@ public class LegalMoves {
         return moves;
     }
 
-    protected List<List<Move>> eating() throws InvalidMoveException {
+    public List<List<Move>> eating() throws InvalidMoveException {
         List<List<Move>> allEatings = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -162,7 +162,7 @@ public class LegalMoves {
         return true;
     }
 
-    protected List<List<Move>> moving() {
+    public List<List<Move>> moving() {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 
         // Putting all player pieces coordinates in a list

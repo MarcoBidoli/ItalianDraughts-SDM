@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-record SquareEnc(char pieceEnc, int positionEnc) {}
+
 public class Game {
     private final Board gameBoard;
     private GameColor currentPlayer;
     private GameStatus status;
     private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
     private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
-    private final Map<List<SquareEnc>, Integer> visits;
+    private final Map<List<SquareEncoder>, Integer> visits;
 
     private List<List<Move>> currentLegalMoves;
 
@@ -143,7 +143,7 @@ public class Game {
     }
 
     public void boardEncoder(Board board) {
-        List<SquareEnc> encoding = new ArrayList<>();
+        List<SquareEncoder> encoding = new ArrayList<>();
         int counter = 0;
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
@@ -156,7 +156,7 @@ public class Game {
                         } else {
                             value = board.getCell(i, j).getPiece().isKing() ? 'W' : 'w';
                         }
-                        encoding.add(new SquareEnc(value, counter));
+                        encoding.add(new SquareEncoder(value, counter));
                     }
                 }
             }
@@ -173,7 +173,7 @@ public class Game {
         return false;
     }
 
-    protected Map<List<SquareEnc>, Integer> getVisits() {
+    public Map<List<SquareEncoder>, Integer> getVisits() {
         return visits;
     }
 
