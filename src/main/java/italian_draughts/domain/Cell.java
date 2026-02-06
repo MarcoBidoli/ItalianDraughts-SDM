@@ -1,3 +1,5 @@
+package italian_draughts.domain;
+
 public class Cell {
 
     private Piece piece;
@@ -25,7 +27,7 @@ public class Cell {
             throw new InvalidMoveException("Pieces can only be placed on black cells");
         }
         if (this.piece != null) {
-            throw new InvalidMoveException("Cell already occupied");
+            throw new InvalidMoveException("domain.Cell already occupied");
         }
         this.piece = p;
     }

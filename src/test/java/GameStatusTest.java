@@ -1,3 +1,8 @@
+import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.GameStatus;
+import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

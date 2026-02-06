@@ -1,11 +1,20 @@
+package italian_draughts.app;
+
+import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.gui.BoardPanel;
+import italian_draughts.gui.DashboardPanel;
+import italian_draughts.logic.Game;
+import italian_draughts.domain.Board;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
-    //private final Game game = new Game();
+    //private final logic.Game game = new logic.Game();
     private int turnCounter = 1;
 
     void main() throws InvalidMoveException {
@@ -15,6 +24,28 @@ public class Main {
         game.calculateLegalMoves();
 
         JFrame frame = new JFrame("Italian Draughts");
+
+        // --- ICON LOADING LOGIC START ---
+        try {
+            // Use ImageIO to load the image synchronously to prevent the Mac CImage null crash
+            BufferedImage icon = ImageIO.read(new File("italian-draughts-masked.png"));
+
+            // Set the window icon (standard)
+            frame.setIconImage(icon);
+
+            // Set the Mac Dock icon (specific for macOS)
+            if (Taskbar.isTaskbarSupported()) {
+                Taskbar taskbar = Taskbar.getTaskbar();
+                taskbar.setIconImage(icon);
+            }
+        } catch (IOException e) {
+            System.err.println("Could not load icon: " + e.getMessage());
+            // Fallback or ignore
+        } catch (UnsupportedOperationException e) {
+            // Taskbar not supported (e.g., on some Linux distros or older Java versions)
+        }
+        // --- ICON LOADING LOGIC END ---
+
         frame.setLayout(new BorderLayout());
 
         DashboardPanel dashboardPanel = new DashboardPanel(game);
@@ -33,11 +64,11 @@ public class Main {
 
 
         /*
-        List<List<Move>> currentPlayerLegalMoves = new ArrayList<>();
-        while(game.getStatus() == GameStatus.ONGOING) {
+        List<List<domain.Move>> currentPlayerLegalMoves = new ArrayList<>();
+        while(game.getStatus() == domain.GameStatus.ONGOING) {
             printGameStatus();
             game.getBoard().printBoard();
-            currentPlayerLegalMoves = new LegalMoves(game.getBoard(), game.getCurrentPlayer()).getLegalMoves();
+            currentPlayerLegalMoves = new logic.LegalMoves(game.getBoard(), game.getCurrentPlayer()).getLegalMoves();
 
             // display legal moves to the player where to choose from
             printMoves(currentPlayerLegalMoves);
@@ -48,7 +79,7 @@ public class Main {
                 break;
 
             // Applying the selected move
-            List<Move> selectedMove = currentPlayerLegalMoves.get(Integer.parseInt(input)-1);
+            List<domain.Move> selectedMove = currentPlayerLegalMoves.get(Integer.parseInt(input)-1);
             game.movePieces(selectedMove, game.getBoard());
 
             // Show updated board
@@ -60,10 +91,10 @@ public class Main {
             game.nextTurn();
         }
 
-        if(game.getStatus() == GameStatus.DRAW)
+        if(game.getStatus() == domain.GameStatus.DRAW)
             IO.println("DRAW!");
         else
-            IO.println(game.getStatus() == GameStatus.BLACK_WINS ? "BLACK WINS!" : "WHITE WINS!");
+            IO.println(game.getStatus() == domain.GameStatus.BLACK_WINS ? "BLACK WINS!" : "WHITE WINS!");
     */
     }
 }
@@ -71,7 +102,7 @@ public class Main {
 
     /*
     // Helper to display moves to the player
-    private void printMoves(List<List<Move>> allLegalMoves) {
+    private void printMoves(List<List<domain.Move>> allLegalMoves) {
         if (allLegalMoves == null || allLegalMoves.isEmpty()) {
             System.out.println("No moves to display.");
             return;
@@ -80,7 +111,7 @@ public class Main {
         for (int i = 0; i < allLegalMoves.size(); i++) {
             // Flatten the inner list of moves into a single string
             String moveSequence = allLegalMoves.get(i).stream()
-                    .map(Move::toString)
+                    .map(domain.Move::toString)
                     .collect(Collectors.joining(" "));
 
             // Print the index and the full sequence on one line
@@ -93,7 +124,7 @@ public class Main {
         String player = game.getCurrentPlayer().toString();
         IO.println(player + "'s TURN");
         IO.println("Turn count: " + turnCounter);
-        IO.println("Game status: " + game.getStatus());
+        IO.println("logic.Game status: " + game.getStatus());
     }
 
     // Input validator, just for this simple input implementation

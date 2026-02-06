@@ -1,3 +1,5 @@
+package italian_draughts.domain;
+
 public class EatingMove extends Move{
     private boolean kingEaten;
 

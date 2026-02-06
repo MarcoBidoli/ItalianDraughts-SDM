@@ -1,3 +1,12 @@
+package italian_draughts.gui;
+
+import italian_draughts.domain.Coords;
+import italian_draughts.logic.Game;
+import italian_draughts.domain.Move;
+import italian_draughts.domain.Piece;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.GameStatus;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -57,7 +66,7 @@ public class BoardPanel extends JComponent {
         });
     }
 
-    protected void handleLogic(int row, int col) {
+    public void handleLogic(int row, int col) {
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
             if (lastMove.toRow == row && lastMove.toCol == col) {
@@ -77,7 +86,7 @@ public class BoardPanel extends JComponent {
             }
         }
 
-        // Handle Piece Selection
+        // Handle domain.Piece Selection
         List<List<Move>> pieceMoves = game.getMovesFor(row, col);
 
         if (!pieceMoves.isEmpty()) {
@@ -91,7 +100,7 @@ public class BoardPanel extends JComponent {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
@@ -156,8 +165,8 @@ public class BoardPanel extends JComponent {
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
-                // Draw the Piece (Must be drawn after highlights to appear on top)
-                Cell cell = game.getBoard().getCell(i, j);
+                // Draw the domain.Piece (Must be drawn after highlights to appear on top)
+                italian_draughts.domain.Cell cell = game.getBoard().getCell(i, j);
                 if (!cell.isEmpty()) {
                     drawPiece(g2, i, j, cell.getPiece());
                 }
@@ -202,7 +211,7 @@ public class BoardPanel extends JComponent {
         g2.setStroke(new BasicStroke(2));
         g2.drawOval(x, y, size, size);
 
-        // 4. King Icon or Piece Pattern
+        // 4. King Icon or domain.Piece Pattern
         if (p.isKing()) {
             drawCrown(g2, x + size / 2, y + size / 2, size / 2);
         } else {
@@ -234,9 +243,9 @@ public class BoardPanel extends JComponent {
         GameStatus status = game.getStatus();
         if (status != GameStatus.ONGOING) {
             String msg = switch (status) {
-                case WHITE_WINS -> "WHITE WINS!";
-                case BLACK_WINS -> "BLACK WINS!";
-                case DRAW -> "DRAW!";
+                case GameStatus.WHITE_WINS -> "WHITE WINS!";
+                case GameStatus.BLACK_WINS -> "BLACK WINS!";
+                case GameStatus.DRAW -> "DRAW!";
                 default -> "";
             };
             JOptionPane.showMessageDialog(this, msg, "Game Over", JOptionPane.INFORMATION_MESSAGE);

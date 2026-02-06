@@ -1,3 +1,4 @@
+import italian_draughts.domain.Move;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
