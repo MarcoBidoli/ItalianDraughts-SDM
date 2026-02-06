@@ -6,8 +6,12 @@ import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
 import italian_draughts.domain.Board;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
     //private final logic.Game game = new logic.Game();
@@ -20,6 +24,28 @@ public class Main {
         game.calculateLegalMoves();
 
         JFrame frame = new JFrame("Italian Draughts");
+
+        // --- ICON LOADING LOGIC START ---
+        try {
+            // Use ImageIO to load the image synchronously to prevent the Mac CImage null crash
+            BufferedImage icon = ImageIO.read(new File("italian-draughts-masked.png"));
+
+            // Set the window icon (standard)
+            frame.setIconImage(icon);
+
+            // Set the Mac Dock icon (specific for macOS)
+            if (Taskbar.isTaskbarSupported()) {
+                Taskbar taskbar = Taskbar.getTaskbar();
+                taskbar.setIconImage(icon);
+            }
+        } catch (IOException e) {
+            System.err.println("Could not load icon: " + e.getMessage());
+            // Fallback or ignore
+        } catch (UnsupportedOperationException e) {
+            // Taskbar not supported (e.g., on some Linux distros or older Java versions)
+        }
+        // --- ICON LOADING LOGIC END ---
+
         frame.setLayout(new BorderLayout());
 
         DashboardPanel dashboardPanel = new DashboardPanel(game);
