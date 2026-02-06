@@ -97,7 +97,11 @@ public class Board {
     }
 
     // Added for action branch support
-    public boolean isOnBoard(int i, int j) {
+    public boolean isNotOnBoard(int i, int j) {
+        return !onBoard(i, j);
+    }
+
+    private static boolean onBoard(int i, int j) {
         return i >= 0 && i < 8 && j >= 0 && j < 8;
     }
 
