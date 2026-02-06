@@ -1,3 +1,5 @@
+package italian_draughts.domain;
+
 public class Piece {
     private GameColor color;
     private boolean king;

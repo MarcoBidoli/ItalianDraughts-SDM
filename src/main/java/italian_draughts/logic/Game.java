@@ -1,3 +1,7 @@
+package italian_draughts.logic;
+
+import italian_draughts.domain.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +64,7 @@ public class Game {
             return;
         }
 
-        // 3) Update contatori draw (Move-Count Rule)
+        // 3) Update contatori draw (domain.Move-Count Rule)
         updateDrawCounters(playerWhoMoved, captureOccurred);
         updateStatusByPieces(this.gameBoard);
 
@@ -97,7 +101,7 @@ public class Game {
             return;
         }
 
-        // La Move-Count Rule si applica solo se entrambi hanno almeno un king
+        // La domain.Move-Count Rule si applica solo se entrambi hanno almeno un king
         boolean bothHaveKings = hasKing(GameColor.WHITE) && hasKing(GameColor.BLACK);
         if (!bothHaveKings) {
             return;

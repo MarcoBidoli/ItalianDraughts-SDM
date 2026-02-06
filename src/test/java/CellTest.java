@@ -1,3 +1,7 @@
+import italian_draughts.domain.Cell;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.domain.Piece;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +60,7 @@ public class CellTest {
     void emptyCell() throws InvalidMoveException {
         Cell target = new Cell(GameColor.BLACK);
         target.putPieceOn(new Piece(GameColor.WHITE));
-        target.empty();// Piece on cell target
+        target.empty();// domain.Piece on cell target
         assertNull(target.getPiece());
     }
 

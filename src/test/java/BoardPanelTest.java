@@ -1,6 +1,11 @@
+import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.gui.BoardPanel;
+import italian_draughts.gui.DashboardPanel;
+import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

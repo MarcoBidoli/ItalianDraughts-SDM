@@ -1,3 +1,5 @@
+import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

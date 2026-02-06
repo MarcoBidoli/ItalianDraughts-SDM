@@ -1,3 +1,8 @@
+import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.domain.Move;
+import italian_draughts.logic.LegalMoves;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
@@ -24,13 +29,13 @@ public class MovingLegalMovesTest {
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
 
         // Fake implementation
-//        List<List<Move>> result = List.of(
-//                List.of(new Move(2, 2, 1, 1)),
-//                List.of(new Move(2, 2, 1, 3))
+//        List<List<domain.Move>> result = List.of(
+//                List.of(new domain.Move(2, 2, 1, 1)),
+//                List.of(new domain.Move(2, 2, 1, 3))
 //        );
         List<List<Move>> result = legalMoves.moving();
 
-        // expected 2 distinct List<Move> sequences (paths)
+        // expected 2 distinct List<domain.Move> sequences (paths)
         assertEquals(2, result.size());
 
         // Each sub-list should contain exactly 1 move for a standard move
@@ -144,7 +149,7 @@ public class MovingLegalMovesTest {
         List<List<Move>> result = legalMoves.moving();
         IO.println(result);
 
-        // expected 2 distinct List<Move> sequences (paths)
+        // expected 2 distinct List<domain.Move> sequences (paths)
         assertEquals(2, result.size());
 
         // Each sub-list should contain exactly 1 move for a standard move

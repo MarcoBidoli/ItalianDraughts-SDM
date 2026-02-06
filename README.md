@@ -1,4 +1,4 @@
-# Italian Draughts - Game
+# Italian Draughts - logic.Game
 
 ## Introduction
 This repository was created fot the "Software Development Methods" exam at the University of Trieste.
