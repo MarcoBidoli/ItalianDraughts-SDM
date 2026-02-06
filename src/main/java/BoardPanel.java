@@ -27,7 +27,7 @@ public class BoardPanel extends JComponent {
         this.game = game;
         this.dashboardPanel = dashboardPanel;
         if (this.dashboardPanel != null) {
-            this.dashboardPanel.updateInfo(game);
+            this.dashboardPanel.updateInfo();
         }
 
         this.setPreferredSize(new Dimension(TILE_SIZE * 8 + OFFSET, TILE_SIZE * 8 + OFFSET));
@@ -63,7 +63,7 @@ public class BoardPanel extends JComponent {
             if (lastMove.toRow == row && lastMove.toCol == col) {
                 try {
                     game.applyTurn(new ArrayList<>(move));
-                    if (dashboardPanel != null) dashboardPanel.updateInfo(game);
+                    if (dashboardPanel != null) dashboardPanel.updateInfo();
                     selectedCoords = null;
                     filteredMoves = new ArrayList<>();
                     repaint();
@@ -78,10 +78,7 @@ public class BoardPanel extends JComponent {
         }
 
         // Handle Piece Selection
-        List<List<Move>> allMoves = game.getCurrentLegalMoves();
-        List<List<Move>> pieceMoves = allMoves.stream()
-                .filter(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col)
-                .toList();
+        List<List<Move>> pieceMoves = game.getMovesFor(row, col);
 
         if (!pieceMoves.isEmpty()) {
             selectedCoords = new Coords(row, col);
@@ -249,7 +246,7 @@ public class BoardPanel extends JComponent {
 
     public void setDashboardPanel(DashboardPanel dp) {
         this.dashboardPanel = dp;
-        if (this.dashboardPanel != null) this.dashboardPanel.updateInfo(game);
+        if (this.dashboardPanel != null) this.dashboardPanel.updateInfo();
     }
 
     public List<List<Move>> getFilteredMoves() {
