@@ -1,5 +1,4 @@
 import italian_draughts.domain.Board;
-import italian_draughts.domain.Cell;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.InvalidMoveException;
 import org.junit.jupiter.api.Test;

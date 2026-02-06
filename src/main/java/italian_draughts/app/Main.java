@@ -1,11 +1,7 @@
 package italian_draughts.app;
-
-import italian_draughts.domain.InvalidMoveException;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
-import italian_draughts.domain.Board;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
