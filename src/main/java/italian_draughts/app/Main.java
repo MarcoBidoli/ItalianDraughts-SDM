@@ -14,10 +14,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class Main {
-    //private final logic.Game game = new logic.Game();
-    private int turnCounter = 1;
+    // private final logic.Game game = new logic.Game();
+    // private int turnCounter = 1;
 
-    void main() throws InvalidMoveException {
+    void main() {
 
         Game game = new Game();
         game.getBoard().setGame();

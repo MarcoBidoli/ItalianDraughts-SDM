@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LegalMoves {
-    private Board gameBoard;
-    private GameColor player;
-    private int direction;
+    private final Board gameBoard;
+    private final GameColor player;
+    private final int direction;
 
     public LegalMoves(Board gameBoard, GameColor player) {
         this.gameBoard = gameBoard;

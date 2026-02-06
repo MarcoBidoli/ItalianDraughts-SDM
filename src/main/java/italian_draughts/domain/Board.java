@@ -1,7 +1,7 @@
 package italian_draughts.domain;
 
 public class Board {
-    private Cell[][] board;
+    private final Cell[][] board;
 
 
     /* TODO

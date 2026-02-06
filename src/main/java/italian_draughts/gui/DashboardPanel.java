@@ -9,10 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPanel extends JPanel {
-    private JLabel status;
-    private JLabel count;
-    private JButton resign;
-    private JButton draw;
+    private final JLabel status;
+    private final JLabel count;
     private final Game game;
 
     public DashboardPanel(Game game) {
@@ -33,8 +31,8 @@ public class DashboardPanel extends JPanel {
 
         JPanel btnPan = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         btnPan.setOpaque(false);
-        resign = new ModernButton("Resign", new Color(231, 76, 60), Color.WHITE);
-        draw = new ModernButton("Draw", new Color(52, 152, 219), Color.WHITE);
+        JButton resign = new ModernButton("Resign", new Color(231, 76, 60), Color.WHITE);
+        JButton draw = new ModernButton("Draw", new Color(52, 152, 219), Color.WHITE);
 
 
         resign.addActionListener(e -> handleResign());
