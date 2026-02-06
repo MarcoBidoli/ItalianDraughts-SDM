@@ -188,19 +188,8 @@ public class Game {
     }
 
     private void updateStatusByPieces(Board board) {
-        int white = 0;
-        int black = 0;
-
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                Piece p = board.getCell(r, c).getPiece();
-                if (p != null) {
-                    if (p.getColor() == GameColor.WHITE) white++;
-                    else if (p.getColor() == GameColor.BLACK) black++;
-                }
-            }
-        }
-
+        int white = board.countColorPieces(GameColor.WHITE);
+        int black = board.countColorPieces(GameColor.BLACK);
         if (white == 0) status = GameStatus.BLACK_WINS;
         else if (black == 0) status = GameStatus.WHITE_WINS;
         else status = GameStatus.ONGOING;
