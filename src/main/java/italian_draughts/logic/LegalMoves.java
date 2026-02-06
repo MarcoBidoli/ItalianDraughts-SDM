@@ -147,7 +147,7 @@ public class LegalMoves {
 
     private boolean canEat(int x, int y, int xOpp, int yOpp, int finX, int finY) {
         //compute whether the eating is doable or not
-        if (!gameBoard.isOnBoard(finX, finY))
+        if (gameBoard.isNotOnBoard(finX, finY))
             return false;
 
         if (gameBoard.getCell(xOpp, yOpp).isEmpty() || gameBoard.getCell(xOpp, yOpp).getPiece().getColor().equals(player))
@@ -201,7 +201,7 @@ public class LegalMoves {
 
     private void addCoordToLegalMoves(Coords fromCoord, Coords toCoord, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if (!gameBoard.isOnBoard(toCoord.i(), toCoord.j())) return;
+        if (gameBoard.isNotOnBoard(toCoord.i(), toCoord.j())) return;
 
         // check destination is empty
         if (gameBoard.getCell(toCoord.i(), toCoord.j()).isEmpty())
