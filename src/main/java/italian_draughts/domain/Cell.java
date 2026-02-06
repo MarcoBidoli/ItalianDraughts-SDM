@@ -3,7 +3,7 @@ package italian_draughts.domain;
 public class Cell {
 
     private Piece piece;
-    GameColor cellColor;
+    private final GameColor cellColor;
 
     public Cell(GameColor cellColor) {
         piece = null;
@@ -16,10 +16,6 @@ public class Cell {
 
     public GameColor getColor() {
         return this.cellColor;
-    }
-
-    public void setColor(GameColor color) {
-        this.cellColor = color;
     }
 
     public void putPieceOn(Piece p) throws InvalidMoveException {

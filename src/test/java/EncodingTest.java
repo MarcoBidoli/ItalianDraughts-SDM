@@ -13,9 +13,15 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EncodingTest {
-    Board board = new Board();
+    private final Board board;
+
+    public EncodingTest() {
+        board = new Board();
+    }
+
     @Test
     public void testEncode() throws InvalidMoveException {
+        board.resetGame();
         board.initCells();
         board.placePiece(GameColor.WHITE, 4, 4);
         board.placePiece(GameColor.BLACK, 0, 0);
@@ -45,6 +51,7 @@ public class EncodingTest {
     }
     @Test
     public void removalTest() throws InvalidMoveException {
+        board.resetGame();
         board.initCells();
         board.placePiece(GameColor.WHITE, 3, 7);
         board.placePiece(GameColor.BLACK, 0, 0);

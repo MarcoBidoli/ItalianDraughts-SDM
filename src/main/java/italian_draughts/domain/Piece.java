@@ -1,7 +1,7 @@
 package italian_draughts.domain;
 
 public class Piece {
-    private GameColor color;
+    private final GameColor color;
     private boolean king;
 
     public Piece(GameColor color){
@@ -10,9 +10,6 @@ public class Piece {
     }
     public GameColor getColor() {
         return color;
-    }
-    public void setColor(GameColor color) {
-        this.color = color;
     }
     public boolean isKing() {
         return king;
