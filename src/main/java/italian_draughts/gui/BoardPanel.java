@@ -248,7 +248,7 @@ public class BoardPanel extends JComponent {
                 case GameStatus.DRAW -> "DRAW!";
                 default -> "";
             };
-            JOptionPane.showMessageDialog(this, msg, "logic.Game Over", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, msg, "Game Over", JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
     }
