@@ -119,11 +119,7 @@ public class BoardPanel extends JComponent {
         // Iterate through the grid
         for (int i = 0; i < 8; i++) {
             // Draw Coordinate Labels (8-1 and A-H)
-            g2.setColor(new Color(240, 240, 240));
-            g2.setFont(new Font("SansSerif", Font.BOLD, 16));
-            g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 7);
-            g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
-
+            drawCoordinates(g2, i);
             for (int j = 0; j < 8; j++) {
                 int x = j * TILE_SIZE + OFFSET;
                 int y = i * TILE_SIZE;
@@ -133,31 +129,7 @@ public class BoardPanel extends JComponent {
                 g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 // Create a "hit zone" visual to tell the player which pieces can move
-                final int currentRow = i;
-                final int currentCol = j;
-                boolean isSelectable = allMoves.stream()
-                        .anyMatch(m -> m.getFirst().fromRow == currentRow && m.getFirst().fromCol == currentCol);
-
-                if (isSelectable) {
-                    Stroke oldStroke = g2.getStroke();
-
-                    g2.setColor(new Color(0, 0, 0, 60));
-                    g2.setStroke(new BasicStroke(5.0f));
-                    int padding = 8;
-                    g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
-
-                    // Draw the main Gold ring
-                    g2.setColor(new Color(255, 215, 0)); // (Classic Gold)
-                    g2.setStroke(new BasicStroke(3.5f));
-                    g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
-
-                    // Add a "Shine" (A small white arc on the top-left of the ring)
-                    g2.setColor(new Color(255, 255, 255, 180));
-                    g2.setStroke(new BasicStroke(1.5f));
-                    g2.drawArc(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2), 110, 60);
-
-                    g2.setStroke(oldStroke);
-                }
+                drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
                 if (selectedCoords != null && selectedCoords.i() == i && selectedCoords.j() == j) {
@@ -165,7 +137,7 @@ public class BoardPanel extends JComponent {
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
-                // Draw the domain.Piece (Must be drawn after highlights to appear on top)
+                // Draw the Piece (Must be drawn after highlights to appear on top)
                 italian_draughts.domain.Cell cell = game.getBoard().getCell(i, j);
                 if (!cell.isEmpty()) {
                     drawPiece(g2, i, j, cell.getPiece());
@@ -263,5 +235,40 @@ public class BoardPanel extends JComponent {
     }
 
     public Coords getSelectedCoords() { return selectedCoords; }
+
+    private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
+        final int currentRow = i;
+        final int currentCol = j;
+        boolean isSelectable = allMoves.stream()
+                .anyMatch(m -> m.getFirst().fromRow == currentRow && m.getFirst().fromCol == currentCol);
+
+        if (isSelectable) {
+            Stroke oldStroke = g2.getStroke();
+
+            g2.setColor(new Color(0, 0, 0, 60));
+            g2.setStroke(new BasicStroke(5.0f));
+            int padding = 8;
+            g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
+
+            // Draw the main Gold ring
+            g2.setColor(new Color(255, 215, 0)); // (Classic Gold)
+            g2.setStroke(new BasicStroke(3.5f));
+            g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
+
+            // Add a "Shine" (A small white arc on the top-left of the ring)
+            g2.setColor(new Color(255, 255, 255, 180));
+            g2.setStroke(new BasicStroke(1.5f));
+            g2.drawArc(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2), 110, 60);
+
+            g2.setStroke(oldStroke);
+        }
+    }
+
+    public void drawCoordinates(Graphics2D g2, int i) {
+        g2.setColor(new Color(240, 240, 240));
+        g2.setFont(new Font("SansSerif", Font.BOLD, 16));
+        g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 7);
+        g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
+    }
 
 }
