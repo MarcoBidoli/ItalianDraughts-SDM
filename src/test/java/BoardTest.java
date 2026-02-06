@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
@@ -19,7 +19,7 @@ public class BoardTest {
     @Test
     public void emptyTest() {
         Board board = new Board();
-        assertEquals(true, board.isEmpty());
+        assertTrue(board.isEmpty());
     }
 
     @Test
@@ -60,5 +60,21 @@ public class BoardTest {
         Board board = new Board();
         board.setGame();
         board.printBoard();
+    }
+    @Test
+    public void getBoardRepresentationTest() throws InvalidMoveException {
+        Board board = new Board();
+        board.initCells();
+
+        board.placePiece(GameColor.WHITE, 7, 1);
+        board.placePiece(GameColor.BLACK, 0, 2);
+        board.placeKing(GameColor.WHITE, 6, 4);
+        String repr = board.getBoardRepresentation();
+
+        assertNotNull(repr);
+        assertTrue(repr.contains("w"));
+        assertTrue(repr.contains("b"));
+        assertTrue(repr.contains("W"));
+        assertTrue(repr.contains("-") || repr.contains("."));
     }
 }

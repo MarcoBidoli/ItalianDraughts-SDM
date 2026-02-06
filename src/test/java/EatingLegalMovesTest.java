@@ -18,8 +18,8 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(1, pieceEatings.size());
-        assertEquals(3, pieceEatings.get(0).toRow);
-        assertEquals(1, pieceEatings.get(0).toCol);
+        assertEquals(3, pieceEatings.getFirst().toRow);
+        assertEquals(1, pieceEatings.getFirst().toCol);
 
         assertFalse(board.getCell(4, 2).isEmpty());
         assertNotNull(board.getCell(5, 3).getPiece());
@@ -75,8 +75,8 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(1, pieceEatings.size());
-        assertEquals(2, pieceEatings.get(0).toRow, "Obtained a wrong piece eaten - rows");
-        assertEquals(4, pieceEatings.get(0).toCol, "Obtained a wrong piece eaten - cols");
+        assertEquals(2, pieceEatings.getFirst().toRow, "Obtained a wrong piece eaten - rows");
+        assertEquals(4, pieceEatings.getFirst().toCol, "Obtained a wrong piece eaten - cols");
     }
 
     @Test
@@ -92,13 +92,13 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(1, pieceEatings.size());
-        assertEquals(2, pieceEatings.get(0).toRow, "Obtained a wrong piece eaten - rows");
-        assertEquals(0, pieceEatings.get(0).toCol, "Obtained a wrong piece eaten - cols");
+        assertEquals(2, pieceEatings.getFirst().toRow, "Obtained a wrong piece eaten - rows");
+        assertEquals(0, pieceEatings.getFirst().toCol, "Obtained a wrong piece eaten - cols");
 
         pieceEatings = result.get(1);
         assertEquals(1, pieceEatings.size());
-        assertEquals(2, pieceEatings.get(0).toRow);
-        assertEquals(4, pieceEatings.get(0).toCol);
+        assertEquals(2, pieceEatings.getFirst().toRow);
+        assertEquals(4, pieceEatings.getFirst().toCol);
     }
 
     @Test
@@ -155,8 +155,8 @@ public class EatingLegalMovesTest {
 
         for (int i = 0; i < result.size(); i++) {
             assertEquals(1, result.get(i).size());
-            assertTrue(result.get(i).get(0).toRow == 3, "wrong row - " + Integer.toString(i));
-            assertTrue(result.get(i).get(0).toCol == 5 || result.get(i).get(0).toCol == 1, "wrong column - " + Integer.toString(i));
+            assertEquals(3, result.get(i).getFirst().toRow, "wrong row - " + i);
+            assertTrue(result.get(i).getFirst().toCol == 5 || result.get(i).getFirst().toCol == 1, "wrong column - " + i);
         }
 
         board.placeKing(GameColor.BLACK, 2, 4);
@@ -166,11 +166,11 @@ public class EatingLegalMovesTest {
         assertEquals(2, result.size(), "Couldn't find all best eatings");
 
         for (int i = 0; i < result.size(); i++) {
-            assertEquals(2, result.get(i).size(), "Couldn't complete eating - " + Integer.toString(i));
+            assertEquals(2, result.get(i).size(), "Couldn't complete eating - " + i);
             assertEquals(3, result.get(i).get(0).toRow);
             assertEquals(5, result.get(i).get(0).toCol);
             assertEquals(1, result.get(i).get(1).toRow);
-            assertTrue(result.get(i).get(1).toCol == 3 || result.get(i).get(1).toCol == 7, "wrong column - " + Integer.toString(i));
+            assertTrue(result.get(i).get(1).toCol == 3 || result.get(i).get(1).toCol == 7, "wrong column - " + i);
         }
     }
 }
