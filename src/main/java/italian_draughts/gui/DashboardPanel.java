@@ -1,3 +1,10 @@
+package italian_draughts.gui;
+
+import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.GameStatus;
+import italian_draughts.domain.Piece;
+import italian_draughts.logic.Game;
 import javax.swing.*;
 import java.awt.*;
 
@@ -47,7 +54,7 @@ public class DashboardPanel extends JPanel {
         int resp = JOptionPane.showConfirmDialog(this, req + " asks for DRAW. " + opp + " do you agree?", "Draw request", JOptionPane.YES_NO_OPTION);
 
         if(resp == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Game ends in an AGREED DRAW.");
+            JOptionPane.showMessageDialog(this, "logic.Game ends in an AGREED DRAW.");
             game.agreedDrawHandling();
             System.exit(0);
         }

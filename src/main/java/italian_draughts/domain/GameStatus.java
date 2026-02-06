@@ -1,3 +1,5 @@
+package italian_draughts.domain;
+
 public enum GameStatus {
     ONGOING,
     WHITE_WINS,

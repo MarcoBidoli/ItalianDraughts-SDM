@@ -1,8 +1,9 @@
+package italian_draughts.logic;
+
+import italian_draughts.domain.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-record Coords(int i, int j) {
-}
 
 public class LegalMoves {
     private Board gameBoard;
