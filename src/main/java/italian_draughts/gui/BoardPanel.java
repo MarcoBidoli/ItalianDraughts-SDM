@@ -119,11 +119,7 @@ public class BoardPanel extends JComponent {
         // Iterate through the grid
         for (int i = 0; i < 8; i++) {
             // Draw Coordinate Labels (8-1 and A-H)
-            g2.setColor(new Color(240, 240, 240));
-            g2.setFont(new Font("SansSerif", Font.BOLD, 16));
-            g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 7);
-            g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
-
+            drawCoordinates(g2, i);
             for (int j = 0; j < 8; j++) {
                 int x = j * TILE_SIZE + OFFSET;
                 int y = i * TILE_SIZE;
@@ -266,6 +262,13 @@ public class BoardPanel extends JComponent {
 
             g2.setStroke(oldStroke);
         }
+    }
+
+    public void drawCoordinates(Graphics2D g2, int i) {
+        g2.setColor(new Color(240, 240, 240));
+        g2.setFont(new Font("SansSerif", Font.BOLD, 16));
+        g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 7);
+        g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
     }
 
 }
