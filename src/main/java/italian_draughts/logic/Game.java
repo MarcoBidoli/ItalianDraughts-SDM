@@ -11,8 +11,7 @@ public class Game {
     private final Board gameBoard;
     private GameColor currentPlayer;
     private GameStatus status;
-    private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
-    private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
+    private int quietMovesNoCapture;
     private final Map<List<SquareEncoder>, Integer> visits;
 
     private List<List<Move>> currentLegalMoves;
