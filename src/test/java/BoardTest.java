@@ -43,7 +43,7 @@ public class BoardTest {
     }
 
     @Test
-    public void printBoard() {
+    public void printBoard() { //Questo metodo non testa niente, scegliere se tenere
         Board board = new Board();
         board.setGame();
         board.printBoard();
