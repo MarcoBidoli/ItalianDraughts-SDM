@@ -21,7 +21,7 @@ public class ActualMovingTest {
         moves.add(new Move(4, 4, 3, 3));
         game.movePieces(moves, board);
         assertTrue(board.isEmptyCell(4,4));
-        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(3,3));
+        assertSame(GameColor.WHITE, board.colorOfPiece(3,3));
     }
     @Test
     public void testEating() throws InvalidMoveException {
@@ -32,7 +32,7 @@ public class ActualMovingTest {
         game.movePieces(moves, board);
         assertTrue(board.isEmptyCell(4,4));
         assertTrue(board.isEmptyCell(3,3));
-        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(2,2));
+        assertSame(GameColor.WHITE, board.colorOfPiece(2,2));
     }
     @Test
     public void testDoubleEating() throws InvalidMoveException {
@@ -47,7 +47,7 @@ public class ActualMovingTest {
         assertTrue(board.isEmptyCell(5,5));
         assertTrue(board.isEmptyCell(4,4));
         assertTrue(board.isEmptyCell(3,3));
-        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(2,2));
+        assertSame(GameColor.WHITE, board.colorOfPiece(2,2));
     }
     @Test
     public void testTripleEating() throws InvalidMoveException {
@@ -66,7 +66,7 @@ public class ActualMovingTest {
         assertTrue(board.isEmptyCell(3,3));
         assertTrue(board.isEmptyCell(2,2));
         assertTrue(board.isEmptyCell(1,1));
-        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(0,0));
+        assertSame(GameColor.WHITE, board.colorOfPiece(0,0));
     }
     @Test
     public void testPromotion() throws InvalidMoveException {
