@@ -3,7 +3,6 @@ package italian_draughts.gui;
 import italian_draughts.domain.Board;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.GameStatus;
-import italian_draughts.domain.Piece;
 import italian_draughts.logic.Game;
 import javax.swing.*;
 import java.awt.*;
@@ -35,8 +34,8 @@ public class DashboardPanel extends JPanel {
         JButton draw = new ModernButton("Draw", new Color(52, 152, 219), Color.WHITE);
 
 
-        resign.addActionListener(e -> handleResign());
-        draw.addActionListener(e -> handleDrawRequest());
+        resign.addActionListener(_ -> handleResign());
+        draw.addActionListener(_ -> handleDrawRequest());
 
         btnPan.add(draw);
         btnPan.add(resign);
