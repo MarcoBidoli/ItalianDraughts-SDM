@@ -219,6 +219,17 @@ public class Game {
         }
     }
 
+    private boolean hasAnyPiece(GameColor color) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece p = gameBoard.getCell(r, c).getPiece();
+                if (p != null && p.getColor() == color) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public List<List<Move>> getCurrentLegalMoves() {
         return currentLegalMoves;
