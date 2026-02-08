@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ActualMovingTest {
     private final Board board = new Board();
-    Game game = new Game();
-    List<Move> moves = new ArrayList<>();
+    private final Game game = new Game();
+    private final List<Move> moves = new ArrayList<>();
     @Test
     public void testMoving() throws InvalidMoveException {
         board.initCells();
