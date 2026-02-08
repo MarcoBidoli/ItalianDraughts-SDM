@@ -7,11 +7,11 @@ public class Move {
     public int toCol;
 
     public Move(int fromRow, int fromCol, int toRow, int toCol) throws IllegalArgumentException {
-        if (fromRow < 0 || fromCol < 0 || toRow < 0 || toCol < 0) {
-            throw new IllegalArgumentException("Negative coordinates in domain.Move");
-        } else if (fromRow > 7 || fromCol > 7 || toRow > 7 || toCol > 7) {
-               throw new IllegalArgumentException("Coordinates out of board");
-        } else {
+        if (Board.positionIsOffBoard(fromRow, fromCol))
+            throw new IllegalArgumentException("Start cell is not in board");
+        else if (Board.positionIsOffBoard(toRow, toCol))
+            throw new IllegalArgumentException("Arrive cell is not on board");
+        else {
             this.fromRow = fromRow;
             this.fromCol = fromCol;
             this.toRow = toRow;

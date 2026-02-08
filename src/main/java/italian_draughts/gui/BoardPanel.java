@@ -42,7 +42,7 @@ public class BoardPanel extends JComponent {
             public void mouseClicked(MouseEvent e) {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
-                if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+                if (Board.onBoard(row, col)) {
                     handleLogic(row, col);
                 }
             }
@@ -129,7 +129,7 @@ public class BoardPanel extends JComponent {
                 drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedCoords != null && selectedCoords.i() == i && selectedCoords.j() == j) {
+                if (selectedCoords != null && selectedCoords.row() == i && selectedCoords.col() == j) {
                     g2.setColor(SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
