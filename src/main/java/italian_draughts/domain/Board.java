@@ -6,8 +6,8 @@ public class Board {
 
     /* TODO
     * - add methods to work with pieces from a Board obj
-    *   e.g. instead of gameBoard[i][j].getCell().getPiece().getColor() -> gameBoard[i][j].getPlayerColor()
-    *       or gameBoard[i][j].isPieceKing() etc.
+    *   e.g. instead of gameBoard[row][col].getCell().getPiece().getColor() -> gameBoard[row][col].getPlayerColor()
+    *       or gameBoard[row][col].isPieceKing() etc.
     *
      */
 
@@ -156,8 +156,8 @@ public class Board {
         int p=0;
         for(int i=0; i<8; i++) {
             for(int j=0; j<8; j++) {
-                if(!getCell(i,j).isEmpty()) {
-                    if(getColorOfPieceWithCoordinates(i, j) == color)
+                if(cellIsEmpty(i, j)) {
+                    if(colorOfPiece(i, j) == color)
                         p++;
                 }
             }
@@ -165,16 +165,23 @@ public class Board {
         return p;
     }
 
-    public GameColor getColorOfPieceWithCoordinates(int i, int j) {
-        return getCell(i, j).getPiece().getColor();
+    private boolean cellIsEmpty(int i, int j) {
+        Cell inspectedCell = getCell(i, j);
+        return !inspectedCell.isEmpty();
     }
 
-    public Piece getPieceWithCoordinates(int i, int j) {
-        return getCell(i, j).getPiece();
+    public GameColor colorOfPiece(int i, int j) {
+        Piece piece = board[i][j].getPiece();
+        return piece.getColor();
+    }
+
+    public Piece getPieceAt(int i, int j) {
+        return board[i][j].getPiece();
     }
 
     public boolean isPieceWithCoordinatesKing(int i, int j) {
-        return getCell(i, j).getPiece().isKing();
+        Piece piece = board[i][j].getPiece();
+        return piece.isKing();
     }
     public void emptyCell(int i, int j) {
         board[i][j].empty();
@@ -183,5 +190,4 @@ public class Board {
     public boolean isEmptyCell(int i, int j) {
         return board[i][j].isEmpty();
     }
-//fare test di sti metodi
 }
