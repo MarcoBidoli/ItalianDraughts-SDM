@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ActualMovingTest {
     private final Board board = new Board();
+    Game game = new Game();
+    List<Move> moves = new ArrayList<>();
     @Test
     public void testMoving() throws InvalidMoveException {
         board.initCells();
         board.placePiece(GameColor.WHITE, 4, 4);
-        List<Move> moves = new ArrayList<>();
         moves.add(new Move(4, 4, 3, 3));
-        Game game = new Game();
         game.movePieces(moves, board);
         assertTrue(board.getCell(4,4).isEmpty());
         assertSame(GameColor.WHITE, board.getCell(3, 3).getPiece().getColor());
@@ -28,9 +28,7 @@ public class ActualMovingTest {
         board.initCells();
         board.placePiece(GameColor.WHITE, 4, 4);
         board.placePiece(GameColor.BLACK, 3, 3);
-        List<Move> moves = new ArrayList<>();
         moves.add(new Move(4, 4, 2, 2));
-        Game game = new Game();
         game.movePieces(moves, board);
         assertTrue(board.getCell(4,4).isEmpty());
         assertTrue(board.getCell(3,3).isEmpty());
@@ -42,10 +40,8 @@ public class ActualMovingTest {
         board.placePiece(GameColor.WHITE, 6, 6);
         board.placePiece(GameColor.BLACK, 5, 5);
         board.placePiece(GameColor.BLACK, 3, 3);
-        List<Move> moves = new ArrayList<>();
         moves.add(new Move(6, 6, 4, 4));
         moves.add(new Move(4, 4, 2, 2));
-        Game game = new Game();
         game.movePieces(moves, board);
         assertTrue(board.getCell(6,6).isEmpty());
         assertTrue(board.getCell(5,5).isEmpty());
@@ -60,11 +56,9 @@ public class ActualMovingTest {
         board.placePiece(GameColor.BLACK, 5, 5);
         board.placePiece(GameColor.BLACK, 3, 3);
         board.placePiece(GameColor.BLACK, 1, 1);
-        List<Move> moves = new ArrayList<>();
         moves.add(new Move(6, 6, 4, 4));
         moves.add(new Move(4, 4, 2, 2));
         moves.add(new Move(2, 2, 0, 0));
-        Game game = new Game();
         game.movePieces(moves, board);
         assertTrue(board.getCell(6,6).isEmpty());
         assertTrue(board.getCell(5,5).isEmpty());
@@ -78,9 +72,7 @@ public class ActualMovingTest {
     public void testPromotion() throws InvalidMoveException {
         board.initCells();
         board.placePiece(GameColor.WHITE, 6, 6);
-        List<Move> moves = new ArrayList<>();
         moves.add(new Move(6, 6, 7, 7));
-        Game game = new Game();
         game.movePieces(moves, board);
         assertTrue(board.getCell(7,7).getPiece().isKing());
     }

@@ -14,6 +14,7 @@ public class Game {
     private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
     private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
     private final Map<List<SquareEncoder>, Integer> visits;
+    public static final int MAX_QUIET_MOVES = 40;
 
     private List<List<Move>> currentLegalMoves;
 
@@ -115,7 +116,7 @@ public class Game {
         }
 
         // Trigger draw: 40 mosse consecutive per ciascun giocatore senza catture
-        if (quietMovesWhite >= 40 && quietMovesBlack >= 40) {
+        if (quietMovesWhite >= MAX_QUIET_MOVES && quietMovesBlack >= MAX_QUIET_MOVES) {
             status = GameStatus.DRAW;
         }
     }
