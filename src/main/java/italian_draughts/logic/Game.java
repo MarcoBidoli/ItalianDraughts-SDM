@@ -136,7 +136,7 @@ public class Game {
                 captureOccurred = true;
                 board.getCell((currentMove.fromRow + currentMove.toRow) / 2,
                               (currentMove.toCol + currentMove.fromCol) / 2).empty();
-            visits.clear();
+                visits.clear();
             }
         }
         boardEncoder(board);
