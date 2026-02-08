@@ -7,9 +7,9 @@ public class Move {
     public int toCol;
 
     public Move(int fromRow, int fromCol, int toRow, int toCol) throws IllegalArgumentException {
-        if (Board.isNotOnBoard(fromRow, fromCol))
+        if (Board.positionIsOffBoard(fromRow, fromCol))
             throw new IllegalArgumentException("Start cell is not in board");
-        else if (Board.isNotOnBoard(toRow, toCol))
+        else if (Board.positionIsOffBoard(toRow, toCol))
             throw new IllegalArgumentException("Arrive cell is not on board");
         else {
             this.fromRow = fromRow;

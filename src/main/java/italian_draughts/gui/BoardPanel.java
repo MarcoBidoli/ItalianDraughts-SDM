@@ -129,7 +129,7 @@ public class BoardPanel extends JComponent {
                 drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedCoords != null && selectedCoords.i() == i && selectedCoords.j() == j) {
+                if (selectedCoords != null && selectedCoords.row() == i && selectedCoords.col() == j) {
                     g2.setColor(SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }

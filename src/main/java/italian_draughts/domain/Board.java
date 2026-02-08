@@ -97,7 +97,7 @@ public class Board {
     }
 
     // Added for action branch support
-    public static boolean isNotOnBoard(int i, int j) {
+    public static boolean positionIsOffBoard(int i, int j) {
         return !onBoard(i, j);
     }
 
