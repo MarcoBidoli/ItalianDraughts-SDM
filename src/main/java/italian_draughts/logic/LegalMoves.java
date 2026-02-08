@@ -119,9 +119,9 @@ public class LegalMoves {
                 eatings.add(new EatingMove(x, y, finX, finY, gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp)));
 
                 //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
-                Piece eaten = gameBoard.getPieceWithCoordinates(xOpp, yOpp);
+                Piece eaten = gameBoard.getPieceAt(xOpp, yOpp);
                 gameBoard.emptyCell(xOpp, yOpp);
-                Piece moved = gameBoard.getPieceWithCoordinates(x,y);
+                Piece moved = gameBoard.getPieceAt(x,y);
                 gameBoard.emptyCell(x,y);
                 gameBoard.getCell(finX, finY).putPieceOn(moved);
 
@@ -146,13 +146,13 @@ public class LegalMoves {
         if (gameBoard.isNotOnBoard(finX, finY))
             return false;
 
-        if (gameBoard.isEmptyCell(xOpp, yOpp) || gameBoard.getColorOfPieceWithCoordinates(xOpp, yOpp).equals(player))
+        if (gameBoard.isEmptyCell(xOpp, yOpp) || gameBoard.colorOfPiece(xOpp, yOpp).equals(player))
             return false;
 
         if (!gameBoard.isEmptyCell(finX, finY))
             return false;
 
-        return gameBoard.getPieceWithCoordinates(x, y) == null || gameBoard.isPieceWithCoordinatesKing(x, y) || !gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp);
+        return gameBoard.getPieceAt(x, y) == null || gameBoard.isPieceWithCoordinatesKing(x, y) || !gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp);
     }
 
     public List<List<Move>> moving() {
@@ -162,8 +162,8 @@ public class LegalMoves {
         List<Coords> myPiecesCoords = new ArrayList<>();
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
-                if (gameBoard.getPieceWithCoordinates(i, j) != null)
-                    if (gameBoard.getColorOfPieceWithCoordinates(i, j).equals(player))
+                if (gameBoard.getPieceAt(i, j) != null)
+                    if (gameBoard.colorOfPiece(i, j).equals(player))
                         myPiecesCoords.add(new Coords(i, j));
 
         // For each save coordinate, check what legal moves are associated with that piece
@@ -174,16 +174,16 @@ public class LegalMoves {
             // for all pieces, checking the frontwards moves
 
             // (coord) -> (i+direction, j+1)
-            addCoordToLegalMoves(coord, new Coords(coord.i() + direction, coord.j() + 1), movesForThisPiece);
+            addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() + 1), movesForThisPiece);
             // (coord) -> (i+direction, j-1)
-            addCoordToLegalMoves(coord, new Coords(coord.i() + direction, coord.j() - 1), movesForThisPiece);
+            addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
-            if (gameBoard.isPieceWithCoordinatesKing(coord.i(), coord.j())) {
+            if (gameBoard.isPieceWithCoordinatesKing(coord.row(), coord.col())) {
                 // (coord) -> (i-direction, j+1)
-                addCoordToLegalMoves(coord, new Coords(coord.i() - direction, coord.j() + 1), movesForThisPiece);
+                addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() + 1), movesForThisPiece);
                 // (coord) -> (i-direction, j-1)
-                addCoordToLegalMoves(coord, new Coords(coord.i() - direction, coord.j() - 1), movesForThisPiece);
+                addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() - 1), movesForThisPiece);
             }
 
             if (!movesForThisPiece.isEmpty())
@@ -194,11 +194,11 @@ public class LegalMoves {
 
     private void addCoordToLegalMoves(Coords fromCoord, Coords toCoord, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if (gameBoard.isNotOnBoard(toCoord.i(), toCoord.j())) return;
+        if (gameBoard.isNotOnBoard(toCoord.row(), toCoord.col())) return;
 
         // check destination is empty
-        if (gameBoard.isEmptyCell(toCoord.i(), toCoord.j()))
-            movesForThisPiece.add(new Move(fromCoord.i(), fromCoord.j(), toCoord.i(), toCoord.j()));
+        if (gameBoard.isEmptyCell(toCoord.row(), toCoord.col()))
+            movesForThisPiece.add(new Move(fromCoord.row(), fromCoord.col(), toCoord.row(), toCoord.col()));
     }
 
 
