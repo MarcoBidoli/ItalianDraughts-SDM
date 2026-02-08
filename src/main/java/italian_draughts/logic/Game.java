@@ -82,14 +82,14 @@ public class Game {
         return false;
     }
 
-    private void updateDrawCounter(boolean captureOccurred) {
+    private void updateMoveCountRule(boolean captureOccurred) {
         // Se c'è stata una cattura, la sequenza "senza catture" si interrompe: reset totale
         if (captureOccurred) {
             quietMovesNoCapture = 0;
             return;
         }
 
-        // La domain.Move-Count Rule si applica solo se entrambi hanno almeno un king
+        // La Move-Count Rule si applica solo se entrambi hanno almeno un king
         boolean bothHaveKings = hasKing(GameColor.WHITE) && hasKing(GameColor.BLACK);
         if (!bothHaveKings) {
             quietMovesNoCapture = 0; // RIPETIZIONE VOLUTA, need check
@@ -115,7 +115,7 @@ public class Game {
         }
 
         // 2) Move-count rule (40 mosse complessive senza cattura, se applicabile)
-        updateDrawCounter(captureOccurred);
+        updateMoveCountRule(captureOccurred);
     }
 
     public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
