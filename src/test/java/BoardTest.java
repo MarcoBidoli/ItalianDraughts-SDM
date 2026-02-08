@@ -1,6 +1,7 @@
 import italian_draughts.domain.Board;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.domain.Piece;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,5 +64,29 @@ public class BoardTest {
         assertTrue(repr.contains("b"));
         assertTrue(repr.contains("W"));
         assertTrue(repr.contains("-") || repr.contains("."));
+    }
+    @Test
+    public void checkEmptyCell() throws InvalidMoveException {
+        Board board = new Board();
+        board.initCells();
+        board.placePiece(GameColor.WHITE, 7, 1);
+        board.emptyCell(7,1);
+        assertTrue(board.isEmptyCell(7,1));
+    }
+    @Test
+    public void checkColorPiece() throws InvalidMoveException {
+        Board board = new Board();
+        board.initCells();
+        board.placePiece(GameColor.WHITE, 7, 1);
+        assertEquals(GameColor.WHITE, board.getColorOfPieceWithCoordinates(7,1));
+    }
+    @Test
+    public void checkPiece() throws InvalidMoveException {
+        Board board = new Board();
+        board.initCells();
+        board.placePiece(GameColor.WHITE, 7, 1);
+        Piece testPiece = new Piece(GameColor.WHITE);
+        assertEquals(testPiece.getColor(), board.getColorOfPieceWithCoordinates(7,1));
+        assertEquals(testPiece.isKing(), board.isPieceWithCoordinatesKing(7,1));
     }
 }

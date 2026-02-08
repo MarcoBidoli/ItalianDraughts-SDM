@@ -157,11 +157,31 @@ public class Board {
         for(int i=0; i<8; i++) {
             for(int j=0; j<8; j++) {
                 if(!getCell(i,j).isEmpty()) {
-                    if(getCell(i,j).getPiece().getColor() == color)
+                    if(getColorOfPieceWithCoordinates(i, j) == color)
                         p++;
                 }
             }
         }
         return p;
     }
+
+    public GameColor getColorOfPieceWithCoordinates(int i, int j) {
+        return getCell(i, j).getPiece().getColor();
+    }
+
+    public Piece getPieceWithCoordinates(int i, int j) {
+        return getCell(i, j).getPiece();
+    }
+
+    public boolean isPieceWithCoordinatesKing(int i, int j) {
+        return getCell(i, j).getPiece().isKing();
+    }
+    public void emptyCell(int i, int j) {
+        board[i][j].empty();
+    }
+
+    public boolean isEmptyCell(int i, int j) {
+        return board[i][j].isEmpty();
+    }
+//fare test di sti metodi
 }
