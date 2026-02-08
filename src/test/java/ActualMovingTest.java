@@ -20,8 +20,8 @@ public class ActualMovingTest {
         board.placePiece(GameColor.WHITE, 4, 4);
         moves.add(new Move(4, 4, 3, 3));
         game.movePieces(moves, board);
-        assertTrue(board.getCell(4,4).isEmpty());
-        assertSame(GameColor.WHITE, board.getCell(3, 3).getPiece().getColor());
+        assertTrue(board.isEmptyCell(4,4));
+        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(3,3));
     }
     @Test
     public void testEating() throws InvalidMoveException {
@@ -30,9 +30,9 @@ public class ActualMovingTest {
         board.placePiece(GameColor.BLACK, 3, 3);
         moves.add(new Move(4, 4, 2, 2));
         game.movePieces(moves, board);
-        assertTrue(board.getCell(4,4).isEmpty());
-        assertTrue(board.getCell(3,3).isEmpty());
-        assertSame(GameColor.WHITE, board.getCell(2, 2).getPiece().getColor());
+        assertTrue(board.isEmptyCell(4,4));
+        assertTrue(board.isEmptyCell(3,3));
+        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(2,2));
     }
     @Test
     public void testDoubleEating() throws InvalidMoveException {
@@ -43,11 +43,11 @@ public class ActualMovingTest {
         moves.add(new Move(6, 6, 4, 4));
         moves.add(new Move(4, 4, 2, 2));
         game.movePieces(moves, board);
-        assertTrue(board.getCell(6,6).isEmpty());
-        assertTrue(board.getCell(5,5).isEmpty());
-        assertTrue(board.getCell(4,4).isEmpty());
-        assertTrue(board.getCell(3,3).isEmpty());
-        assertSame(GameColor.WHITE, board.getCell(2, 2).getPiece().getColor());
+        assertTrue(board.isEmptyCell(6,6));
+        assertTrue(board.isEmptyCell(5,5));
+        assertTrue(board.isEmptyCell(4,4));
+        assertTrue(board.isEmptyCell(3,3));
+        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(2,2));
     }
     @Test
     public void testTripleEating() throws InvalidMoveException {
@@ -60,13 +60,13 @@ public class ActualMovingTest {
         moves.add(new Move(4, 4, 2, 2));
         moves.add(new Move(2, 2, 0, 0));
         game.movePieces(moves, board);
-        assertTrue(board.getCell(6,6).isEmpty());
-        assertTrue(board.getCell(5,5).isEmpty());
-        assertTrue(board.getCell(4,4).isEmpty());
-        assertTrue(board.getCell(3,3).isEmpty());
-        assertTrue(board.getCell(2,2).isEmpty());
-        assertTrue(board.getCell(1,1).isEmpty());
-        assertSame(GameColor.WHITE, board.getCell(0, 0).getPiece().getColor());
+        assertTrue(board.isEmptyCell(6,6));
+        assertTrue(board.isEmptyCell(5,5));
+        assertTrue(board.isEmptyCell(4,4));
+        assertTrue(board.isEmptyCell(3,3));
+        assertTrue(board.isEmptyCell(2,2));
+        assertTrue(board.isEmptyCell(1,1));
+        assertSame(GameColor.WHITE, board.getColorOfPieceWithCoordinates(0,0));
     }
     @Test
     public void testPromotion() throws InvalidMoveException {
@@ -74,6 +74,6 @@ public class ActualMovingTest {
         board.placePiece(GameColor.WHITE, 6, 6);
         moves.add(new Move(6, 6, 7, 7));
         game.movePieces(moves, board);
-        assertTrue(board.getCell(7,7).getPiece().isKing());
+        assertTrue(board.isPieceWithCoordinatesKing(7,7));
     }
 }
