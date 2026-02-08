@@ -101,7 +101,7 @@ public class Board {
         return !onBoard(i, j);
     }
 
-    private static boolean onBoard(int i, int j) {
+    public static boolean onBoard(int i, int j) {
         return i >= 0 && i < 8 && j >= 0 && j < 8;
     }
 
