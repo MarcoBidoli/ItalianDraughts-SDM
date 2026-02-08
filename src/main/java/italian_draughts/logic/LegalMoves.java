@@ -42,8 +42,7 @@ public class LegalMoves {
         List<List<Move>> allEatings = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Cell c = gameBoard.getCell(i, j);
-                if (!c.isEmpty() && c.getPiece().getColor().equals(player)) {
+                if (gameBoard.isPieceOwnedBy(player, i, j)) {
                     findEatings(i, j, new ArrayList<>(), allEatings);
                 }
             }
@@ -123,16 +122,37 @@ public class LegalMoves {
                 gameBoard.emptyCell(xOpp, yOpp);
                 Piece moved = gameBoard.getPieceAt(x,y);
                 gameBoard.emptyCell(x,y);
-                gameBoard.getCell(finX, finY).putPieceOn(moved);
+                /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
+                 * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
+                 * */
+                if(moved.isKing()) {
+                    gameBoard.placeKing(moved.getColor(), finX, finY);
+                } else {
+                    gameBoard.placePiece(moved.getColor(), finX, finY);
+                }
 
                 //recursive call
                 findEatings(finX, finY, eatings, allEatings);
 
                 //restore the board
                 gameBoard.emptyCell(finX, finY);
-                gameBoard.getCell(x, y).putPieceOn(moved);
+                /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
+                 * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
+                 * */
+                if(moved.isKing()) {
+                    gameBoard.placeKing(moved.getColor(), x, y);
+                } else {
+                    gameBoard.placePiece(moved.getColor(), x, y);
+                }
                 eatings.removeLast();
-                gameBoard.getCell(xOpp, yOpp).putPieceOn(eaten);
+                /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
+                 * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
+                 * */
+                if(eaten.isKing()) {
+                    gameBoard.placeKing(eaten.getColor(), xOpp, yOpp);
+                } else {
+                    gameBoard.placePiece(eaten.getColor(), xOpp, yOpp);
+                }
             }
         }
 
@@ -146,7 +166,7 @@ public class LegalMoves {
         if (gameBoard.isNotOnBoard(finX, finY))
             return false;
 
-        if (gameBoard.isEmptyCell(xOpp, yOpp) || gameBoard.colorOfPiece(xOpp, yOpp).equals(player))
+        if (gameBoard.isEmptyCell(xOpp, yOpp) || gameBoard.isPieceOwnedBy(player, xOpp, yOpp))
             return false;
 
         if (!gameBoard.isEmptyCell(finX, finY))
@@ -162,9 +182,8 @@ public class LegalMoves {
         List<Coords> myPiecesCoords = new ArrayList<>();
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
-                if (gameBoard.getPieceAt(i, j) != null)
-                    if (gameBoard.colorOfPiece(i, j).equals(player))
-                        myPiecesCoords.add(new Coords(i, j));
+                if(gameBoard.isPieceOwnedBy(player, i, j))
+                    myPiecesCoords.add(new Coords(i, j));
 
         // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
@@ -173,16 +192,16 @@ public class LegalMoves {
 
             // for all pieces, checking the frontwards moves
 
-            // (coord) -> (i+direction, j+1)
+            // (coord) -> (row+direction, col+1)
             addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() + 1), movesForThisPiece);
-            // (coord) -> (i+direction, j-1)
+            // (coord) -> (row+direction, col-1)
             addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
             if (gameBoard.isPieceWithCoordinatesKing(coord.row(), coord.col())) {
-                // (coord) -> (i-direction, j+1)
+                // (coord) -> (row-direction, col+1)
                 addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() + 1), movesForThisPiece);
-                // (coord) -> (i-direction, j-1)
+                // (coord) -> (row-direction, col-1)
                 addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() - 1), movesForThisPiece);
             }
 
