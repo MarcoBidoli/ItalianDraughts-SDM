@@ -45,35 +45,27 @@ public class Game {
     }
 
     public void applyTurn(List<Move> moves) throws InvalidMoveException {
-        if(status != GameStatus.ONGOING) return;
-
-        // 1) Il turno contiene almeno una cattura?
-        boolean captureOccurred = moves.stream()
-                .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
-
-        // 2) Applica le mosse alla board (riutilizzo il codice di Federico)
-        movePieces(new ArrayList<>(moves), this.gameBoard);
-
-        //check move repetition
-        if(checkRepetition()) {
-            status = GameStatus.DRAW;
-            return;
+        if (status != GameStatus.ONGOING) return;
+        if (moves == null || moves.isEmpty()) {
+            throw new InvalidMoveException("Turn must contain at least one move");
         }
 
-        // 2) Update contatori draw (domain.Move-Count Rule)
-        updateDrawCounter(captureOccurred);
-        updateStatusByPieces(this.gameBoard);
+        // 1) Applica le mosse e ottieni info cattura (single source of truth)
+        boolean captureOccurred = movePieces(new ArrayList<>(moves), this.gameBoard);
 
-        // Se la regola draw ha dichiarato DRAW, non cambia turno
+        // 2) Check draw (repetition + move-count)
+        checkDraw(captureOccurred);
         if (status != GameStatus.ONGOING) {
-            return;
+            return; // in caso di DRAW, non cambia turno
         }
 
         // 3) Turno successivo
         nextTurn();
-        // 4) Verifico vittoria
+
+        // 4) Check win (pezzi finiti o nessuna mossa legale per il nuovo currentPlayer)
         checkWin();
     }
+
 
 
     private boolean hasKing(GameColor color) {
@@ -127,7 +119,7 @@ public class Game {
     }
 
     public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
-        boolean captureOccured = false;
+        boolean captureOccurred = false;
 
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
@@ -143,14 +135,14 @@ public class Game {
             boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
             //if a capture, empty middle cell
             if (isCapture) {
-                captureOccured = true;
+                captureOccurred = true;
                 board.getCell((currentMove.fromRow + currentMove.toRow) / 2,
                               (currentMove.toCol + currentMove.fromCol) / 2).empty();
             visits.clear();
             }
         }
         boardEncoder(board);
-        return captureOccured;
+        return captureOccurred;
     }
 
     public void boardEncoder(Board board) {
