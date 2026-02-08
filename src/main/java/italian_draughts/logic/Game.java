@@ -83,7 +83,7 @@ public class Game {
     private boolean hasKing(GameColor color) {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
-                Piece piece = gameBoard.getPieceWithCoordinates(r,c);
+                Piece piece = gameBoard.getPieceAt(r,c);
                 if (piece != null &&
                         piece.getColor() == color &&
                         piece.isKing()) {
@@ -124,7 +124,7 @@ public class Game {
     public void movePieces(List<Move> move, Board board) throws InvalidMoveException {
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
-            Piece pieceToMove = board.getPieceWithCoordinates(currentMove.fromRow, currentMove.fromCol);
+            Piece pieceToMove = board.getPieceAt(currentMove.fromRow, currentMove.fromCol);
 
             //promotion
             promotionCheck(currentMove, pieceToMove);
@@ -151,8 +151,8 @@ public class Game {
                 if((i + j) % 2 == 0){
                     char value;
                     counter++;
-                    if (board.getPieceWithCoordinates(i,j) != null) {
-                        if (board.getColorOfPieceWithCoordinates(i,j) == GameColor.BLACK) {
+                    if (board.getPieceAt(i,j) != null) {
+                        if (board.colorOfPiece(i,j) == GameColor.BLACK) {
                             value = board.isPieceWithCoordinatesKing(i,j) ? 'B' : 'b';
                         } else {
                             value = board.isPieceWithCoordinatesKing(i,j) ? 'W' : 'w';

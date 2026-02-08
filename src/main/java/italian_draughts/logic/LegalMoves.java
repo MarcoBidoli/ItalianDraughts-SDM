@@ -119,9 +119,9 @@ public class LegalMoves {
                 eatings.add(new EatingMove(x, y, finX, finY, gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp)));
 
                 //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
-                Piece eaten = gameBoard.getPieceWithCoordinates(xOpp, yOpp);
+                Piece eaten = gameBoard.getPieceAt(xOpp, yOpp);
                 gameBoard.emptyCell(xOpp, yOpp);
-                Piece moved = gameBoard.getPieceWithCoordinates(x,y);
+                Piece moved = gameBoard.getPieceAt(x,y);
                 gameBoard.emptyCell(x,y);
                 gameBoard.getCell(finX, finY).putPieceOn(moved);
 
@@ -146,13 +146,13 @@ public class LegalMoves {
         if (Board.positionIsOffBoard(finX, finY))
             return false;
 
-        if (gameBoard.isEmptyCell(xOpp, yOpp) || gameBoard.getColorOfPieceWithCoordinates(xOpp, yOpp).equals(player))
+        if (gameBoard.isEmptyCell(xOpp, yOpp) || gameBoard.colorOfPiece(xOpp, yOpp).equals(player))
             return false;
 
         if (!gameBoard.isEmptyCell(finX, finY))
             return false;
 
-        return gameBoard.getPieceWithCoordinates(x, y) == null || gameBoard.isPieceWithCoordinatesKing(x, y) || !gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp);
+        return gameBoard.getPieceAt(x, y) == null || gameBoard.isPieceWithCoordinatesKing(x, y) || !gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp);
     }
 
     public List<List<Move>> moving() {
@@ -162,8 +162,8 @@ public class LegalMoves {
         List<Coords> myPiecesCoords = new ArrayList<>();
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
-                if (gameBoard.getPieceWithCoordinates(i, j) != null)
-                    if (gameBoard.getColorOfPieceWithCoordinates(i, j).equals(player))
+                if (gameBoard.getPieceAt(i, j) != null)
+                    if (gameBoard.colorOfPiece(i, j).equals(player))
                         myPiecesCoords.add(new Coords(i, j));
 
         // For each save coordinate, check what legal moves are associated with that piece
