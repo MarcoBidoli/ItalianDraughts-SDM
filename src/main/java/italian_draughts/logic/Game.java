@@ -214,13 +214,11 @@ public class Game {
         try {
             LegalMoves lm = new LegalMoves(gameBoard, currentPlayer);
             this.currentLegalMoves = lm.getLegalMoves();
-
-            if(this.currentLegalMoves.isEmpty() && status == GameStatus.ONGOING)
-                status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
         } catch (InvalidMoveException e) {
             this.currentLegalMoves = new ArrayList<>();
         }
     }
+
 
     public List<List<Move>> getCurrentLegalMoves() {
         return currentLegalMoves;
