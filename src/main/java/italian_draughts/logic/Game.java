@@ -47,9 +47,6 @@ public class Game {
     public void applyTurn(List<Move> moves) throws InvalidMoveException {
         if(status != GameStatus.ONGOING) return;
 
-        // Salviamo chi sta giocando ORA (prima di eventuali cambi turno)
-        GameColor playerWhoMoved = currentPlayer;
-
         // 1) Il turno contiene almeno una cattura?
         boolean captureOccurred = moves.stream()
                 .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
@@ -63,8 +60,8 @@ public class Game {
             return;
         }
 
-        // 3) Update contatori draw (domain.Move-Count Rule)
-        updateDrawCounters(playerWhoMoved, captureOccurred);
+        // 2) Update contatori draw (domain.Move-Count Rule)
+        updateDrawCounter(captureOccurred);
         updateStatusByPieces(this.gameBoard);
 
         // Se la regola draw ha dichiarato DRAW, non cambia turno
@@ -72,9 +69,10 @@ public class Game {
             return;
         }
 
-        // 4) Turno successivo
+        // 3) Turno successivo
         nextTurn();
-        calculateLegalMoves();
+        // 4) Verifico vittoria
+        checkWin();
     }
 
 
@@ -92,29 +90,25 @@ public class Game {
         return false;
     }
 
-    private void updateDrawCounters(GameColor playerWhoMoved, boolean captureOccurred) {
+    private void updateDrawCounter(boolean captureOccurred) {
         // Se c'è stata una cattura, la sequenza "senza catture" si interrompe: reset totale
         if (captureOccurred) {
-            quietMovesWhite = 0;
-            quietMovesBlack = 0;
+            quietMovesNoCapture = 0;
             return;
         }
 
         // La domain.Move-Count Rule si applica solo se entrambi hanno almeno un king
         boolean bothHaveKings = hasKing(GameColor.WHITE) && hasKing(GameColor.BLACK);
         if (!bothHaveKings) {
+            quietMovesNoCapture = 0; // RIPETIZIONE VOLUTA, need check
             return;
         }
 
-        // Incremento il contatore del giocatore che ha appena mosso
-        if (playerWhoMoved == GameColor.WHITE) {
-            quietMovesWhite++;
-        } else if (playerWhoMoved == GameColor.BLACK) {
-            quietMovesBlack++;
-        }
+        // Incremento il contatore
+        quietMovesNoCapture++;
 
-        // Trigger draw: 40 mosse consecutive per ciascun giocatore senza catture
-        if (quietMovesWhite >= 40 && quietMovesBlack >= 40) {
+        // Trigger draw: 40 mosse consecutive senza catture
+        if (quietMovesNoCapture >= 40) {
             status = GameStatus.DRAW;
         }
     }
