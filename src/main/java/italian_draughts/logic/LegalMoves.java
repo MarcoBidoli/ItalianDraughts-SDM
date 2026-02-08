@@ -85,8 +85,7 @@ public class LegalMoves {
             //#kings eaten
             int k1 = countKingsEaten(e1);
             int k2 = countKingsEaten(e2);
-            int cmpK = Integer.compare(k1, k2);
-            return cmpK;
+            return Integer.compare(k1, k2);
         });
     }
 
