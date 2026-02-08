@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class BoardPanel extends JComponent {
     private final int TILE_SIZE = 80;
@@ -54,10 +55,12 @@ public class BoardPanel extends JComponent {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
 
-                boolean overSelectable = game.getCurrentLegalMoves().stream()
+                List<List<Move>> currentLegalMoves = game.getCurrentLegalMoves();
+                Stream<List<Move>> legalMovesStream = currentLegalMoves.stream();
+                boolean isSelectable = legalMovesStream
                         .anyMatch(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col);
 
-                setCursor(overSelectable ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : Cursor.getDefaultCursor());
+                setCursor(isSelectable ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : Cursor.getDefaultCursor());
             }
         });
     }
@@ -129,13 +132,14 @@ public class BoardPanel extends JComponent {
                 drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedCoords != null && selectedCoords.i() == i && selectedCoords.j() == j) {
+                if (selectedCoords != null && selectedCoords.row() == i && selectedCoords.col() == j) {
                     g2.setColor(SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
                 // Draw the Piece (Must be drawn after highlights to appear on top)
-                italian_draughts.domain.Cell cell = game.getBoard().getCell(i, j);
+                Board board = game.getBoard();
+                Cell cell = board.getCell(i, j);
                 if (!cell.isEmpty()) {
                     drawPiece(g2, i, j, cell.getPiece());
                 }
@@ -236,8 +240,12 @@ public class BoardPanel extends JComponent {
     private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
         final int currentRow = i;
         final int currentCol = j;
-        boolean isSelectable = allMoves.stream()
-                .anyMatch(m -> m.getFirst().fromRow == currentRow && m.getFirst().fromCol == currentCol);
+
+        Stream<List<Move>> allMovesStream = allMoves.stream();
+        boolean isSelectable = allMovesStream.anyMatch(m -> {
+            Move firstMove = m.getFirst();
+            return firstMove.fromRow == currentRow && firstMove.fromCol == currentCol;
+        });
 
         if (isSelectable) {
             Stroke oldStroke = g2.getStroke();

@@ -130,7 +130,14 @@ public class Game {
             promotionCheck(currentMove, pieceToMove);
 
             //moving
-            board.getCell(currentMove.toRow, currentMove.toCol).putPieceOn(pieceToMove);
+            /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
+            * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
+            * */
+            if(pieceToMove.isKing()) {
+                board.placeKing(pieceToMove.getColor(), currentMove.toRow, currentMove.toCol);
+            } else {
+                board.placePiece(pieceToMove.getColor(), currentMove.toRow, currentMove.toCol);
+            }
             board.emptyCell(currentMove.fromRow, currentMove.fromCol);
 
             //if a capture, empty middle cell
@@ -214,7 +221,8 @@ public class Game {
 
     public List<List<Move>> getMovesFor(int row, int col) {
         try {
-            return new LegalMoves(this.gameBoard, this.currentPlayer).getSinglePieceLegalMoves(row, col);
+            LegalMoves legalMoves = new LegalMoves(this.gameBoard, this.currentPlayer);
+            return legalMoves.getSinglePieceLegalMoves(row, col);
         } catch (InvalidMoveException e) {
             throw new RuntimeException(e);
         }

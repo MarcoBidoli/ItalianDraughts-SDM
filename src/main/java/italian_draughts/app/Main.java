@@ -1,4 +1,5 @@
 package italian_draughts.app;
+import italian_draughts.domain.Board;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
@@ -16,7 +17,8 @@ public class Main {
     void main() {
 
         Game game = new Game();
-        game.getBoard().setGame();
+        Board gameBoard = game.getBoard();
+        gameBoard.setGame();
         game.calculateLegalMoves();
 
         JFrame frame = new JFrame("Italian Draughts");
