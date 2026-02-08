@@ -190,4 +190,11 @@ public class Board {
     public boolean isEmptyCell(int i, int j) {
         return board[i][j].isEmpty();
     }
+
+    public boolean isPieceOwnedBy(GameColor playerColor, int row, int col) {
+        Cell cell = getCell(row, col);
+        if(cell.isEmpty()) return false;
+        GameColor pieceOnCellColor = colorOfPiece(row, col);
+        return pieceOnCellColor.equals(playerColor);
+    }
 }
