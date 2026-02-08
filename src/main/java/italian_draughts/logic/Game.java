@@ -44,7 +44,7 @@ public class Game {
         return (player == GameColor.BLACK) ? GameColor.WHITE : GameColor.BLACK;
     }
 
-    public void applyTurn(List<Move> moves) throws InvalidMoveException {
+    public void processTurn(List<Move> moves) throws InvalidMoveException {
         if (status != GameStatus.ONGOING) return;
         if (moves == null || moves.isEmpty()) {
             throw new InvalidMoveException("Turn must contain at least one move");
@@ -65,8 +65,6 @@ public class Game {
         // 4) Check win (pezzi finiti o nessuna mossa legale per il nuovo currentPlayer)
         checkWin();
     }
-
-
 
     private boolean hasKing(GameColor color) {
         for (int r = 0; r < 8; r++) {
