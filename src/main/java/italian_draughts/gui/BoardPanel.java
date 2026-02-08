@@ -42,7 +42,7 @@ public class BoardPanel extends JComponent {
             public void mouseClicked(MouseEvent e) {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
-                if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+                if (Board.onBoard(row, col)) {
                     handleLogic(row, col);
                 }
             }
