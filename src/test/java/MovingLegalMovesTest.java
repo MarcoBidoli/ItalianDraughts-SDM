@@ -127,13 +127,21 @@ public class MovingLegalMovesTest {
         // First piece
         List<List<Move>> movesA = getMovesForPiece(result, 5, 3);
         assertEquals(2, movesA.size());
-        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 3 && path.getFirst().toRow == 4 && path.getFirst().toCol == 2));
-        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 3 && path.getFirst().toRow == 4 && path.getFirst().toCol == 4));
-
+        Move mL = new Move(5, 3, 4, 2);
+        Move mR = new Move(5, 3, 4, 4);
+        assertTrue(movesA.stream()
+                .map(path -> path.getFirst())
+                .anyMatch(m -> m.equals(mL)));
+        assertTrue(movesA.stream()
+                .map(path -> path.getFirst())
+                .anyMatch(m -> m.equals(mR)));
         // Second piece
         List<List<Move>> movesB = getMovesForPiece(result, 5, 7);
         assertEquals(1, movesB.size());
-        assertTrue(movesB.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 7 && path.getFirst().toRow == 4 && path.getFirst().toCol == 6));
+        Move mT = new Move(5, 7, 4, 6);
+        assertTrue(movesB.stream()
+                .map(path -> path.getFirst())
+                .anyMatch(m -> m.equals(mT)));
     }
 
     // ----------------------------------- All tests regarding BLACK standard moves ------------------------------------
