@@ -119,7 +119,9 @@ public class Game {
         }
     }
 
-    public void movePieces(List<Move> move, Board board) throws InvalidMoveException {
+    public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
+        boolean captureOccured = false;
+
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
             Piece pieceToMove = board.getCell(currentMove.fromRow, currentMove.fromCol).getPiece();
@@ -131,14 +133,17 @@ public class Game {
             board.getCell(currentMove.toRow, currentMove.toCol).putPieceOn(pieceToMove);
             board.getCell(currentMove.fromRow, currentMove.fromCol).empty();
 
+            boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
             //if a capture, empty middle cell
-            if (Math.abs(currentMove.fromRow - currentMove.toRow) == 2) {
-                board.getCell((currentMove.fromRow + currentMove.toRow) / 2, (currentMove.toCol + currentMove.fromCol) / 2).empty();
+            if (isCapture) {
+                captureOccured = true;
+                board.getCell((currentMove.fromRow + currentMove.toRow) / 2,
+                              (currentMove.toCol + currentMove.fromCol) / 2).empty();
             visits.clear();
             }
         }
         boardEncoder(board);
-        updateStatusByPieces(board);
+        return captureOccured;
     }
 
     public void boardEncoder(Board board) {
