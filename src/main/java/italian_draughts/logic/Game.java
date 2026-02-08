@@ -231,6 +231,23 @@ public class Game {
         return false;
     }
 
+    private void checkWin() {
+        if (status != GameStatus.ONGOING) return;
+
+        // Caso 1: il giocatore di turno non ha più pezzi
+        if (!hasAnyPiece(currentPlayer)) {
+            status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+            currentLegalMoves = new ArrayList<>();
+            return;
+        }
+
+        // Caso 2: il giocatore di turno non ha mosse legali
+        calculateLegalMoves();
+        if (currentLegalMoves.isEmpty()) {
+            status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+        }
+    }
+
     public List<List<Move>> getCurrentLegalMoves() {
         return currentLegalMoves;
     }
