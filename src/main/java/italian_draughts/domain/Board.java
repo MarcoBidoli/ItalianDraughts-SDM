@@ -97,11 +97,11 @@ public class Board {
     }
 
     // Added for action branch support
-    public boolean isNotOnBoard(int i, int j) {
+    public static boolean positionIsOffBoard(int i, int j) {
         return !onBoard(i, j);
     }
 
-    private static boolean onBoard(int i, int j) {
+    public static boolean onBoard(int i, int j) {
         return i >= 0 && i < 8 && j >= 0 && j < 8;
     }
 
@@ -152,4 +152,36 @@ public class Board {
         }
         return sb.toString();
     }
+    public int countColorPieces(GameColor color) {
+        int p=0;
+        for(int i=0; i<8; i++) {
+            for(int j=0; j<8; j++) {
+                if(!getCell(i,j).isEmpty()) {
+                    if(getColorOfPieceWithCoordinates(i, j) == color)
+                        p++;
+                }
+            }
+        }
+        return p;
+    }
+
+    public GameColor getColorOfPieceWithCoordinates(int i, int j) {
+        return getCell(i, j).getPiece().getColor();
+    }
+
+    public Piece getPieceWithCoordinates(int i, int j) {
+        return getCell(i, j).getPiece();
+    }
+
+    public boolean isPieceWithCoordinatesKing(int i, int j) {
+        return getCell(i, j).getPiece().isKing();
+    }
+    public void emptyCell(int i, int j) {
+        board[i][j].empty();
+    }
+
+    public boolean isEmptyCell(int i, int j) {
+        return board[i][j].isEmpty();
+    }
+//fare test di sti metodi
 }

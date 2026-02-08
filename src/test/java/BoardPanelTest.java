@@ -47,8 +47,8 @@ public class BoardPanelTest {
         panel.handleLogic(5, 1);
 
         assertNotNull(panel.getSelectedCoords());
-        assertEquals(5, panel.getSelectedCoords().i());
-        assertEquals(1, panel.getSelectedCoords().j());
+        assertEquals(5, panel.getSelectedCoords().row());
+        assertEquals(1, panel.getSelectedCoords().col());
 
         assertFalse(panel.getFilteredMoves().isEmpty());
     }

@@ -13,6 +13,7 @@ public class Game {
     private GameStatus status;
     private int quietMovesNoCapture;
     private final Map<List<SquareEncoder>, Integer> visits;
+    public static final int MAX_QUIET_MOVES = 40;
 
     private List<List<Move>> currentLegalMoves;
 
@@ -69,7 +70,7 @@ public class Game {
     private boolean hasKing(GameColor color) {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
-                Piece piece = gameBoard.getCell(r, c).getPiece();
+                Piece piece = gameBoard.getPieceWithCoordinates(r,c);
                 if (piece != null &&
                         piece.getColor() == color &&
                         piece.isKing()) {
@@ -121,14 +122,14 @@ public class Game {
 
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
-            Piece pieceToMove = board.getCell(currentMove.fromRow, currentMove.fromCol).getPiece();
+            Piece pieceToMove = board.getPieceWithCoordinates(currentMove.fromRow, currentMove.fromCol);
 
             //promotion
             promotionCheck(currentMove, pieceToMove);
 
             //moving
             board.getCell(currentMove.toRow, currentMove.toCol).putPieceOn(pieceToMove);
-            board.getCell(currentMove.fromRow, currentMove.fromCol).empty();
+            board.emptyCell(currentMove.fromRow, currentMove.fromCol);
 
             boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
             //if a capture, empty middle cell
@@ -151,11 +152,11 @@ public class Game {
                 if((i + j) % 2 == 0){
                     char value;
                     counter++;
-                    if (board.getCell(i,j).getPiece() != null) {
-                        if (board.getCell(i, j).getPiece().getColor() == GameColor.BLACK) {
-                            value = board.getCell(i, j).getPiece().isKing() ? 'B' : 'b';
+                    if (board.getPieceWithCoordinates(i,j) != null) {
+                        if (board.getColorOfPieceWithCoordinates(i,j) == GameColor.BLACK) {
+                            value = board.isPieceWithCoordinatesKing(i,j) ? 'B' : 'b';
                         } else {
-                            value = board.getCell(i, j).getPiece().isKing() ? 'W' : 'w';
+                            value = board.isPieceWithCoordinatesKing(i,j) ? 'W' : 'w';
                         }
                         encoding.add(new SquareEncoder(value, counter));
                     }

@@ -17,11 +17,11 @@ public class GameDrawTest {
 
         // White king in basso a sinistra (celle nere, cioè pari)
         gb.placePiece(GameColor.WHITE, 6, 2);
-        gb.getCell(6, 2).getPiece().setKing(true);
+        gb.getPieceWithCoordinates(6,2).setKing(true);
 
         // Black king in alto a destra (celle nere, cioè pari)
         gb.placePiece(GameColor.BLACK, 0, 6);
-        gb.getCell(0, 6).getPiece().setKing(true);
+        gb.getPieceWithCoordinates(0,6).setKing(true);
 
         // Percorsi ciclici (4 posizioni) per evitare avanti-indietro ripetuto
         // White cycle: (6,2) -> (5,1) -> (4,2) -> (5,3) -> (6,2) ...
