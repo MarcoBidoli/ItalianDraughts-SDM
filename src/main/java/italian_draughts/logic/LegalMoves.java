@@ -85,11 +85,7 @@ public class LegalMoves {
             //#kings eaten
             int k1 = countKingsEaten(e1);
             int k2 = countKingsEaten(e2);
-            int cmpK = Integer.compare(k1, k2);
-            if (cmpK != 0)
-                return cmpK;
-
-            return 0;
+            return Integer.compare(k1, k2);
         });
     }
 
@@ -156,10 +152,7 @@ public class LegalMoves {
         if (!gameBoard.isEmptyCell(finX, finY))
             return false;
 
-        if (gameBoard.getPieceWithCoordinates(x, y) != null && !gameBoard.isPieceWithCoordinatesKing(x, y) && gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp))
-            return false;
-
-        return true;
+        return gameBoard.getPieceWithCoordinates(x, y) == null || gameBoard.isPieceWithCoordinatesKing(x, y) || !gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp);
     }
 
     public List<List<Move>> moving() {
