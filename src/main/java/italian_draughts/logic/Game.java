@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Game {
     private final Board gameBoard;
@@ -53,7 +54,8 @@ public class Game {
         GameColor playerWhoMoved = currentPlayer;
 
         // 1) Il turno contiene almeno una cattura?
-        boolean captureOccurred = moves.stream()
+        Stream<Move> stream = moves.stream();
+        boolean captureOccurred = stream
                 .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
 
         // 2) Applica le mosse alla board (riutilizzo il codice di Federico)
