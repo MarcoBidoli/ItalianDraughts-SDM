@@ -130,17 +130,17 @@ public class MovingLegalMovesTest {
         Move mL = new Move(5, 3, 4, 2);
         Move mR = new Move(5, 3, 4, 4);
         assertTrue(movesA.stream()
-                .map(path -> path.getFirst())
+                .map(List::getFirst)
                 .anyMatch(m -> m.equals(mL)));
         assertTrue(movesA.stream()
-                .map(path -> path.getFirst())
+                .map(List::getFirst)
                 .anyMatch(m -> m.equals(mR)));
         // Second piece
         List<List<Move>> movesB = getMovesForPiece(result, 5, 7);
         assertEquals(1, movesB.size());
         Move mT = new Move(5, 7, 4, 6);
         assertTrue(movesB.stream()
-                .map(path -> path.getFirst())
+                .map(List::getFirst)
                 .anyMatch(m -> m.equals(mT)));
     }
 
