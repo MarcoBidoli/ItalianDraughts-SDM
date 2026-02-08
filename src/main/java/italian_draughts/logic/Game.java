@@ -113,6 +113,19 @@ public class Game {
         }
     }
 
+    private void checkDraw(boolean captureOccurred) {
+        if (status != GameStatus.ONGOING) return;
+
+        // 1) Move repetition (3 volte stessa configurazione)
+        if (checkRepetition()) {
+            status = GameStatus.DRAW;
+            return;
+        }
+
+        // 2) Move-count rule (40 mosse complessive senza cattura, se applicabile)
+        updateDrawCounter(captureOccurred);
+    }
+
     public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
         boolean captureOccured = false;
 
