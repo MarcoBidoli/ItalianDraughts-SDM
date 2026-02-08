@@ -1,11 +1,7 @@
 package italian_draughts.gui;
 
-import italian_draughts.domain.Coords;
+import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
-import italian_draughts.domain.Move;
-import italian_draughts.domain.Piece;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.GameStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,8 +76,9 @@ public class BoardPanel extends JComponent {
                     checkGameOver();
 
                     return;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidMoveException e) {
+                    JOptionPane.showMessageDialog(this, "An error with the move has occurred!");
+                    return;
                 }
             }
         }
