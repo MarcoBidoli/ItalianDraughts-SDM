@@ -68,17 +68,12 @@ public class Game {
     }
 
     private boolean hasKing(GameColor color) {
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                Piece piece = gameBoard.getPieceAt(r,c);
-                if (piece != null &&
-                        piece.getColor() == color &&
-                        piece.isKing()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        //noinspection ChainedMethodCall
+        return Board.ALL_SQUARES.stream()
+                .anyMatch(square -> {
+                    Piece p = gameBoard.getPieceAt(square.row(), square.col());
+                    return p != null && p.getColor() == color && p.isKing();
+                });
     }
 
     private void updateMoveCountRule(boolean captureOccurred) {
@@ -146,21 +141,14 @@ public class Game {
 
     public void boardEncoder(Board board) {
         List<SquareEncoder> encoding = new ArrayList<>();
-        int counter = 0;
-        for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) {
-                if((i + j) % 2 == 0){
-                    char value;
-                    counter++;
-                    if (board.getPieceAt(i,j) != null) {
-                        if (board.colorOfPiece(i,j) == GameColor.BLACK) {
-                            value = board.isKingAt(i,j) ? 'B' : 'b';
-                        } else {
-                            value = board.isKingAt(i,j) ? 'W' : 'w';
-                        }
-                        encoding.add(new SquareEncoder(value, counter));
-                    }
-                }
+        int index = 0;
+
+        for (Coords square : Board.PLAYABLE_SQUARES) {
+            index++;
+            Cell cell = board.getCell(square.row(), square.col());
+
+            if (!cell.isEmpty()) {
+                encoding.add(new SquareEncoder(cell.getSymbol(), index));
             }
         }
         visits.merge(encoding, 1, Integer::sum);
@@ -199,15 +187,12 @@ public class Game {
     }
 
     private boolean hasAnyPiece(GameColor color) {
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                Piece p = gameBoard.getPieceAt(r,c);
-                if (p != null && p.getColor() == color) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        //noinspection ChainedMethodCall
+        return Board.ALL_SQUARES.stream()
+                .anyMatch(square -> {
+                    Piece p = gameBoard.getPieceAt(square.row(), square.col());
+                    return p != null && p.getColor() == color;
+                });
     }
 
     private void checkWin() {

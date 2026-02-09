@@ -38,15 +38,17 @@ public class LegalMoves {
         return moves;
     }
 
-    public List<List<Move>> eating() throws InvalidMoveException {
+    public List<List<Move>> eating() {
         List<List<Move>> allEatings = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (gameBoard.isPieceOwnedBy(player, i, j)) {
-                    findEatings(i, j, new ArrayList<>(), allEatings);
-                }
-            }
-        }
+        Board.PLAYABLE_SQUARES.stream()
+                .filter(square -> gameBoard.isPieceOwnedBy(player, square.row(), square.col())) // player owned pieces stream
+                .forEach(sq -> { // find eating for each piece owned by player
+                    try {
+                        findEatings(sq.row(), sq.col(), new ArrayList<>(), allEatings);
+                    } catch (InvalidMoveException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         if (!allEatings.isEmpty())
             sortEatings(allEatings);
@@ -160,11 +162,9 @@ public class LegalMoves {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 
         // Putting all player pieces coordinates in a list
-        List<Coords> myPiecesCoords = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                if(gameBoard.isPieceOwnedBy(player, i, j))
-                    myPiecesCoords.add(new Coords(i, j));
+        List<Coords> myPiecesCoords = Board.PLAYABLE_SQUARES.stream()
+                .filter(square -> gameBoard.isPieceOwnedBy(player, square.row(), square.col()))
+                .toList();
 
         // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
