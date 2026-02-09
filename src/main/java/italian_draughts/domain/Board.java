@@ -158,6 +158,27 @@ public class Board {
         }
         return sb.toString();
     }
+
+    public void stringToBoard(String string) throws InvalidMoveException {
+        string = string.replaceAll("\\s+", "");
+        if(string.length() != 64){
+            throw new IllegalArgumentException("The string given has a different length from 64 (the number of tiles of a board), it is " + string.length() + " long");
+        }
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++){
+                char c = string.charAt(i*8+j);
+                switch (c) {
+                    case 'w' -> placePiece(GameColor.WHITE, i, j);
+                    case 'W' -> placeKing(GameColor.WHITE, i, j);
+                    case 'b' -> placePiece(GameColor.BLACK, i, j);
+                    case 'B' -> placeKing(GameColor.BLACK, i, j);
+                    case '-' -> {}
+                    default -> throw new IllegalArgumentException("Invalid character detected: '" + c + "'");
+                }
+            }
+        }
+    }
+
     public int countColorPieces(GameColor color) {
         int p=0;
         for(int i=0; i<8; i++) {

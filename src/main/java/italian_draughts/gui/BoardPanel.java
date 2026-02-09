@@ -28,6 +28,7 @@ public class BoardPanel extends JComponent {
     private final Color PIECE_BLACK = new Color(35, 35, 35);
     private final Color HIGHLIGHT_MOVE = new Color(46, 204, 113, 180);
     private final Color SELECTED_TILE = new Color(255, 255, 0, 120);
+        private final Color GOLD = new Color(255, 215, 0);
 
     public BoardPanel(Game game, DashboardPanel dashboardPanel) {
         this.game = game;
@@ -101,6 +102,7 @@ public class BoardPanel extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        final int HIGHLIGHT_OVAL_SIZE = 20;
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
@@ -152,16 +154,18 @@ public class BoardPanel extends JComponent {
             Move lastMove = move.getLast();
             int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
             int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
-            g2.fillOval(cx - 10, cy - 10, 20, 20);
+            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE/2, cy - HIGHLIGHT_OVAL_SIZE/2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
         }
     }
 
     private void drawPiece(Graphics2D g2, int row, int col, Piece p) {
-        int x = col * TILE_SIZE + OFFSET + 12;
-        int y = row * TILE_SIZE + 12;
-        int size = TILE_SIZE - 24;
+        final int OVAL_SIZE = 24;
+        int x = col * TILE_SIZE + OFFSET + OVAL_SIZE/2;
+        int y = row * TILE_SIZE + OVAL_SIZE/2;
+        int size = TILE_SIZE - OVAL_SIZE;
 
         // 1. Soft Shadow
+        //noinspection MagicNumber
         g2.setColor(new Color(0, 0, 0, 70));
         g2.fillOval(x + 2, y + 4, size, size);
 
@@ -170,6 +174,7 @@ public class BoardPanel extends JComponent {
         Color base = isWhite ? PIECE_WHITE : PIECE_BLACK;
         Color top = isWhite ? Color.WHITE : new Color(70, 70, 70);
 
+        //noinspection MagicNumber
         RadialGradientPaint rgp = new RadialGradientPaint(
                 new Point2D.Float(x + size * 0.35f, y + size * 0.35f),
                 size,
@@ -180,6 +185,7 @@ public class BoardPanel extends JComponent {
         g2.fillOval(x, y, size, size);
 
         // 3. Physical Edge Highlight
+        //noinspection MagicNumber
         g2.setColor(isWhite ? new Color(200, 200, 200) : new Color(10, 10, 10));
         g2.setStroke(new BasicStroke(2));
         g2.drawOval(x, y, size, size);
@@ -189,6 +195,7 @@ public class BoardPanel extends JComponent {
             drawCrown(g2, x + size / 2, y + size / 2, size / 2);
         } else {
             // Subtle inner ring for regular checkers
+            //noinspection MagicNumber
             g2.setColor(new Color(128, 128, 128, 80));
             g2.setStroke(new BasicStroke(1));
             g2.drawOval(x + size / 4, y + size / 4, size / 2, size / 2);
@@ -196,7 +203,7 @@ public class BoardPanel extends JComponent {
     }
 
     private void drawCrown(Graphics2D g2, int cx, int cy, int size) {
-        g2.setColor(new Color(255, 215, 0)); // Gold
+        g2.setColor(GOLD); // Gold
         int w = size / 2;
         int h = size / 3;
 
@@ -207,6 +214,7 @@ public class BoardPanel extends JComponent {
         g2.fillPolygon(px, py, 7);
 
         // Shine on the crown
+        //noinspection MagicNumber
         g2.setColor(new Color(255, 255, 255, 120));
         g2.setStroke(new BasicStroke(1));
         g2.drawPolygon(px, py, 7);
@@ -250,19 +258,25 @@ public class BoardPanel extends JComponent {
         if (isSelectable) {
             Stroke oldStroke = g2.getStroke();
 
+            //noinspection MagicNumber
             g2.setColor(new Color(0, 0, 0, 60));
+            //noinspection MagicNumber
             g2.setStroke(new BasicStroke(5.0f));
             int padding = 8;
             g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
 
             // Draw the main Gold ring
-            g2.setColor(new Color(255, 215, 0)); // (Classic Gold)
+            g2.setColor(GOLD); // (Classic Gold)
+            //noinspection MagicNumber
             g2.setStroke(new BasicStroke(3.5f));
             g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
 
             // Add a "Shine" (A small white arc on the top-left of the ring)
+            //noinspection MagicNumber
             g2.setColor(new Color(255, 255, 255, 180));
+            //noinspection MagicNumber
             g2.setStroke(new BasicStroke(1.5f));
+            //noinspection MagicNumber
             g2.drawArc(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2), 110, 60);
 
             g2.setStroke(oldStroke);
@@ -270,9 +284,12 @@ public class BoardPanel extends JComponent {
     }
 
     public void drawCoordinates(Graphics2D g2, int i) {
+        //noinspection MagicNumber
         g2.setColor(new Color(240, 240, 240));
+        //noinspection MagicNumber
         g2.setFont(new Font("SansSerif", Font.BOLD, 16));
         g2.drawString(String.valueOf(8 - i), 10, i * TILE_SIZE + TILE_SIZE / 2 + 7);
+        //noinspection MagicNumber
         g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
     }
 
