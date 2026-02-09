@@ -60,8 +60,8 @@ public class LegalMoves {
         if(e1.size() != e2.size())
             return false;
 
-        boolean isE1K = gameBoard.isPieceWithCoordinatesKing(e1.getFirst().fromRow, e1.getFirst().fromCol);
-        boolean isE2K = gameBoard.isPieceWithCoordinatesKing(e2.getFirst().fromRow, e2.getFirst().fromCol);
+        boolean isE1K = gameBoard.isKingAt(e1.getFirst().fromRow, e1.getFirst().fromCol);
+        boolean isE2K = gameBoard.isKingAt(e2.getFirst().fromRow, e2.getFirst().fromCol);
         if(isE1K != isE2K)
             return false;
 
@@ -75,8 +75,8 @@ public class LegalMoves {
                 return l;
 
             //who eats
-            boolean isE1K = gameBoard.isPieceWithCoordinatesKing(e1.getFirst().fromRow, e1.getFirst().fromCol);
-            boolean isE2K = gameBoard.isPieceWithCoordinatesKing(e2.getFirst().fromRow, e2.getFirst().fromCol);
+            boolean isE1K = gameBoard.isKingAt(e1.getFirst().fromRow, e1.getFirst().fromCol);
+            boolean isE2K = gameBoard.isKingAt(e2.getFirst().fromRow, e2.getFirst().fromCol);
             l = Boolean.compare(isE2K, isE1K);
             if (l != 0)
                 return l;
@@ -101,7 +101,7 @@ public class LegalMoves {
     private void findEatings(int x, int y, List<Move> eatings, List<List<Move>> allEatings) throws InvalidMoveException {
         boolean hasEat = false;
         int[][] dirs;
-        if (gameBoard.isPieceWithCoordinatesKing(x,y))
+        if (gameBoard.isKingAt(x,y))
             dirs = new int[][]{{1, -1}, {1, 1}, {-1, -1}, {-1, 1}};
         else
             dirs = new int[][]{{direction, -1}, {direction, 1}};
@@ -115,8 +115,7 @@ public class LegalMoves {
 
             if (canEat(x, y, xOpp, yOpp, finX, finY)) { //check if an eating is doable
                 hasEat = true;
-                PieceType pieceType = gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp) ? PieceType.KING : PieceType.MAN;
-                eatings.add(new EatingMove(x, y, finX, finY, pieceType));
+                eatings.add(new EatingMove(x, y, finX, finY, gameBoard.isKingAt(xOpp, yOpp)));
 
                 //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
                 Piece eaten = gameBoard.getPieceAt(xOpp, yOpp);
@@ -153,7 +152,7 @@ public class LegalMoves {
         if (!gameBoard.isEmptyCell(finX, finY))
             return false;
 
-        return gameBoard.getPieceAt(x, y) == null || gameBoard.isPieceWithCoordinatesKing(x, y) || !gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp);
+        return gameBoard.getPieceAt(x, y) == null || gameBoard.isKingAt(x, y) || !gameBoard.isKingAt(xOpp, yOpp);
     }
 
     public List<List<Move>> moving() {
@@ -179,7 +178,7 @@ public class LegalMoves {
             addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
-            if (gameBoard.isPieceWithCoordinatesKing(coord.row(), coord.col())) {
+            if (gameBoard.isKingAt(coord.row(), coord.col())) {
                 // (coord) -> (row-direction, col+1)
                 addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() + 1), movesForThisPiece);
                 // (coord) -> (row-direction, col-1)
