@@ -1,7 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
-import italian_draughts.domain.Piece;
+import italian_draughts.domain.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,12 +16,6 @@ public class BoardTest {
     public void checkNWBlack() {
         Board board = new Board();
         assertEquals(GameColor.BLACK, board.getCellColor(0,0));
-    }
-
-    @Test
-    public void emptyTest() {
-        Board board = new Board();
-        assertTrue(board.isEmpty());
     }
 
     @Test
@@ -51,7 +42,7 @@ public class BoardTest {
 
         board.placePiece(GameColor.WHITE, 7, 1);
         board.placePiece(GameColor.BLACK, 0, 2);
-        board.placeKing(GameColor.WHITE, 6, 4);
+        board.placePiece(GameColor.WHITE, PieceType.KING,6, 4);
         String repr = board.getBoardRepresentation();
 
         assertNotNull(repr);

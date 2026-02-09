@@ -54,7 +54,7 @@ public class EatingLegalMovesTest {
     public void pieceEatingKing() throws InvalidMoveException {
         Board board = new Board();
         board.placePiece(GameColor.WHITE, 5, 3);
-        board.placeKing(GameColor.BLACK, 4, 2);
+        board.placePiece(GameColor.BLACK, PieceType.KING, 4, 2);
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
@@ -64,7 +64,7 @@ public class EatingLegalMovesTest {
     @Test
     public void kingEatsFirst() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(GameColor.WHITE, 4, 2);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 4, 2);
         board.placePiece(GameColor.WHITE, 4, 4);
         board.placePiece(GameColor.BLACK, 3, 3);
 
@@ -81,7 +81,7 @@ public class EatingLegalMovesTest {
     @Test
     public void kingEatenFirst() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(GameColor.WHITE, 4, 2);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 4, 2);
         board.placePiece(GameColor.BLACK, 3, 1);
         board.placePiece(GameColor.BLACK, 3, 3);
 
@@ -103,8 +103,8 @@ public class EatingLegalMovesTest {
     @Test
     public void eatTheMostPieces() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(GameColor.WHITE, 5, 3);
-        board.placeKing(GameColor.BLACK, 4, 2);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 5, 3);
+        board.placePiece(GameColor.BLACK, PieceType.KING, 4, 2);
         board.placePiece(GameColor.WHITE, 5, 5);
         board.placePiece(GameColor.BLACK, 4, 6);
         board.placePiece(GameColor.BLACK, 2, 6);
@@ -124,10 +124,10 @@ public class EatingLegalMovesTest {
     @Test
     public void eatTheMostKings() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(GameColor.WHITE, 5, 3);
-        board.placeKing(GameColor.BLACK, 4, 2);
-        board.placeKing(GameColor.BLACK, 4, 4);
-        board.placeKing(GameColor.BLACK, 2, 4);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 5, 3);
+        board.placePiece(GameColor.BLACK, PieceType.KING, 4, 2);
+        board.placePiece(GameColor.BLACK, PieceType.KING, 4, 4);
+        board.placePiece(GameColor.BLACK, PieceType.KING, 2, 4);
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
