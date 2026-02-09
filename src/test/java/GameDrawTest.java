@@ -34,7 +34,7 @@ public class GameDrawTest {
         int wIdx = 0;
         int bIdx = 0;
 
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < Game.MAX_QUIET_MOVES; i++) {
             // turno White: sposta lungo il ciclo
             List<Move> w = new ArrayList<>();
             int[] wFrom = whitePath[wIdx];
