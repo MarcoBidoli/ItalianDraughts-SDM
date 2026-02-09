@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class Game {
     private final Board gameBoard;
@@ -100,7 +99,7 @@ public class Game {
         quietMovesNoCapture++;
 
         // Trigger draw: 40 mosse consecutive senza catture
-        if (quietMovesNoCapture >= 40) {
+        if (quietMovesNoCapture >= MAX_QUIET_MOVES) {
             status = GameStatus.DRAW;
         }
     }
