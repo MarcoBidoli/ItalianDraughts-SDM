@@ -84,7 +84,7 @@ public class DashboardPanel extends JPanel {
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
         if(game.getStatus() != GameStatus.ONGOING) {
-            status.setText("GAME STATUS: " + game.getStatus());
+            status.setText("GAME STATUS: " + getStringStatus(game.getStatus()));
             status.setForeground(Color.DARK_GRAY);
         }
     }
@@ -95,5 +95,16 @@ public class DashboardPanel extends JPanel {
 
     public String getCountText() {
         return count.getText();
+    }
+
+    private String getStringStatus(GameStatus gs) {
+        String stringStatus;
+        switch (gs) {
+            case DRAW -> stringStatus = "DRAW!";
+            case BLACK_WINS -> stringStatus = "BLACK WINS!";
+            case WHITE_WINS -> stringStatus = "WHITE WINS!";
+            default -> stringStatus = "";
+        }
+        return stringStatus;
     }
 }
