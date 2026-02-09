@@ -141,13 +141,17 @@ public class BoardPanel extends JComponent {
             }
         }
 
+        drawIndicators(g2, HIGHLIGHT_OVAL_SIZE);
+    }
+
+    private void drawIndicators(Graphics2D g2, int HIGHLIGHT_OVAL_SIZE) {
         // Draw suggested move indicators (Green Dots)
         g2.setColor(colors.HIGHLIGHT_MOVE);
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
             int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
             int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
-            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE/2, cy - HIGHLIGHT_OVAL_SIZE/2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
+            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE /2, cy - HIGHLIGHT_OVAL_SIZE /2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
         }
     }
 

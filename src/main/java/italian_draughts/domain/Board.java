@@ -8,8 +8,8 @@ import java.util.function.Consumer;
 public class Board {
     private final Cell[][] board;
 
-    private static final List<Coords> PLAYABLE_SQUARES;
-    private static final List<Coords> ALL_SQUARES;
+    public static final List<Coords> PLAYABLE_SQUARES;
+    public static final List<Coords> ALL_SQUARES;
 
     static {
         List<Coords> valid_squares = new ArrayList<>();
@@ -31,12 +31,12 @@ public class Board {
         initCells();
     }
 
-    private void forEachSquare(List<Coords> list, Consumer<Coords> action) {
+    public void forEachSquare(List<Coords> list, Consumer<Coords> action) {
         for (Coords sq : list) action.accept(sq);
     }
 
     // Shortcut to avoid repeating board[r][c] logic everywhere
-    private void onCell(Coords sq, Consumer<Cell> action) {
+    public void onCell(Coords sq, Consumer<Cell> action) {
         action.accept(board[sq.row()][sq.col()]);
     }
 
