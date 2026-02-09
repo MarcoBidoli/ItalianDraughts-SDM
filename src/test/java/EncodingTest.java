@@ -45,6 +45,7 @@ public class EncodingTest {
         ArrayList<List<SquareEncoder>> allEnc = new ArrayList<>(gameGetVisits.keySet());
         List<SquareEncoder> enc = allEnc.getFirst();
         SquareEncoder tile1 = new SquareEncoder('b',1);
+        //noinspection MagicNumber
         SquareEncoder tile2 = new SquareEncoder('w',19);
         List<SquareEncoder> testList = new ArrayList<>();
         testList.add(tile1);
@@ -65,8 +66,11 @@ public class EncodingTest {
         ArrayList<List<SquareEncoder>> allEnc = new ArrayList<>(gameGetVisits.keySet());
         List<SquareEncoder> enc = allEnc.getFirst();
         SquareEncoder tile1 = new SquareEncoder('b',1);
+        //noinspection MagicNumber
         SquareEncoder tile2 = new SquareEncoder('b',14);
+        //noinspection MagicNumber
         SquareEncoder tile3 = new SquareEncoder('w',16);
+        //noinspection MagicNumber
         SquareEncoder tile4 = new SquareEncoder('w',19);
         List<SquareEncoder> testList = new ArrayList<>();
         testList.add(tile1);
