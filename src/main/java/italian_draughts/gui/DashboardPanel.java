@@ -11,11 +11,10 @@ public class DashboardPanel extends JPanel {
     private final JLabel status;
     private final JLabel count;
     private final Game game;
-    private final PaletteColors colors;
 
     public DashboardPanel(Game game) {
         this.game = game;
-        this.colors = new PaletteColors();
+        PaletteColors colors = new PaletteColors();
         //noinspection MagicNumber
         this.setLayout(new BorderLayout(20, 0));
         //noinspection MagicNumber
