@@ -5,10 +5,7 @@ public class EatingMove extends Move{
 
     public EatingMove(int fromRow, int fromCol, int toRow, int toCol, PieceType pieceType) throws IllegalArgumentException {
         super(fromRow, fromCol, toRow, toCol);
-        if(pieceType.equals(PieceType.KING))
-            this.kingEaten = true;
-        else
-            this.kingEaten = false;
+        this.kingEaten = pieceType.equals(PieceType.KING);
     }
 
     public boolean kingEaten(){
