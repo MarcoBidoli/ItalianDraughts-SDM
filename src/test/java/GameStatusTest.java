@@ -24,7 +24,7 @@ public class GameStatusTest {
         Game game = new Game();
         Board board = game.getBoard();
 
-        // Svuota la scacchiera del game (Board non espone emptyBoard pubblicamente)
+        // Svuota la scacchiera del game
         board.emptyBoard();
 
         // Posizione: bianco può catturare l'unico nero
