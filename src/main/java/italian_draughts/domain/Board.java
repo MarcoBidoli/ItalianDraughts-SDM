@@ -58,13 +58,6 @@ public class Board {
         board[x][y].putPieceOn(piece);
     }
 
-    public void placePiece(GameColor pieceColor, PieceType pieceType, int x, int y) throws InvalidMoveException {
-        Piece p = new Piece(pieceColor);
-        if (pieceType.equals(PieceType.KING))
-                p.setKing(true);
-        board[x][y].putPieceOn(p);
-    }
-
     public void placeKing(GameColor color, int x, int y) throws InvalidMoveException {
         Piece p = new Piece(color);
         p.setKing(true);
