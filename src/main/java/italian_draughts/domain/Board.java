@@ -3,14 +3,6 @@ package italian_draughts.domain;
 public class Board {
     private final Cell[][] board;
 
-
-    /* TODO
-    * - add methods to work with pieces from a Board obj
-    *   e.g. instead of gameBoard[row][col].getCell().getPiece().getColor() -> gameBoard[row][col].getPlayerColor()
-    *       or gameBoard[row][col].isPieceKing() etc.
-    *
-     */
-
     public Board() {
         board = new Cell[8][8];
         initCells();
@@ -57,8 +49,20 @@ public class Board {
         return true;
     }
 
+    // TODO: choose if replacing in tests with the other PlacePiece()
     public void placePiece(GameColor color, int x, int y) throws InvalidMoveException {
         board[x][y].putPieceOn(new Piece(color));
+    }
+
+    public void placePiece(Piece piece, int x, int y) throws InvalidMoveException {
+        board[x][y].putPieceOn(piece);
+    }
+
+    public void placePiece(GameColor pieceColor, PieceType pieceType, int x, int y) throws InvalidMoveException {
+        Piece p = new Piece(pieceColor);
+        if (pieceType.equals(PieceType.KING))
+                p.setKing(true);
+        board[x][y].putPieceOn(p);
     }
 
     public void placeKing(GameColor color, int x, int y) throws InvalidMoveException {
@@ -74,7 +78,8 @@ public class Board {
                     try {
                         placePiece(GameColor.BLACK, i, j);
                     } catch (InvalidMoveException e) {
-                        // TODO: Handle error message
+                        System.err.println("Failed to initialize board at [" + i + "][" + j + "]: " + e.getMessage());
+                        throw new RuntimeException("Board initialization failed", e);
                     }
             }
         }
@@ -85,7 +90,8 @@ public class Board {
                     try {
                         placePiece(GameColor.WHITE, i, j);
                     } catch (InvalidMoveException e) {
-                        // TODO: Handle error message
+                        System.err.println("Failed to initialize board at [" + i + "][" + j + "]: " + e.getMessage());
+                        throw new RuntimeException("Board initialization failed", e);
                     }
             }
         }

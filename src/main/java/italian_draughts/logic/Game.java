@@ -129,14 +129,7 @@ public class Game {
             promotionCheck(currentMove, pieceToMove);
 
             //moving
-            /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
-            * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
-            * */
-            if(pieceToMove.isKing()) {
-                board.placeKing(pieceToMove.getColor(), currentMove.toRow, currentMove.toCol);
-            } else {
-                board.placePiece(pieceToMove.getColor(), currentMove.toRow, currentMove.toCol);
-            }
+            board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
             board.emptyCell(currentMove.fromRow, currentMove.fromCol);
 
             boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
