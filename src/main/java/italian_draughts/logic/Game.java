@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Game {
     private final Board gameBoard;
@@ -70,7 +71,7 @@ public class Game {
     private boolean hasKing(GameColor color) {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
-                Piece piece = gameBoard.getPieceWithCoordinates(r,c);
+                Piece piece = gameBoard.getPieceAt(r,c);
                 if (piece != null &&
                         piece.getColor() == color &&
                         piece.isKing()) {
@@ -122,13 +123,20 @@ public class Game {
 
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
-            Piece pieceToMove = board.getPieceWithCoordinates(currentMove.fromRow, currentMove.fromCol);
+            Piece pieceToMove = board.getPieceAt(currentMove.fromRow, currentMove.fromCol);
 
             //promotion
             promotionCheck(currentMove, pieceToMove);
 
             //moving
-            board.getCell(currentMove.toRow, currentMove.toCol).putPieceOn(pieceToMove);
+            /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
+            * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
+            * */
+            if(pieceToMove.isKing()) {
+                board.placeKing(pieceToMove.getColor(), currentMove.toRow, currentMove.toCol);
+            } else {
+                board.placePiece(pieceToMove.getColor(), currentMove.toRow, currentMove.toCol);
+            }
             board.emptyCell(currentMove.fromRow, currentMove.fromCol);
 
             boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
@@ -152,8 +160,8 @@ public class Game {
                 if((i + j) % 2 == 0){
                     char value;
                     counter++;
-                    if (board.getPieceWithCoordinates(i,j) != null) {
-                        if (board.getColorOfPieceWithCoordinates(i,j) == GameColor.BLACK) {
+                    if (board.getPieceAt(i,j) != null) {
+                        if (board.colorOfPiece(i,j) == GameColor.BLACK) {
                             value = board.isPieceWithCoordinatesKing(i,j) ? 'B' : 'b';
                         } else {
                             value = board.isPieceWithCoordinatesKing(i,j) ? 'W' : 'w';
@@ -233,7 +241,8 @@ public class Game {
 
     public List<List<Move>> getMovesFor(int row, int col) {
         try {
-            return new LegalMoves(this.gameBoard, this.currentPlayer).getSinglePieceLegalMoves(row, col);
+            LegalMoves legalMoves = new LegalMoves(this.gameBoard, this.currentPlayer);
+            return legalMoves.getSinglePieceLegalMoves(row, col);
         } catch (InvalidMoveException e) {
             throw new RuntimeException(e);
         }

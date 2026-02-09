@@ -28,11 +28,6 @@ public class MovingLegalMovesTest {
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
 
-        // Fake implementation
-//        List<List<domain.Move>> result = List.of(
-//                List.of(new domain.Move(2, 2, 1, 1)),
-//                List.of(new domain.Move(2, 2, 1, 3))
-//        );
         List<List<Move>> result = legalMoves.moving();
 
         // expected 2 distinct List<domain.Move> sequences (paths)
@@ -127,13 +122,21 @@ public class MovingLegalMovesTest {
         // First piece
         List<List<Move>> movesA = getMovesForPiece(result, 5, 3);
         assertEquals(2, movesA.size());
-        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 3 && path.getFirst().toRow == 4 && path.getFirst().toCol == 2));
-        assertTrue(movesA.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 3 && path.getFirst().toRow == 4 && path.getFirst().toCol == 4));
-
+        Move mL = new Move(5, 3, 4, 4);
+        assertTrue(movesA.stream()
+                .map(List::getFirst)
+                .anyMatch(m -> m.equals(mL)));
+        Move mR = new Move(5, 3, 4, 4);
+        assertTrue(movesA.stream()
+                .map(List::getFirst)
+                .anyMatch(m -> m.equals(mR)));
         // Second piece
         List<List<Move>> movesB = getMovesForPiece(result, 5, 7);
         assertEquals(1, movesB.size());
-        assertTrue(movesB.stream().anyMatch(path -> path.getFirst().fromRow == 5 && path.getFirst().fromCol == 7 && path.getFirst().toRow == 4 && path.getFirst().toCol == 6));
+        Move mT = new Move(5, 7, 4, 6);
+        assertTrue(movesB.stream()
+                .map(List::getFirst)
+                .anyMatch(m -> m.equals(mT)));
     }
 
     // ----------------------------------- All tests regarding BLACK standard moves ------------------------------------

@@ -24,4 +24,14 @@ public class Move {
     public String toString() {
         return String.format("(%d,%d) -> (%d,%d)", fromRow, fromCol, toRow, toCol);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Move move = (Move) obj;
+        boolean matchingRows = fromRow == move.fromRow && toRow == move.toRow;
+        boolean matchingCols = fromCol == move.fromCol && toCol == move.toCol;
+        return matchingRows && matchingCols;
+    }
 }

@@ -44,7 +44,20 @@ public class BoardTest {
     }
 
     @Test
-    public void printBoard() { //Questo metodo non testa niente, scegliere se tenere
+    public void printBoard() {
+        // TODO: Questo metodo non testa niente
+        // Assegnare una stringa come board, ricreare con posizioni e assertEquals
+        /*String expectedBoard = """
+                       0  1  2  3  4  5  6  7
+                       0  ⛂  .  ⛂  .  ⛂  .  ⛂  .
+                       1  .  ⛂  .  ⛂  .  ⛂  .  ⛂
+                       2  ⛂  .  ⛂  .  ⛂  .  ⛂  .
+                       3  .  .  .  .  .  .  .  .
+                       4  .  .  .  .  .  .  .  .
+                       5  .  ⛀  .  ⛀  .  ⛀  .  ⛀
+                       6  ⛀  .  ⛀  .  ⛀  .  ⛀  .
+                       7  .  ⛀  .  ⛀  .  ⛀  .  ⛀
+         """;*/
         Board board = new Board();
         board.setGame();
         board.printBoard();
@@ -78,7 +91,7 @@ public class BoardTest {
         Board board = new Board();
         board.initCells();
         board.placePiece(GameColor.WHITE, 7, 1);
-        assertEquals(GameColor.WHITE, board.getColorOfPieceWithCoordinates(7,1));
+        assertEquals(GameColor.WHITE, board.colorOfPiece(7,1));
     }
     @Test
     public void checkPiece() throws InvalidMoveException {
@@ -86,7 +99,7 @@ public class BoardTest {
         board.initCells();
         board.placePiece(GameColor.WHITE, 7, 1);
         Piece testPiece = new Piece(GameColor.WHITE);
-        assertEquals(testPiece.getColor(), board.getColorOfPieceWithCoordinates(7,1));
+        assertEquals(testPiece.getColor(), board.colorOfPiece(7,1));
         assertEquals(testPiece.isKing(), board.isPieceWithCoordinatesKing(7,1));
     }
 }
