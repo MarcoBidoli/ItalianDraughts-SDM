@@ -144,32 +144,36 @@ public class EatingLegalMovesTest {
     @Test
     public void multipleBestEatings() throws InvalidMoveException {
         Board board = new Board();
-        board.placeKing(GameColor.WHITE, 5, 3);
-        board.placeKing(GameColor.BLACK, 4, 2);
-        board.placeKing(GameColor.BLACK, 4, 4);
+        String stringBoard = "----------------------------------B-B------W--------------------";
+        board.stringToBoard(stringBoard);
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
         List<List<Move>> result = legalMoves.eating();
         assertEquals(2, result.size(), "Couldn't find all best eatings");
-
         for (int i = 0; i < result.size(); i++) {
-            assertEquals(1, result.get(i).size());
-            assertEquals(3, result.get(i).getFirst().toRow, "wrong row - " + i);
-            assertTrue(result.get(i).getFirst().toCol == 5 || result.get(i).getFirst().toCol == 1, "wrong column - " + i);
+            List<Move> move = result.get(i);
+            assertEquals(1, move.size());
+            Move first = move.getFirst();
+            assertEquals(3, first.toRow, "wrong row - " + i);
+            assertTrue(first.toCol == 5 || first.toCol == 1, "wrong column - " + i);
         }
 
-        board.placeKing(GameColor.BLACK, 2, 4);
-        board.placeKing(GameColor.BLACK, 2, 6);
+        board.emptyBoard();
+        stringBoard = "--------------------B-B-----------B-B------W--------------------";
+        board.stringToBoard(stringBoard);
         legalMoves = new LegalMoves(board, GameColor.WHITE);
         result = legalMoves.eating();
         assertEquals(2, result.size(), "Couldn't find all best eatings");
 
         for (int i = 0; i < result.size(); i++) {
-            assertEquals(2, result.get(i).size(), "Couldn't complete eating - " + i);
-            assertEquals(3, result.get(i).get(0).toRow);
-            assertEquals(5, result.get(i).get(0).toCol);
-            assertEquals(1, result.get(i).get(1).toRow);
-            assertTrue(result.get(i).get(1).toCol == 3 || result.get(i).get(1).toCol == 7, "wrong column - " + i);
+            List<Move> move = result.get(i);
+            assertEquals(2, move.size(), "Couldn't complete eating - " + i);
+            Move first = move.getFirst();
+            Move second = move.get(1);
+            assertEquals(3, first.toRow);
+            assertEquals(5, first.toCol);
+            assertEquals(1, second.toRow);
+            assertTrue(second.toCol == 3 || second.toCol == 7, "wrong column - " + i);
         }
     }
 }
