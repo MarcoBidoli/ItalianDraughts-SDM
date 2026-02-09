@@ -246,4 +246,8 @@ public class Game {
     public void resignHandling(GameColor loser) {
         status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
     }
+
+    public void setCurrentTurn(GameColor player) {
+        this.currentPlayer = player;
+    }
 }
