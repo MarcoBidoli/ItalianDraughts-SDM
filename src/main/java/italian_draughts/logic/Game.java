@@ -251,4 +251,6 @@ public class Game {
     public void setCurrentTurn(GameColor player) {
         this.currentPlayer = player;
     }
+
+
 }
