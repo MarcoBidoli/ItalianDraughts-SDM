@@ -28,9 +28,7 @@ public class BoardPanel extends JComponent {
     private final Color PIECE_BLACK = new Color(35, 35, 35);
     private final Color HIGHLIGHT_MOVE = new Color(46, 204, 113, 180);
     private final Color SELECTED_TILE = new Color(255, 255, 0, 120);
-    private final int HIGHLIGHT_OVAL_SIZE = 20;
-    private final int OVAL_SIZE = 24;
-    private final Color GOLD = new Color(255, 215, 0);
+        private final Color GOLD = new Color(255, 215, 0);
 
     public BoardPanel(Game game, DashboardPanel dashboardPanel) {
         this.game = game;
@@ -104,6 +102,7 @@ public class BoardPanel extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        final int HIGHLIGHT_OVAL_SIZE = 20;
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
@@ -160,6 +159,7 @@ public class BoardPanel extends JComponent {
     }
 
     private void drawPiece(Graphics2D g2, int row, int col, Piece p) {
+        final int OVAL_SIZE = 24;
         int x = col * TILE_SIZE + OFFSET + OVAL_SIZE/2;
         int y = row * TILE_SIZE + OVAL_SIZE/2;
         int size = TILE_SIZE - OVAL_SIZE;
