@@ -1,7 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
-import italian_draughts.domain.Move;
+import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +14,7 @@ public class ActualMovingTest {
     @Test
     public void testMoving() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(GameColor.WHITE, 4, 4);
+        board.placePiece(GameColor.WHITE, PieceType.MAN, 4, 4);
         moves.add(new Move(4, 4, 3, 3));
         game.movePieces(moves, board);
         assertTrue(board.isEmptyCell(4,4));
@@ -26,8 +23,8 @@ public class ActualMovingTest {
     @Test
     public void testEating() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(GameColor.WHITE, 4, 4);
-        board.placePiece(GameColor.BLACK, 3, 3);
+        board.placePiece(GameColor.WHITE, PieceType.MAN, 4, 4);
+        board.placePiece(GameColor.BLACK, PieceType.MAN, 3, 3);
         moves.add(new Move(4, 4, 2, 2));
         game.movePieces(moves, board);
         assertTrue(board.isEmptyCell(4,4));
@@ -37,9 +34,9 @@ public class ActualMovingTest {
     @Test
     public void testDoubleEating() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(GameColor.WHITE, 6, 6);
-        board.placePiece(GameColor.BLACK, 5, 5);
-        board.placePiece(GameColor.BLACK, 3, 3);
+        board.placePiece(GameColor.WHITE, PieceType.MAN, 6, 6);
+        board.placePiece(GameColor.BLACK, PieceType.MAN, 5, 5);
+        board.placePiece(GameColor.BLACK, PieceType.MAN, 3, 3);
         moves.add(new Move(6, 6, 4, 4));
         moves.add(new Move(4, 4, 2, 2));
         game.movePieces(moves, board);
@@ -52,10 +49,10 @@ public class ActualMovingTest {
     @Test
     public void testTripleEating() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(GameColor.WHITE, 6, 6);
-        board.placePiece(GameColor.BLACK, 5, 5);
-        board.placePiece(GameColor.BLACK, 3, 3);
-        board.placePiece(GameColor.BLACK, 1, 1);
+        board.placePiece(GameColor.WHITE, PieceType.MAN, 6, 6);
+        board.placePiece(GameColor.BLACK, PieceType.MAN, 5, 5);
+        board.placePiece(GameColor.BLACK, PieceType.MAN, 3, 3);
+        board.placePiece(GameColor.BLACK, PieceType.MAN, 1, 1);
         moves.add(new Move(6, 6, 4, 4));
         moves.add(new Move(4, 4, 2, 2));
         moves.add(new Move(2, 2, 0, 0));
@@ -71,7 +68,7 @@ public class ActualMovingTest {
     @Test
     public void testPromotion() throws InvalidMoveException {
         board.initCells();
-        board.placePiece(GameColor.WHITE, 6, 6);
+        board.placePiece(GameColor.WHITE, PieceType.MAN, 6, 6);
         moves.add(new Move(6, 6, 7, 7));
         game.movePieces(moves, board);
         assertTrue(board.isPieceWithCoordinatesKing(7,7));
