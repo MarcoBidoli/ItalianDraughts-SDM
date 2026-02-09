@@ -37,10 +37,11 @@ public class MovingLegalMovesTest {
         for (List<Move> path : result) {
             assertEquals(1, path.size());
         }
-
         // Both intended destinations are covered by the paths
+        //noinspection ChainedMethodCall
         boolean foundLeft = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 1 && path.getFirst().toCol == 1); // (2,2) -> (1,1)
+        //noinspection ChainedMethodCall
         boolean foundRight = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 1 && path.getFirst().toCol == 3); // (2,2) -> (1,3)
 
@@ -56,11 +57,12 @@ public class MovingLegalMovesTest {
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
-
+        List<Move> first = result.getFirst();
         // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
-        assertEquals(1, result.getFirst().size());
+        assertEquals(1, first.size());
 
+        //noinspection ChainedMethodCall
         boolean foundLeft = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 6); // (5,7) -> (4,6)
 
@@ -75,11 +77,12 @@ public class MovingLegalMovesTest {
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
-
+        List<Move> first = result.getFirst();
         // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
-        assertEquals(1, result.getFirst().size());
+        assertEquals(1, first.size());
 
+        //noinspection ChainedMethodCall
         boolean foundRight = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 1); // (4,0) -> (3,1)
 
@@ -96,13 +99,12 @@ public class MovingLegalMovesTest {
         List<List<Move>> result = legalMoves.moving();
 
         List<List<Move>> pathsForPiece = getMovesForPiece(result, 3, 3);
-
+        List<Move> first = pathsForPiece.getFirst();
         // Only 1 path expected
         assertEquals(1, pathsForPiece.size());
         // Only 1 move for this path
-        assertEquals(1, pathsForPiece.getFirst().size());
-
-        Move m = pathsForPiece.getFirst().getFirst();
+        assertEquals(1, first.size());
+        Move m = first.getFirst();
         // check the only available move
         assertEquals(3, m.fromRow);
         assertEquals(3, m.fromCol);
@@ -161,8 +163,10 @@ public class MovingLegalMovesTest {
         }
 
         // Both intended destinations are covered by the paths
+        //noinspection ChainedMethodCall
         boolean foundRight = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 3); // (2,4) -> (3,5)
+        //noinspection ChainedMethodCall
         boolean foundLeft = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 5); // (2,4) -> (3,3)
 
@@ -178,11 +182,12 @@ public class MovingLegalMovesTest {
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK); // BLACK turn
         List<List<Move>> result = legalMoves.moving();
-
+        List<Move> first = result.getFirst();
         // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
-        assertEquals(1, result.getFirst().size());
+        assertEquals(1, first.size());
 
+        //noinspection ChainedMethodCall
         boolean foundLeft = result.stream()
                        .anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 6); // (3,7) -> (4,6)
         assertTrue(foundLeft);
@@ -196,11 +201,12 @@ public class MovingLegalMovesTest {
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.BLACK); // WHITE turn
         List<List<Move>> result = legalMoves.moving();
-
+        List<Move> first = result.getFirst();
         // Expected 1 sub-list with exactly 1 move
         assertEquals(1, result.size());
-        assertEquals(1, result.getFirst().size());
+        assertEquals(1, first.size());
 
+        //noinspection ChainedMethodCall
         boolean foundRight = result.stream()
                 .anyMatch(path -> path.getFirst().toRow == 3 && path.getFirst().toCol == 1); // (2,0) -> (3,1)
 
@@ -217,13 +223,13 @@ public class MovingLegalMovesTest {
         List<List<Move>> result = legalMoves.moving();
 
         List<List<Move>> pathsForPiece = getMovesForPiece(result, 3, 3);
-
+        List<Move> first = pathsForPiece.getFirst();
         // Only 1 path expected
         assertEquals(1, pathsForPiece.size());
         // Only 1 move for this path
-        assertEquals(1, pathsForPiece.getFirst().size());
+        assertEquals(1, first.size());
 
-        Move m = pathsForPiece.getFirst().getFirst();
+        Move m = first.getFirst();
         // check the only available move
         assertEquals(3, m.fromRow);
         assertEquals(3, m.fromCol);
@@ -243,12 +249,15 @@ public class MovingLegalMovesTest {
         // First piece
         List<List<Move>> movesA = getMovesForPiece(result, 3, 3);
         assertEquals(2, movesA.size());
+        //noinspection ChainedMethodCall
         assertTrue(movesA.stream().anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 2));
+        //noinspection ChainedMethodCall
         assertTrue(movesA.stream().anyMatch(path -> path.getFirst().toRow == 4 && path.getFirst().toCol == 4));
 
         // Second piece
         List<List<Move>> movesB = getMovesForPiece(result, 6, 0);
         assertEquals(1, movesB.size());
+        //noinspection ChainedMethodCall
         assertTrue(movesB.stream().anyMatch(path -> path.getFirst().toRow == 7 && path.getFirst().toCol == 1));
     }
 }

@@ -135,8 +135,8 @@ public class Game {
             //if a capture, empty middle cell
             if (isCapture) {
                 captureOccurred = true;
-                board.getCell((currentMove.fromRow + currentMove.toRow) / 2,
-                              (currentMove.toCol + currentMove.fromCol) / 2).empty();
+                board.emptyCell((currentMove.fromRow + currentMove.toRow) / 2,
+                        (currentMove.toCol + currentMove.fromCol) / 2);
                 visits.clear();
             }
         }
@@ -201,7 +201,7 @@ public class Game {
     private boolean hasAnyPiece(GameColor color) {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
-                Piece p = gameBoard.getCell(r, c).getPiece();
+                Piece p = gameBoard.getPieceAt(r,c);
                 if (p != null && p.getColor() == color) {
                     return true;
                 }

@@ -41,7 +41,9 @@ public class EncodingTest {
             assertEquals(3, count);
         }
         assertTrue(game.checkRepetition());
-        List<SquareEncoder> enc = game.getVisits().keySet().iterator().next();
+        Map<List<SquareEncoder>, Integer> gameGetVisits = game.getVisits();
+        ArrayList<List<SquareEncoder>> allEnc = new ArrayList<>(gameGetVisits.keySet());
+        List<SquareEncoder> enc = allEnc.getFirst();
         SquareEncoder tile1 = new SquareEncoder('b',1);
         SquareEncoder tile2 = new SquareEncoder('w',19);
         List<SquareEncoder> testList = new ArrayList<>();
@@ -59,7 +61,9 @@ public class EncodingTest {
         board.placePiece(GameColor.BLACK, 3, 3);
         Game game = new Game();
         game.boardEncoder(board);
-        List<SquareEncoder> enc = game.getVisits().keySet().iterator().next();
+        Map<List<SquareEncoder>, Integer> gameGetVisits = game.getVisits();
+        ArrayList<List<SquareEncoder>> allEnc = new ArrayList<>(gameGetVisits.keySet());
+        List<SquareEncoder> enc = allEnc.getFirst();
         SquareEncoder tile1 = new SquareEncoder('b',1);
         SquareEncoder tile2 = new SquareEncoder('b',14);
         SquareEncoder tile3 = new SquareEncoder('w',16);
@@ -80,7 +84,9 @@ public class EncodingTest {
         testList2.add(tile6);
         testList2.add(tile3);
 
-        List<SquareEncoder> enc2 = game.getVisits().keySet().iterator().next();
+        Map<List<SquareEncoder>, Integer> gameGetVisits2 = game.getVisits();
+        ArrayList<List<SquareEncoder>> allEnc2 = new ArrayList<>(gameGetVisits2.keySet());
+        List<SquareEncoder> enc2 = allEnc2.getFirst();
         assertEquals(testList2, enc2);
     }
 }
