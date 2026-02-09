@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
+    private final int nTotPieces = 24;
     @Test
     public void checkSEBlack() {
         Board board = new Board();
@@ -22,7 +23,7 @@ public class BoardTest {
         Board board = new Board();
         board.setGame();
         int c = board.countColorPieces(GameColor.BLACK) + board.countColorPieces(GameColor.WHITE);
-        assertEquals(24, c);
+        assertEquals(nTotPieces, c);
     }
 
     @Test
@@ -30,8 +31,8 @@ public class BoardTest {
         Board board = new Board();
         board.setGame();
         int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
-        assertEquals(12, w);
-        assertEquals(12, b);
+        assertEquals(nTotPieces/2, w);
+        assertEquals(nTotPieces/2, b);
     }
 
     @Test

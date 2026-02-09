@@ -24,6 +24,7 @@ public class ModernButton extends JButton {
         // Paint the background
         g2.setColor(getBackground());
         // Adjust for more/less roundness
+        //noinspection MagicNumber
         int cornerRadius = 15;
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
 

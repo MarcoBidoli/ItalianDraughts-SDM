@@ -18,6 +18,7 @@ public class MoveTest {
     void throwExceptionCoordinatesOutOfBoard() {
         assertThrows(IllegalArgumentException.class, () -> new Move(0, 9, 1, 1));
         assertThrows(IllegalArgumentException.class, () -> new Move(8, 1, 1, 1));
+        //noinspection MagicNumber
         assertThrows(IllegalArgumentException.class, () -> new Move(0, 0, 12, 1));
         assertThrows(IllegalArgumentException.class, () -> new Move(0, 0, 1, 9));
     }

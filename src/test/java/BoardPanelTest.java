@@ -1,13 +1,13 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.domain.*;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
+import italian_draughts.gui.PaletteColors;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,8 +15,10 @@ public class BoardPanelTest {
 
     @Test
     public void showCorrectBoard() {
+        PaletteColors colors = new PaletteColors();
         Game game = new Game();
-        game.getBoard().setGame();
+        Board board = game.getBoard();
+        board.setGame();
         BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
         panel.setSize(panel.getPreferredSize());
 
@@ -27,11 +29,12 @@ public class BoardPanelTest {
         g2.dispose();
 
         int marginPixel = img.getRGB(10, 10);
-        Color expectedMargin = new Color(115, 74, 33);
+        Color expectedMargin = colors.getWOOD_MARGIN();
         assertEquals(expectedMargin.getRGB(), marginPixel);
 
+        //noinspection MagicNumber
         int  boardPixel = img.getRGB(30 + 5, 5);
-        Color expectedBoard = new Color (153, 102, 51);
+        Color expectedBoard = colors.getWOOD_DARK();
         assertEquals(expectedBoard.getRGB(), boardPixel);
     }
 
@@ -46,10 +49,12 @@ public class BoardPanelTest {
 
         panel.handleLogic(5, 1);
 
+        Coords coords = panel.getSelectedCoords();
         assertNotNull(panel.getSelectedCoords());
-        assertEquals(5, panel.getSelectedCoords().row());
-        assertEquals(1, panel.getSelectedCoords().col());
+        assertEquals(5, coords.row());
+        assertEquals(1, coords.col());
 
-        assertFalse(panel.getFilteredMoves().isEmpty());
+        List<List<Move>> filteredMoves = panel.getFilteredMoves();
+        assertFalse(filteredMoves.isEmpty());
     }
 }
