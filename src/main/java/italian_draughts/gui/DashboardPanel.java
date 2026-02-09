@@ -98,7 +98,7 @@ public class DashboardPanel extends JPanel {
     }
 
     private String getStringStatus(GameStatus gs) {
-        String stringStatus = "";
+        String stringStatus;
         switch (gs) {
             case DRAW -> stringStatus = "DRAW!";
             case BLACK_WINS -> stringStatus = "BLACK WINS!";
