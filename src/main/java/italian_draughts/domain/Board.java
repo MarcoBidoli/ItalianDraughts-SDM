@@ -167,6 +167,7 @@ public class Board {
                     case 'b' -> placePiece(GameColor.BLACK, i, j);
                     case 'B' -> placeKing(GameColor.BLACK, i, j);
                     case '-' -> {}
+                    case '.' -> {}
                     default -> throw new IllegalArgumentException("Invalid character detected: '" + c + "'");
                 }
             }

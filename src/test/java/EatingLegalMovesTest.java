@@ -1,7 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
-import italian_draughts.domain.Move;
+import italian_draughts.domain.*;
 import italian_draughts.logic.LegalMoves;
 import org.junit.jupiter.api.Test;
 
@@ -26,17 +23,18 @@ public class EatingLegalMovesTest {
         assertEquals(3, pieceEatings.getFirst().toRow);
         assertEquals(1, pieceEatings.getFirst().toCol);
 
-        assertFalse(board.getCell(4, 2).isEmpty());
-        assertNotNull(board.getCell(5, 3).getPiece());
+        Cell pieceEatenCell = board.getCell(4, 2);
+        assertFalse(pieceEatenCell.isEmpty());
+        Cell firstPieceCell = board.getCell(5,3);
+        assertNotNull(firstPieceCell.getPiece());
     }
 
     @Test
     public void doubleEat() throws InvalidMoveException {
         Board board = new Board();
-        board.placePiece(GameColor.WHITE, 5, 3);
-        board.placePiece(GameColor.BLACK, 4, 2);
-        board.placePiece(GameColor.BLACK, 2, 2);
-
+        String boardString = "------------------b---------------b--------w--------------------";
+        board.stringToBoard(boardString);
+        board.printBoard();
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE);
 
         List<List<Move>> result = legalMoves.eating();
@@ -49,11 +47,7 @@ public class EatingLegalMovesTest {
         assertEquals(1, pieceEatings.get(1).toRow);
         assertEquals(3, pieceEatings.get(1).toCol);
 
-        assertFalse(board.getCell(4, 2).isEmpty());
-        assertFalse(board.getCell(2, 2).isEmpty());
-        assertNotNull(board.getCell(5, 3).getPiece());
-        assertTrue(board.getCell(3, 1).isEmpty());
-        assertTrue(board.getCell(1, 3).isEmpty());
+        assertEquals(boardString, board.getBoardRepresentation());
     }
 
     @Test
