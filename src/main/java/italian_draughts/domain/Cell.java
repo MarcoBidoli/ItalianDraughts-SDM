@@ -37,6 +37,6 @@ public class Cell {
     }
 
     public char getSymbol() {
-        return isEmpty() ? '.' : piece.getSymbol();
+        return isEmpty() ? '-' : piece.getSymbol();
     }
 }

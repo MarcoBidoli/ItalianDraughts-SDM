@@ -20,7 +20,7 @@ public class Piece {
 
     // Needed for print
     public char getSymbol() {
-        if (color == GameColor.WHITE) return king ? '⛁' : '⛀';
-        return king ? '⛃' : '⛂';
+        if (color == GameColor.WHITE) return king ? 'W' : 'w';
+        return king ? 'B' : 'b';
     }
 }

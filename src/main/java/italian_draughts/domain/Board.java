@@ -1,23 +1,50 @@
 package italian_draughts.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
+
 public class Board {
     private final Cell[][] board;
+
+    private static final List<Coords> PLAYABLE_SQUARES;
+    private static final List<Coords> ALL_SQUARES;
+
+    static {
+        List<Coords> valid_squares = new ArrayList<>();
+        List<Coords> all_squares = new ArrayList<>();
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                if ((r + c) % 2 == 0) {
+                    valid_squares.add(new Coords(r, c));
+                }
+                all_squares.add(new Coords(r, c));
+            }
+        }
+        PLAYABLE_SQUARES = Collections.unmodifiableList(valid_squares);
+        ALL_SQUARES = Collections.unmodifiableList(all_squares);
+    }
 
     public Board() {
         board = new Cell[8][8];
         initCells();
     }
 
+    private void forEachSquare(List<Coords> list, Consumer<Coords> action) {
+        for (Coords sq : list) action.accept(sq);
+    }
+
+    // Shortcut to avoid repeating board[r][c] logic everywhere
+    private void onCell(Coords sq, Consumer<Cell> action) {
+        action.accept(board[sq.row()][sq.col()]);
+    }
+
     public void initCells() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if ((i + j) % 2 == 0) {
-                    board[i][j] = new Cell(GameColor.BLACK);
-                } else {
-                    board[i][j] = new Cell(GameColor.WHITE);
-                }
-            }
-        }
+        forEachSquare(ALL_SQUARES, square -> {
+            GameColor squareColor = PLAYABLE_SQUARES.contains(square) ? GameColor.BLACK : GameColor.WHITE;
+            board[square.row()][square.col()] = new Cell(squareColor);
+        });
     }
 
     public GameColor getCellColor(int x, int y) {
@@ -29,24 +56,7 @@ public class Board {
     }
 
     public void emptyBoard() {
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                if(!board[i][j].isEmpty()) {
-                    board[i][j].empty();
-                }
-            }
-        }
-    }
-
-    public boolean isEmpty() {
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                if(!board[i][j].isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        forEachSquare(PLAYABLE_SQUARES, square -> onCell(square, Cell::empty));
     }
 
     // TODO: choose if replacing in tests with the other PlacePiece()
@@ -58,36 +68,25 @@ public class Board {
         board[x][y].putPieceOn(piece);
     }
 
-    public void placeKing(GameColor color, int x, int y) throws InvalidMoveException {
-        Piece p = new Piece(color);
-        p.setKing(true);
+    public void placePiece(GameColor pieceColor, PieceType pieceType, int x, int y) throws InvalidMoveException {
+        Piece p = new Piece(pieceColor);
+        if (pieceType.equals(PieceType.KING))
+                p.setKing(true);
         board[x][y].putPieceOn(p);
     }
 
     public void setGame() {
-        for(int i=0; i<3; i++) {
-            for(int j=0; j<8; j++) {
-                if (board[i][j].getColor() == GameColor.BLACK)
-                    try {
-                        placePiece(GameColor.BLACK, i, j);
-                    } catch (InvalidMoveException e) {
-                        System.err.println("Failed to initialize board at [" + i + "][" + j + "]: " + e.getMessage());
-                        throw new RuntimeException("Board initialization failed", e);
-                    }
+        forEachSquare(PLAYABLE_SQUARES, square -> {
+            int row = square.row();
+            int col = square.col();
+            try {
+                if (row < 3) placePiece(GameColor.BLACK, PieceType.MAN, row, col); // BLACK ON TOP
+                else if (row > 4) placePiece(GameColor.WHITE, PieceType.MAN, row, col); // WHITE ON BOTTOM
+            } catch (InvalidMoveException e) {
+                System.err.println("Failed to initialize board at [" + row + "][" + col + "]: " + e.getMessage());
+                throw new RuntimeException("Board initialization failed", e);
             }
-        }
-
-        for(int i=5; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                if (board[i][j].getColor() == GameColor.BLACK)
-                    try {
-                        placePiece(GameColor.WHITE, i, j);
-                    } catch (InvalidMoveException e) {
-                        System.err.println("Failed to initialize board at [" + i + "][" + j + "]: " + e.getMessage());
-                        throw new RuntimeException("Board initialization failed", e);
-                    }
-            }
-        }
+        });
     }
 
     public void resetGame() {
@@ -105,90 +104,73 @@ public class Board {
     }
 
     public void printBoard() {
-        String repr = getBoardRepresentation();
-
         StringBuilder sb = new StringBuilder();
         sb.append("   0  1  2  3  4  5  6  7\n");
 
-        int index = 0;
-        for (int i = 0; i < 8; i++) {
-            sb.append(i).append(" ");
-            for (int j = 0; j < 8; j++) {
-                char c = repr.charAt(index++);
-                char symbol = switch (c) {
-                    case 'w' -> '⛀';
-                    case 'W' -> '⛁';
-                    case 'b' -> '⛂';
-                    case 'B' -> '⛃';
-                    case '-' -> '.';
-                    default -> throw new IllegalArgumentException("Invalid character detected: '" + c + "'");
-                };
-                sb.append(" ").append(symbol).append(" ");
-            }
-            sb.append("\n");
-        }
+        forEachSquare(ALL_SQUARES, square -> {
+            int row = square.row();
+            int col = square.col();
 
+            if (col == 0) sb.append(row).append(" ");
+            onCell(square, cell -> sb.append(" ").append(cell.getSymbol()).append(" "));
+            if (col == 7) sb.append("\n");
+        });
         IO.println(sb.toString());
     }
-
 
     public String getBoardRepresentation() {
         StringBuilder sb = new StringBuilder();
 
-        for (Cell[] cells : board) {
-            for (Cell cell : cells) {
-                if (cell.isEmpty()) {
-                    sb.append('-');
-                } else {
-                    Piece p = cell.getPiece();
-                    if (p.getColor() == GameColor.WHITE) {
-                        sb.append(p.isKing() ? 'W' : 'w');
-                    } else {
-                        sb.append(p.isKing() ? 'B' : 'b');
-                    }
-                }
-            }
-        }
+        forEachSquare(ALL_SQUARES, square ->
+                onCell(square, cell -> sb.append(cell.getSymbol()))
+        );
         return sb.toString();
     }
 
-    public void stringToBoard(String string) throws InvalidMoveException {
+    public void stringToBoard(String string) {
         string = string.replaceAll("\\s+", "");
-        int n_BOARD_CELLS = 64;
-        if(string.length() != n_BOARD_CELLS){
-            throw new IllegalArgumentException("The string given has a different length from 64 (the number of tiles of a board), it is " + string.length() + " long");
-        }
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++){
-                char c = string.charAt(i*8+j);
-                switch (c) {
-                    case 'w' -> placePiece(GameColor.WHITE, i, j);
-                    case 'W' -> placeKing(GameColor.WHITE, i, j);
-                    case 'b' -> placePiece(GameColor.BLACK, i, j);
-                    case 'B' -> placeKing(GameColor.BLACK, i, j);
-                    case '-' -> {}
-                    default -> throw new IllegalArgumentException("Invalid character detected: '" + c + "'");
-                }
+        final int STRING_SIZE = 64;
+        if(string.length() != STRING_SIZE)
+            throw new IllegalArgumentException("Board string must be 64 characters, but was " + string.length());
+
+        String finalString = string;
+        forEachSquare(ALL_SQUARES, square -> {
+            int row = square.row();
+            int col = square.col();
+
+            char symbol = finalString.charAt(row * 8 + col);
+
+            try {
+                convertSymbolToPiece(symbol, row, col);
+            } catch (InvalidMoveException e) {
+                throw new RuntimeException("Failed to convert string to board at (" + row + ", " + col + ")", e);
             }
+        });
+    }
+
+    private void convertSymbolToPiece(char symbol, int row, int col) throws InvalidMoveException {
+        switch (symbol) {
+            case 'w' -> placePiece(GameColor.WHITE, PieceType.MAN, row, col);
+            case 'W' -> placePiece(GameColor.WHITE, PieceType.KING, row, col);
+            case 'b' -> placePiece(GameColor.BLACK, PieceType.MAN, row, col);
+            case 'B' -> placePiece(GameColor.BLACK, PieceType.KING, row, col);
+            case '-' -> emptyCell(row, col);
+            default -> throw new IllegalArgumentException("Invalid char " + symbol);
         }
     }
 
     public int countColorPieces(GameColor color) {
-        int p=0;
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                if(cellIsEmpty(i, j)) {
-                    if(colorOfPiece(i, j) == color)
-                        p++;
+        int count = 0;
+        for (Coords square : PLAYABLE_SQUARES) {
+            Cell cell = getCell(square.row(), square.col());
+            if (!cell.isEmpty()) {
+                Piece pieceOnCell = cell.getPiece();
+                if (pieceOnCell.getColor() == color) {
+                    count++;
                 }
             }
         }
-        return p;
-    }
-
-    private boolean cellIsEmpty(int i, int j) {
-        Cell inspectedCell = getCell(i, j);
-        return !inspectedCell.isEmpty();
+        return count;
     }
 
     public GameColor colorOfPiece(int i, int j) {
@@ -200,7 +182,7 @@ public class Board {
         return board[i][j].getPiece();
     }
 
-    public boolean isPieceWithCoordinatesKing(int i, int j) {
+    public boolean isKingAt(int i, int j) {
         Piece piece = board[i][j].getPiece();
         return piece.isKing();
     }
