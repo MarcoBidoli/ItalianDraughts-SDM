@@ -51,8 +51,8 @@ public class GameDrawTest {
         Board board = game.getBoard();
 
         board.emptyBoard();
-        board.placeKing(GameColor.WHITE, 6, 2);
-        board.placeKing(GameColor.BLACK, 1, 5);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 6, 2);
+        board.placePiece(GameColor.BLACK, PieceType.KING, 1, 5);
 
         // Back-and-forth moves
         Move[] sequence = {
