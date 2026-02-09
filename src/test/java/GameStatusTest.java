@@ -25,13 +25,7 @@ public class GameStatusTest {
         Board board = game.getBoard();
 
         // Svuota la scacchiera del game (Board non espone emptyBoard pubblicamente)
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                if (!board.getCell(r, c).isEmpty()) {
-                    board.getCell(r, c).empty();
-                }
-            }
-        }
+        board.emptyBoard();
 
         // Posizione: bianco può catturare l'unico nero
         board.placePiece(GameColor.WHITE, 5, 1);
