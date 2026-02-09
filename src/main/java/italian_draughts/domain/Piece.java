@@ -17,4 +17,10 @@ public class Piece {
     public void setKing(boolean king) {
         this.king = king;
     }
+
+    // Needed for print
+    public char getSymbol() {
+        if (color == GameColor.WHITE) return king ? 'W' : 'w';
+        return king ? 'B' : 'b';
+    }
 }

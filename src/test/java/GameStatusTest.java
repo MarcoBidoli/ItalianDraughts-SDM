@@ -1,8 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.GameStatus;
-import italian_draughts.domain.Move;
-import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
 
 import java.util.ArrayList;
@@ -24,7 +20,7 @@ public class GameStatusTest {
         Game game = new Game();
         Board board = game.getBoard();
 
-        // Svuota la scacchiera del game (Board non espone emptyBoard pubblicamente)
+        // Svuota la scacchiera del game
         board.emptyBoard();
 
         // Posizione: bianco può catturare l'unico nero
@@ -43,8 +39,8 @@ public class GameStatusTest {
         Board board = game.getBoard();
         // board where Black is one move away from being trapped
         // and White is about to make that move.
-        board.placeKing(GameColor.WHITE, 1, 7);
-        board.placeKing(GameColor.WHITE, 2, 6);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 1, 7);
+        board.placePiece(GameColor.WHITE, PieceType.KING, 2, 6);
         board.placePiece(GameColor.BLACK, 0, 6);
         board.printBoard();
         game.setCurrentTurn(GameColor.WHITE);

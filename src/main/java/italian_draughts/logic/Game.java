@@ -154,9 +154,9 @@ public class Game {
                     counter++;
                     if (board.getPieceAt(i,j) != null) {
                         if (board.colorOfPiece(i,j) == GameColor.BLACK) {
-                            value = board.isPieceWithCoordinatesKing(i,j) ? 'B' : 'b';
+                            value = board.isKingAt(i,j) ? 'B' : 'b';
                         } else {
-                            value = board.isPieceWithCoordinatesKing(i,j) ? 'W' : 'w';
+                            value = board.isKingAt(i,j) ? 'W' : 'w';
                         }
                         encoding.add(new SquareEncoder(value, counter));
                     }
