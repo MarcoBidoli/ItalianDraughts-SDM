@@ -36,7 +36,7 @@ public class Board {
         return board[x][y];
     }
 
-    private void emptyBoard() {
+    public void emptyBoard() {
         for(int i=0; i<8; i++) {
             for(int j=0; j<8; j++) {
                 if(!board[i][j].isEmpty()) {

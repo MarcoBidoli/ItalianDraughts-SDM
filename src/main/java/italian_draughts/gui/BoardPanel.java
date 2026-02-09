@@ -70,7 +70,7 @@ public class BoardPanel extends JComponent {
             Move lastMove = move.getLast();
             if (lastMove.toRow == row && lastMove.toCol == col) {
                 try {
-                    game.applyTurn(new ArrayList<>(move));
+                    game.processTurn(new ArrayList<>(move));
                     if (dashboardPanel != null) dashboardPanel.updateInfo();
                     selectedCoords = null;
                     filteredMoves = new ArrayList<>();

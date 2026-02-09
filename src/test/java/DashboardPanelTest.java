@@ -43,7 +43,7 @@ public class DashboardPanelTest {
         board.placePiece(GameColor.BLACK, 0, 0);
         List<Move> move = new ArrayList<>();
         move.add(new Move(7, 1, 6, 2));
-        game.applyTurn(move);
+        game.processTurn(move);
 
         dBP.updateInfo();
 

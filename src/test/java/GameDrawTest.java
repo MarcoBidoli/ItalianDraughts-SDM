@@ -43,7 +43,7 @@ public class GameDrawTest {
             int[] wFrom = whitePath[wIdx];
             int[] wTo = whitePath[(wIdx + 1) % whitePath.length];
             w.add(new Move(wFrom[0], wFrom[1], wTo[0], wTo[1]));
-            game.applyTurn(w);
+            game.processTurn(w);
             wIdx = (wIdx + 1) % whitePath.length;
 
             // turno Black: sposta lungo il ciclo
@@ -51,7 +51,7 @@ public class GameDrawTest {
             int[] bFrom = blackPath[bIdx];
             int[] bTo = blackPath[(bIdx + 1) % blackPath.length];
             b.add(new Move(bFrom[0], bFrom[1], bTo[0], bTo[1]));
-            game.applyTurn(b);
+            game.processTurn(b);
             bIdx = (bIdx + 1) % blackPath.length;
         }
 

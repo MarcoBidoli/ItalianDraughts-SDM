@@ -12,8 +12,7 @@ public class Game {
     private final Board gameBoard;
     private GameColor currentPlayer;
     private GameStatus status;
-    private int quietMovesWhite;  //turno in cui non avviene nessuna cattura da parte del bianco
-    private int quietMovesBlack;  //turno in cui non avviene nessuna cattura da parte del nero
+    private int quietMovesNoCapture;
     private final Map<List<SquareEncoder>, Integer> visits;
     public static final int MAX_QUIET_MOVES = 40;
 
@@ -47,40 +46,27 @@ public class Game {
         return (player == GameColor.BLACK) ? GameColor.WHITE : GameColor.BLACK;
     }
 
-    public void applyTurn(List<Move> moves) throws InvalidMoveException {
-        if(status != GameStatus.ONGOING) return;
-
-        // Salviamo chi sta giocando ORA (prima di eventuali cambi turno)
-        GameColor playerWhoMoved = currentPlayer;
-
-        // 1) Il turno contiene almeno una cattura?
-        Stream<Move> stream = moves.stream();
-        boolean captureOccurred = stream
-                .anyMatch(m -> Math.abs(m.fromRow - m.toRow) == 2);
-
-        // 2) Applica le mosse alla board (riutilizzo il codice di Federico)
-        movePieces(new ArrayList<>(moves), this.gameBoard);
-
-        //check move repetition
-        if(checkRepetition()) {
-            status = GameStatus.DRAW;
-            return;
+    public void processTurn(List<Move> moves) throws InvalidMoveException {
+        if (status != GameStatus.ONGOING) return;
+        if (moves == null || moves.isEmpty()) {
+            throw new InvalidMoveException("Turn must contain at least one move");
         }
 
-        // 3) Update contatori draw (domain.Move-Count Rule)
-        updateDrawCounters(playerWhoMoved, captureOccurred);
-        updateStatusByPieces(this.gameBoard);
+        // 1) Applica le mosse e ottieni info cattura (single source of truth)
+        boolean captureOccurred = movePieces(new ArrayList<>(moves), this.gameBoard);
 
-        // Se la regola draw ha dichiarato DRAW, non cambia turno
+        // 2) Check draw (repetition + move-count)
+        checkDraw(captureOccurred);
         if (status != GameStatus.ONGOING) {
-            return;
+            return; // in caso di DRAW, non cambia turno
         }
 
-        // 4) Turno successivo
+        // 3) Turno successivo
         nextTurn();
-        calculateLegalMoves();
-    }
 
+        // 4) Check win (pezzi finiti o nessuna mossa legale per il nuovo currentPlayer)
+        checkWin();
+    }
 
     private boolean hasKing(GameColor color) {
         for (int r = 0; r < 8; r++) {
@@ -96,34 +82,45 @@ public class Game {
         return false;
     }
 
-    private void updateDrawCounters(GameColor playerWhoMoved, boolean captureOccurred) {
+    private void updateMoveCountRule(boolean captureOccurred) {
         // Se c'è stata una cattura, la sequenza "senza catture" si interrompe: reset totale
         if (captureOccurred) {
-            quietMovesWhite = 0;
-            quietMovesBlack = 0;
+            quietMovesNoCapture = 0;
             return;
         }
 
-        // La domain.Move-Count Rule si applica solo se entrambi hanno almeno un king
+        // La Move-Count Rule si applica solo se entrambi hanno almeno un king
         boolean bothHaveKings = hasKing(GameColor.WHITE) && hasKing(GameColor.BLACK);
         if (!bothHaveKings) {
+            quietMovesNoCapture = 0; // RIPETIZIONE VOLUTA, need check
             return;
         }
 
-        // Incremento il contatore del giocatore che ha appena mosso
-        if (playerWhoMoved == GameColor.WHITE) {
-            quietMovesWhite++;
-        } else if (playerWhoMoved == GameColor.BLACK) {
-            quietMovesBlack++;
-        }
+        // Incremento il contatore
+        quietMovesNoCapture++;
 
-        // Trigger draw: 40 mosse consecutive per ciascun giocatore senza catture
-        if (quietMovesWhite >= MAX_QUIET_MOVES && quietMovesBlack >= MAX_QUIET_MOVES) {
+        // Trigger draw: 40 mosse consecutive senza catture
+        if (quietMovesNoCapture >= 40) {
             status = GameStatus.DRAW;
         }
     }
 
-    public void movePieces(List<Move> move, Board board) throws InvalidMoveException {
+    private void checkDraw(boolean captureOccurred) {
+        if (status != GameStatus.ONGOING) return;
+
+        // 1) Move repetition (3 volte stessa configurazione)
+        if (checkRepetition()) {
+            status = GameStatus.DRAW;
+            return;
+        }
+
+        // 2) Move-count rule (40 mosse complessive senza cattura, se applicabile)
+        updateMoveCountRule(captureOccurred);
+    }
+
+    public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
+        boolean captureOccurred = false;
+
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
             Piece pieceToMove = board.getPieceAt(currentMove.fromRow, currentMove.fromCol);
@@ -142,14 +139,17 @@ public class Game {
             }
             board.emptyCell(currentMove.fromRow, currentMove.fromCol);
 
+            boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
             //if a capture, empty middle cell
-            if (Math.abs(currentMove.fromRow - currentMove.toRow) == 2) {
-                board.emptyCell((currentMove.fromRow + currentMove.toRow) / 2, (currentMove.toCol + currentMove.fromCol) / 2);
-            visits.clear();
+            if (isCapture) {
+                captureOccurred = true;
+                board.getCell((currentMove.fromRow + currentMove.toRow) / 2,
+                              (currentMove.toCol + currentMove.fromCol) / 2).empty();
+                visits.clear();
             }
         }
         boardEncoder(board);
-        updateStatusByPieces(board);
+        return captureOccurred;
     }
 
     public void boardEncoder(Board board) {
@@ -197,23 +197,41 @@ public class Game {
         return status;
     }
 
-    private void updateStatusByPieces(Board board) {
-        int white = board.countColorPieces(GameColor.WHITE);
-        int black = board.countColorPieces(GameColor.BLACK);
-        if (white == 0) status = GameStatus.BLACK_WINS;
-        else if (black == 0) status = GameStatus.WHITE_WINS;
-        else status = GameStatus.ONGOING;
-    }
-
     public void calculateLegalMoves() {
         try {
             LegalMoves lm = new LegalMoves(gameBoard, currentPlayer);
             this.currentLegalMoves = lm.getLegalMoves();
-
-            if(this.currentLegalMoves.isEmpty() && status == GameStatus.ONGOING)
-                status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
         } catch (InvalidMoveException e) {
             this.currentLegalMoves = new ArrayList<>();
+        }
+    }
+
+    private boolean hasAnyPiece(GameColor color) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece p = gameBoard.getCell(r, c).getPiece();
+                if (p != null && p.getColor() == color) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void checkWin() {
+        if (status != GameStatus.ONGOING) return;
+
+        // Caso 1: il giocatore di turno non ha più pezzi
+        if (!hasAnyPiece(currentPlayer)) {
+            status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+            currentLegalMoves = new ArrayList<>();
+            return;
+        }
+
+        // Caso 2: il giocatore di turno non ha mosse legali
+        calculateLegalMoves();
+        if (currentLegalMoves.isEmpty()) {
+            status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
         }
     }
 
@@ -236,5 +254,9 @@ public class Game {
 
     public void resignHandling(GameColor loser) {
         status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+    }
+
+    public void setCurrentTurn(GameColor player) {
+        this.currentPlayer = player;
     }
 }
