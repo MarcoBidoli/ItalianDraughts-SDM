@@ -39,22 +39,25 @@ public class LegalMoves {
     }
 
     public List<List<Move>> eating() {
-        List<List<Move>> allEatings = new ArrayList<>();
-        Board.PLAYABLE_SQUARES.stream()
-                .filter(square -> gameBoard.isPieceOwnedBy(player, square.row(), square.col())) // player owned pieces stream
-                .forEach(sq -> { // find eating for each piece owned by player
-                    try {
-                        findEatings(sq.row(), sq.col(), new ArrayList<>(), allEatings);
-                    } catch (InvalidMoveException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        List<List<Move>> allEatingMoves = new ArrayList<>();
+        // player owned pieces stream
+        for (Coords square : Board.PLAYABLE_SQUARES) {
+            int r = square.row();
+            int c = square.col();
+            if (gameBoard.isPieceOwnedBy(player, r, c)) { // find eating for each piece owned by player
+                try {
+                    findEatings(square.row(), square.col(), new ArrayList<>(), allEatingMoves);
+                } catch (InvalidMoveException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
-        if (!allEatings.isEmpty())
-            sortEatings(allEatings);
+        if (!allEatingMoves.isEmpty())
+            sortEatings(allEatingMoves);
 
-        return allEatings.stream()
-                .filter(eating -> checkBest(eating, allEatings.getFirst()))
+        return allEatingMoves.stream()
+                .filter(eating -> checkBest(eating, allEatingMoves.getFirst()))
                 .toList();
     }
 
@@ -170,20 +173,22 @@ public class LegalMoves {
         // If player == BLACK front moves are increasing i
         for (Coords coord : myPiecesCoords) {
             List<Move> movesForThisPiece = new ArrayList<>();
+            int row = coord.row();
+            int col = coord.col();
 
             // for all pieces, checking the frontwards moves
 
             // (coord) -> (row+direction, col+1)
-            addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() + 1), movesForThisPiece);
+            addCoordToLegalMoves(coord, new Coords(row + direction, col + 1), movesForThisPiece);
             // (coord) -> (row+direction, col-1)
-            addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() - 1), movesForThisPiece);
+            addCoordToLegalMoves(coord, new Coords(row + direction, col - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
-            if (gameBoard.isKingAt(coord.row(), coord.col())) {
+            if (gameBoard.isKingAt(row, col)) {
                 // (coord) -> (row-direction, col+1)
-                addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() + 1), movesForThisPiece);
+                addCoordToLegalMoves(coord, new Coords(row - direction, col + 1), movesForThisPiece);
                 // (coord) -> (row-direction, col-1)
-                addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() - 1), movesForThisPiece);
+                addCoordToLegalMoves(coord, new Coords(row - direction, col - 1), movesForThisPiece);
             }
 
             if (!movesForThisPiece.isEmpty())
