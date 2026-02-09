@@ -22,7 +22,7 @@ public class GameDrawTest {
         gb.placePiece(GameColor.BLACK, 0, 6);
         gb.getPieceAt(0, 6).setKing(true);
 
-        // 4-pos cycles to avoid repeating the same position back-and-forth
+        // 4-position cycles to avoid repeating the same position back-and-forth
         int[][] whitePath = {{6, 2}, {5, 1}, {4, 2}, {5, 3}};
         int[][] blackPath = {{0, 6}, {1, 5}, {2, 6}, {1, 7}};
 
@@ -41,7 +41,36 @@ public class GameDrawTest {
             bIdx = (bIdx + 1) % blackPath.length;
         }
 
-        // Draw reached at the last move; turn must not switch after draw
+        // Draw reached at the last move
         assertEquals(GameStatus.DRAW, game.getStatus());
     }
+
+    @Test
+    void drawTriggeredByRepetitionRule() throws InvalidMoveException {
+        Game game = new Game();
+        Board board = game.getBoard();
+
+        board.emptyBoard();
+        board.placeKing(GameColor.WHITE, 6, 2);
+        board.placeKing(GameColor.BLACK, 1, 5);
+
+        // Back-and-forth moves
+        Move[] sequence = {
+                new Move(6, 2, 5, 1), // W
+                new Move(1, 5, 2, 6), // B
+                new Move(5, 1, 6, 2), // W back
+                new Move(2, 6, 1, 5)  // B back
+        };
+
+        // Repeat until DRAW is triggered by the repetition rule
+        for (int i = 0; i < 3 && game.getStatus() == GameStatus.ONGOING; i++) {
+            for (Move m : sequence) {
+                game.processTurn(List.of(m));
+                if (game.getStatus() != GameStatus.ONGOING) break;
+            }
+        }
+
+        assertEquals(GameStatus.DRAW, game.getStatus());
+    }
+
 }
