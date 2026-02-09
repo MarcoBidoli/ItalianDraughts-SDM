@@ -28,11 +28,6 @@ public class MovingLegalMovesTest {
 
         LegalMoves legalMoves = new LegalMoves(board, GameColor.WHITE); // WHITE turn
 
-        // Fake implementation
-//        List<List<domain.Move>> result = List.of(
-//                List.of(new domain.Move(2, 2, 1, 1)),
-//                List.of(new domain.Move(2, 2, 1, 3))
-//        );
         List<List<Move>> result = legalMoves.moving();
 
         // expected 2 distinct List<domain.Move> sequences (paths)
