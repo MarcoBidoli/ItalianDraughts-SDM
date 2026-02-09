@@ -111,14 +111,14 @@ public class BoardTest {
         assertEquals(strTest, board.getBoardRepresentation());
     }
     @Test
-    public void checkStringToBoardWrongLength() throws InvalidMoveException {
+    public void checkStringToBoardWrongLength(){
         Board board = new Board();
         board.initCells();
         String strTest = "--";
         assertThrows(IllegalArgumentException.class, () -> board.stringToBoard(strTest));
     }
     @Test
-    public void checkStringToBoardWrongSymbol() throws InvalidMoveException {
+    public void checkStringToBoardWrongSymbol(){
         Board board = new Board();
         board.initCells();
         String strTest = "hello-----------------------------------------------------------";
