@@ -20,18 +20,11 @@ public class BoardPanel extends JComponent {
     private Coords selectedCoords = null;
     private DashboardPanel dashboardPanel;
 
-    // --- Wood Style Palette ---
-    private final Color WOOD_LIGHT = new Color(223, 191, 159);
-    private final Color WOOD_DARK = new Color(153, 102, 51);
-    private final Color WOOD_MARGIN = new Color(115, 74, 33);
-    private final Color PIECE_WHITE = new Color(245, 245, 245);
-    private final Color PIECE_BLACK = new Color(35, 35, 35);
-    private final Color HIGHLIGHT_MOVE = new Color(46, 204, 113, 180);
-    private final Color SELECTED_TILE = new Color(255, 255, 0, 120);
-        private final Color GOLD = new Color(255, 215, 0);
+    private final PaletteColors colors;
 
     public BoardPanel(Game game, DashboardPanel dashboardPanel) {
         this.game = game;
+        this.colors = new PaletteColors();
         this.dashboardPanel = dashboardPanel;
         if (this.dashboardPanel != null) {
             this.dashboardPanel.updateInfo();
@@ -114,7 +107,7 @@ public class BoardPanel extends JComponent {
         List<List<Move>> allMoves = game.getCurrentLegalMoves();
 
         // Draw Wooden Margins/Frame
-        g2.setColor(WOOD_MARGIN);
+        g2.setColor(colors.WOOD_MARGIN);
         g2.fillRect(0, 0, OFFSET, 8 * TILE_SIZE + OFFSET); // Left vertical bar
         g2.fillRect(0, 8 * TILE_SIZE, 8 * TILE_SIZE + OFFSET, OFFSET); // Bottom horizontal bar
 
@@ -127,7 +120,7 @@ public class BoardPanel extends JComponent {
                 int y = i * TILE_SIZE;
 
                 // A. Draw Checkerboard Tiles
-                g2.setColor((i + j) % 2 == 0 ? WOOD_DARK : WOOD_LIGHT);
+                g2.setColor((i + j) % 2 == 0 ? colors.WOOD_DARK : colors.WOOD_LIGHT);
                 g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 // Create a "hit zone" visual to tell the player which pieces can move
@@ -135,7 +128,7 @@ public class BoardPanel extends JComponent {
 
                 // Highlight the currently selected square (Yellow overlay)
                 if (selectedCoords != null && selectedCoords.row() == i && selectedCoords.col() == j) {
-                    g2.setColor(SELECTED_TILE);
+                    g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
@@ -149,7 +142,7 @@ public class BoardPanel extends JComponent {
         }
 
         // Draw suggested move indicators (Green Dots)
-        g2.setColor(HIGHLIGHT_MOVE);
+        g2.setColor(colors.HIGHLIGHT_MOVE);
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
             int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
@@ -171,7 +164,8 @@ public class BoardPanel extends JComponent {
 
         // 2. Modern Gradient Body
         boolean isWhite = (p.getColor() == GameColor.WHITE);
-        Color base = isWhite ? PIECE_WHITE : PIECE_BLACK;
+        Color base = isWhite ? colors.PIECE_WHITE : colors.PIECE_BLACK;
+        //noinspection MagicNumber
         Color top = isWhite ? Color.WHITE : new Color(70, 70, 70);
 
         //noinspection MagicNumber
@@ -203,7 +197,7 @@ public class BoardPanel extends JComponent {
     }
 
     private void drawCrown(Graphics2D g2, int cx, int cy, int size) {
-        g2.setColor(GOLD); // Gold
+        g2.setColor(colors.GOLD); // Gold
         int w = size / 2;
         int h = size / 3;
 
@@ -266,7 +260,7 @@ public class BoardPanel extends JComponent {
             g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));
 
             // Draw the main Gold ring
-            g2.setColor(GOLD); // (Classic Gold)
+            g2.setColor(colors.GOLD); // (Classic Gold)
             //noinspection MagicNumber
             g2.setStroke(new BasicStroke(3.5f));
             g2.drawOval(x + padding, y + padding, TILE_SIZE - (padding * 2), TILE_SIZE - (padding * 2));

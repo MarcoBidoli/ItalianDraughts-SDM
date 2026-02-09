@@ -3,7 +3,6 @@ package italian_draughts.domain;
 public class Board {
     private final Cell[][] board;
 
-
     /* TODO
     * - add methods to work with pieces from a Board obj
     *   e.g. instead of gameBoard[row][col].getCell().getPiece().getColor() -> gameBoard[row][col].getPlayerColor()
@@ -155,7 +154,8 @@ public class Board {
 
     public void stringToBoard(String string) throws InvalidMoveException {
         string = string.replaceAll("\\s+", "");
-        if(string.length() != 64){
+        int n_BOARD_CELLS = 64;
+        if(string.length() != n_BOARD_CELLS){
             throw new IllegalArgumentException("The string given has a different length from 64 (the number of tiles of a board), it is " + string.length() + " long");
         }
         for(int i=0; i<8; i++){
