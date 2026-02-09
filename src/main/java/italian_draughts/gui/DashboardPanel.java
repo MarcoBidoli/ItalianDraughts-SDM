@@ -14,24 +14,29 @@ public class DashboardPanel extends JPanel {
 
     public DashboardPanel(Game game) {
         this.game = game;
+        PaletteColors colors = new PaletteColors();
+        //noinspection MagicNumber
         this.setLayout(new BorderLayout(20, 0));
+        //noinspection MagicNumber
         this.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        this.setBackground(new Color(236, 240, 241));
+        this.setBackground(colors.DASHBOARD_BG);
 
         JPanel txtPan = new JPanel(new GridLayout(2, 1));
         txtPan.setOpaque(false);
         status = new JLabel("WHITE'S TURN");
+        //noinspection MagicNumber
         status.setFont(new Font("SansSerif", Font.BOLD, 16));
 
         count = new JLabel("WHITES: 12 | BLACKS: 12");
+        //noinspection MagicNumber
         count.setFont(new Font("SansSerif", Font.PLAIN, 14));
         txtPan.add(status);
         txtPan.add(count);
 
         JPanel btnPan = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         btnPan.setOpaque(false);
-        JButton resign = new ModernButton("Resign", new Color(231, 76, 60), Color.WHITE);
-        JButton draw = new ModernButton("Draw", new Color(52, 152, 219), Color.WHITE);
+        JButton resign = new ModernButton("Resign", colors.RESIGN_BTT, Color.WHITE);
+        JButton draw = new ModernButton("Draw", colors.DRAW_BTT, Color.WHITE);
 
 
         resign.addActionListener(_ -> handleResign());

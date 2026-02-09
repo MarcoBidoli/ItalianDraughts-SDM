@@ -115,7 +115,7 @@ public class LegalMoves {
 
             if (canEat(x, y, xOpp, yOpp, finX, finY)) { //check if an eating is doable
                 hasEat = true;
-                PieceType pieceType = gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp) == true ? PieceType.KING : PieceType.MAN;
+                PieceType pieceType = gameBoard.isPieceWithCoordinatesKing(xOpp, yOpp) ? PieceType.KING : PieceType.MAN;
                 eatings.add(new EatingMove(x, y, finX, finY, pieceType));
 
                 //simulation of the new status of the board (with the opponent's piece eaten and the player's piece moved)
