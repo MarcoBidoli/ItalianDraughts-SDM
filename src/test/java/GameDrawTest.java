@@ -16,10 +16,10 @@ public class GameDrawTest {
         gb.initCells();
 
         // White king in basso a sinistra (celle nere, cioè pari)
-        gb.placeKing(GameColor.WHITE, 6, 2);
+        gb.placePiece(GameColor.WHITE, PieceType.KING, 6, 2);
 
         // Black king in alto a destra (celle nere, cioè pari)
-        gb.placeKing(GameColor.BLACK, 0, 6);
+        gb.placePiece(GameColor.BLACK, PieceType.KING, 0, 6);
         // Percorsi ciclici (4 posizioni) per evitare avanti-indietro ripetuto
         // White cycle: (6,2) -> (5,1) -> (4,2) -> (5,3) -> (6,2) ...
         int[][] whitePath = {

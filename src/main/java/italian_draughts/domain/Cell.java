@@ -35,4 +35,8 @@ public class Cell {
     public Piece getPiece() {
         return this.piece;
     }
+
+    public char getSymbol() {
+        return isEmpty() ? '-' : piece.getSymbol();
+    }
 }
