@@ -3,6 +3,7 @@ import italian_draughts.domain.GameColor;
 import italian_draughts.domain.InvalidMoveException;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
+import italian_draughts.gui.PaletteColors;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,7 @@ public class BoardPanelTest {
 
     @Test
     public void showCorrectBoard() {
+        PaletteColors colors = new PaletteColors();
         Game game = new Game();
         game.getBoard().setGame();
         BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
@@ -27,11 +29,12 @@ public class BoardPanelTest {
         g2.dispose();
 
         int marginPixel = img.getRGB(10, 10);
-        Color expectedMargin = new Color(115, 74, 33);
+        Color expectedMargin = colors.getWOOD_MARGIN();
         assertEquals(expectedMargin.getRGB(), marginPixel);
 
+        //noinspection MagicNumber
         int  boardPixel = img.getRGB(30 + 5, 5);
-        Color expectedBoard = new Color (153, 102, 51);
+        Color expectedBoard = colors.getWOOD_DARK();
         assertEquals(expectedBoard.getRGB(), boardPixel);
     }
 
