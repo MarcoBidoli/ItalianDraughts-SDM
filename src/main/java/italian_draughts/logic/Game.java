@@ -100,7 +100,7 @@ public class Game {
         quietMovesNoCapture++;
 
         // Trigger draw: 40 mosse consecutive senza catture
-        if (quietMovesNoCapture >= 40) {
+        if (quietMovesNoCapture >= MAX_QUIET_MOVES) {
             status = GameStatus.DRAW;
         }
     }
