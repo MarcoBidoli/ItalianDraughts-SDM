@@ -72,7 +72,7 @@ public class BoardTest {
         board.placePiece(GameColor.WHITE, 7, 1);
         Piece testPiece = new Piece(GameColor.WHITE);
         assertEquals(testPiece.getColor(), board.colorOfPiece(7,1));
-        assertEquals(testPiece.isKing(), board.isPieceWithCoordinatesKing(7,1));
+        assertEquals(testPiece.isKing(), board.isKingAt(7,1));
     }
     @Test
     public void checkStringToBoard() throws InvalidMoveException {

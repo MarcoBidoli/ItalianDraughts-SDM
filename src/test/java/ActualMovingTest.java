@@ -71,6 +71,6 @@ public class ActualMovingTest {
         board.placePiece(GameColor.WHITE, PieceType.MAN, 6, 6);
         moves.add(new Move(6, 6, 7, 7));
         game.movePieces(moves, board);
-        assertTrue(board.isPieceWithCoordinatesKing(7,7));
+        assertTrue(board.isKingAt(7,7));
     }
 }
