@@ -44,25 +44,6 @@ public class BoardTest {
     }
 
     @Test
-    public void printBoard() {
-        // TODO: Questo metodo non testa niente
-        // Assegnare una stringa come board, ricreare con posizioni e assertEquals
-        /*String expectedBoard = """
-                       0  1  2  3  4  5  6  7
-                       0  ⛂  .  ⛂  .  ⛂  .  ⛂  .
-                       1  .  ⛂  .  ⛂  .  ⛂  .  ⛂
-                       2  ⛂  .  ⛂  .  ⛂  .  ⛂  .
-                       3  .  .  .  .  .  .  .  .
-                       4  .  .  .  .  .  .  .  .
-                       5  .  ⛀  .  ⛀  .  ⛀  .  ⛀
-                       6  ⛀  .  ⛀  .  ⛀  .  ⛀  .
-                       7  .  ⛀  .  ⛀  .  ⛀  .  ⛀
-         """;*/
-        Board board = new Board();
-        board.setGame();
-        board.printBoard();
-    }
-    @Test
     public void getBoardRepresentationTest() throws InvalidMoveException {
         Board board = new Board();
         board.initCells();
