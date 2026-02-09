@@ -122,37 +122,17 @@ public class LegalMoves {
                 gameBoard.emptyCell(xOpp, yOpp);
                 Piece moved = gameBoard.getPieceAt(x,y);
                 gameBoard.emptyCell(x,y);
-                /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
-                 * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
-                 * */
-                if(moved.isKing()) {
-                    gameBoard.placeKing(moved.getColor(), finX, finY);
-                } else {
-                    gameBoard.placePiece(moved.getColor(), finX, finY);
-                }
+                gameBoard.placePiece(moved, finX, finY);
 
                 //recursive call
                 findEatings(finX, finY, eatings, allEatings);
 
                 //restore the board
                 gameBoard.emptyCell(finX, finY);
-                /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
-                 * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
-                 * */
-                if(moved.isKing()) {
-                    gameBoard.placeKing(moved.getColor(), x, y);
-                } else {
-                    gameBoard.placePiece(moved.getColor(), x, y);
-                }
+                gameBoard.placePiece(moved, x, y);
+
                 eatings.removeLast();
-                /* TODO: move this logic inside placePiece() and remove placeKing(), then replace the if block with
-                 * board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
-                 * */
-                if(eaten.isKing()) {
-                    gameBoard.placeKing(eaten.getColor(), xOpp, yOpp);
-                } else {
-                    gameBoard.placePiece(eaten.getColor(), xOpp, yOpp);
-                }
+                gameBoard.placePiece(eaten, xOpp, yOpp);
             }
         }
 
