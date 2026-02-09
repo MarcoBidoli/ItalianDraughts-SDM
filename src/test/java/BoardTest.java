@@ -102,4 +102,26 @@ public class BoardTest {
         assertEquals(testPiece.getColor(), board.colorOfPiece(7,1));
         assertEquals(testPiece.isKing(), board.isPieceWithCoordinatesKing(7,1));
     }
+    @Test
+    public void checkStringToBoard() throws InvalidMoveException {
+        Board board = new Board();
+        board.initCells();
+        String strTest = "--w-------------b-----------------------------------------------";
+        board.stringToBoard(strTest);
+        assertEquals(strTest, board.getBoardRepresentation());
+    }
+    @Test
+    public void checkStringToBoardWrongLength(){
+        Board board = new Board();
+        board.initCells();
+        String strTest = "--";
+        assertThrows(IllegalArgumentException.class, () -> board.stringToBoard(strTest));
+    }
+    @Test
+    public void checkStringToBoardWrongSymbol(){
+        Board board = new Board();
+        board.initCells();
+        String strTest = "hello-----------------------------------------------------------";
+        assertThrows(IllegalArgumentException.class, () -> board.stringToBoard(strTest));
+    }
 }
