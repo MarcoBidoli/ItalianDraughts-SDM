@@ -1,6 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
+import italian_draughts.domain.*;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.gui.PaletteColors;
@@ -9,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +17,8 @@ public class BoardPanelTest {
     public void showCorrectBoard() {
         PaletteColors colors = new PaletteColors();
         Game game = new Game();
-        game.getBoard().setGame();
+        Board board = game.getBoard();
+        board.setGame();
         BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
         panel.setSize(panel.getPreferredSize());
 
@@ -49,10 +49,12 @@ public class BoardPanelTest {
 
         panel.handleLogic(5, 1);
 
+        Coords coords = panel.getSelectedCoords();
         assertNotNull(panel.getSelectedCoords());
-        assertEquals(5, panel.getSelectedCoords().row());
-        assertEquals(1, panel.getSelectedCoords().col());
+        assertEquals(5, coords.row());
+        assertEquals(1, coords.col());
 
-        assertFalse(panel.getFilteredMoves().isEmpty());
+        List<List<Move>> filteredMoves = panel.getFilteredMoves();
+        assertFalse(filteredMoves.isEmpty());
     }
 }

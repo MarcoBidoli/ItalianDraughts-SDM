@@ -24,7 +24,8 @@ public class DashboardPanelTest {
         DashboardPanel dBP = new DashboardPanel(game);
         dBP.updateInfo();
 
-        assertTrue(dBP.getStatusText().contains("WHITE"));
+        String statusText = dBP.getStatusText();
+        assertTrue(statusText.contains("WHITE"));
         String countTxt = dBP.getCountText();
         assertTrue(countTxt.contains("WHITE 2"));
         assertTrue(countTxt.contains("BLACK 1"));
@@ -47,6 +48,7 @@ public class DashboardPanelTest {
 
         dBP.updateInfo();
 
-        assertTrue(dBP.getStatusText().contains("BLACK"));
+        String statusText = dBP.getStatusText();
+        assertTrue(statusText.contains("BLACK"));
     }
 }
