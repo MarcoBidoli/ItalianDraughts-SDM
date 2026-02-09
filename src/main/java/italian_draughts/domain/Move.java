@@ -30,7 +30,8 @@ public class Move {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Move move = (Move) obj;
-        return fromRow == move.fromRow && fromCol == move.fromCol &&
-                toRow == move.toRow && toCol == move.toCol;
+        boolean matchingRows = fromRow == move.fromRow && toRow == move.toRow;
+        boolean matchingCols = fromCol == move.fromCol && toCol == move.toCol;
+        return matchingRows && matchingCols;
     }
 }
