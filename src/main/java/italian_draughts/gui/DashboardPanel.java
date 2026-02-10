@@ -79,15 +79,16 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     public void updateInfo() {
-        String turn = this.game.getCurrentPlayer() == GameColor.WHITE ? "WHITE" : "BLACK";
-        status.setText(turn + "'S TURN");
-        status.setForeground(this.game.getCurrentPlayer() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
         Board board = this.game.getBoard();
         int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
-        if(game.getStatus() != GameStatus.ONGOING) {
-            status.setText("GAME STATUS: " + getStringStatus(game.getStatus()));
+        if(game.getStatus() == GameStatus.ONGOING) {
+            String turn = this.game.getCurrentPlayer() == GameColor.WHITE ? "WHITE" : "BLACK";
+            status.setText(turn + "'S TURN");
+            status.setForeground(this.game.getCurrentPlayer() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+        } else {
+            status.setText("GAME OVER: " + getStringStatus(game.getStatus()));
             status.setForeground(Color.DARK_GRAY);
         }
     }
