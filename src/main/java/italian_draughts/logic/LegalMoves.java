@@ -41,12 +41,12 @@ public class LegalMoves {
     public List<List<Move>> eating() {
         List<List<Move>> allEatingMoves = new ArrayList<>();
         // player owned pieces stream
-        for (Coords square : Board.PLAYABLE_SQUARES) {
+        for (Square square : Board.PLAYABLE_SQUARES) {
             int r = square.row();
             int c = square.col();
             if (gameBoard.isPieceOwnedBy(player, r, c)) { // find eating for each piece owned by player
                 try {
-                    findEatings(square.row(), square.col(), new ArrayList<>(), allEatingMoves);
+                    findEatings(r, c, new ArrayList<>(), allEatingMoves);
                 } catch (InvalidMoveException e) {
                     throw new RuntimeException(e);
                 }
@@ -165,30 +165,30 @@ public class LegalMoves {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 
         // Putting all player pieces coordinates in a list
-        List<Coords> myPiecesCoords = Board.PLAYABLE_SQUARES.stream()
+        List<Square> squaresWithOwnedPieces = Board.PLAYABLE_SQUARES.stream()
                 .filter(square -> gameBoard.isPieceOwnedBy(player, square.row(), square.col()))
                 .toList();
 
         // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
-        for (Coords coord : myPiecesCoords) {
+        for (Square square : squaresWithOwnedPieces) {
+            int row = square.row();
+            int col = square.col();
             List<Move> movesForThisPiece = new ArrayList<>();
-            int row = coord.row();
-            int col = coord.col();
 
             // for all pieces, checking the frontwards moves
 
-            // (coord) -> (row+direction, col+1)
-            addCoordToLegalMoves(coord, new Coords(row + direction, col + 1), movesForThisPiece);
-            // (coord) -> (row+direction, col-1)
-            addCoordToLegalMoves(coord, new Coords(row + direction, col - 1), movesForThisPiece);
+            // (square) -> (row+direction, col+1)
+            addToLegalMoves(square, new Square(row + direction, col + 1), movesForThisPiece);
+            // (square) -> (row+direction, col-1)
+            addToLegalMoves(square, new Square(row + direction, col - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
             if (gameBoard.isKingAt(row, col)) {
-                // (coord) -> (row-direction, col+1)
-                addCoordToLegalMoves(coord, new Coords(row - direction, col + 1), movesForThisPiece);
-                // (coord) -> (row-direction, col-1)
-                addCoordToLegalMoves(coord, new Coords(row - direction, col - 1), movesForThisPiece);
+                // (square) -> (row-direction, col+1)
+                addToLegalMoves(square, new Square(row - direction, col + 1), movesForThisPiece);
+                // (square) -> (row-direction, col-1)
+                addToLegalMoves(square, new Square(row - direction, col - 1), movesForThisPiece);
             }
 
             if (!movesForThisPiece.isEmpty())
@@ -197,14 +197,12 @@ public class LegalMoves {
         return listOfAllMoves;
     }
 
-    private void addCoordToLegalMoves(Coords fromCoord, Coords toCoord, List<Move> movesForThisPiece) {
+    private void addToLegalMoves(Square fromSquare, Square toSquare, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if (Board.positionIsOffBoard(toCoord.row(), toCoord.col())) return;
+        if (Board.positionIsOffBoard(toSquare.row(), toSquare.col())) return;
 
         // check destination is empty
-        if (gameBoard.isEmptyCell(toCoord.row(), toCoord.col()))
-            movesForThisPiece.add(new Move(fromCoord.row(), fromCoord.col(), toCoord.row(), toCoord.col()));
+        if (gameBoard.isEmptyCell(toSquare.row(), toSquare.col()))
+            movesForThisPiece.add(new Move(fromSquare.row(), fromSquare.col(), toSquare.row(), toSquare.col()));
     }
-
-
 }

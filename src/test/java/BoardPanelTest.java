@@ -49,10 +49,10 @@ public class BoardPanelTest {
 
         panel.handleLogic(5, 1);
 
-        Coords coords = panel.getSelectedCoords();
+        Square square = panel.getSelectedCoords();
         assertNotNull(panel.getSelectedCoords());
-        assertEquals(5, coords.row());
-        assertEquals(1, coords.col());
+        assertEquals(5, square.row());
+        assertEquals(1, square.col());
 
         List<List<Move>> filteredMoves = panel.getFilteredMoves();
         assertFalse(filteredMoves.isEmpty());

@@ -143,7 +143,7 @@ public class Game {
         List<SquareEncoder> encoding = new ArrayList<>();
         int index = 0;
 
-        for (Coords square : Board.PLAYABLE_SQUARES) {
+        for (Square square : Board.PLAYABLE_SQUARES) {
             index++;
             Cell cell = board.getCell(square.row(), square.col());
 
