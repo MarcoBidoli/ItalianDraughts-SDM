@@ -21,12 +21,14 @@ public class Main {
         game.calculateLegalMoves();
 
         BoardController controller = new BoardController(game);
-        BoardPanel board = new BoardPanel(controller);
+        BoardPanel board = new BoardPanel(controller, game);
         DashboardPanel dashboard = new DashboardPanel(game);
 
         game.addObserver(board);
         game.addObserver(dashboard);
 
+        board.modelChanged();
+        dashboard.modelChanged();
 
         JFrame frame = new JFrame("Italian Draughts");
 
