@@ -17,7 +17,7 @@ public class BoardPanel extends JComponent {
     private final int OFFSET = 30;
     private final Game game;
     private List<List<Move>> filteredMoves = new ArrayList<>();
-    private Coords selectedCoords = null;
+    private Square selectedSquares = null;
     private DashboardPanel dashboardPanel;
 
     private final PaletteColors colors;
@@ -66,7 +66,7 @@ public class BoardPanel extends JComponent {
                 try {
                     game.processTurn(new ArrayList<>(move));
                     if (dashboardPanel != null) dashboardPanel.updateInfo();
-                    selectedCoords = null;
+                    selectedSquares = null;
                     filteredMoves = new ArrayList<>();
                     repaint();
 
@@ -84,10 +84,10 @@ public class BoardPanel extends JComponent {
         List<List<Move>> pieceMoves = game.getMovesFor(row, col);
 
         if (!pieceMoves.isEmpty()) {
-            selectedCoords = new Coords(row, col);
+            selectedSquares = new Square(row, col);
             filteredMoves = pieceMoves;
         } else {
-            selectedCoords = null;
+            selectedSquares = null;
             filteredMoves = new ArrayList<>();
         }
         repaint();
@@ -127,7 +127,7 @@ public class BoardPanel extends JComponent {
                 drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedCoords != null && selectedCoords.row() == i && selectedCoords.col() == j) {
+                if (selectedSquares != null && selectedSquares.row() == i && selectedSquares.col() == j) {
                     g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
@@ -241,7 +241,7 @@ public class BoardPanel extends JComponent {
         return this.filteredMoves;
     }
 
-    public Coords getSelectedCoords() { return selectedCoords; }
+    public Square getSelectedCoords() { return selectedSquares; }
 
     private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
         final int currentRow = i;
