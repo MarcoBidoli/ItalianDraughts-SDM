@@ -17,7 +17,7 @@ public class BoardPanel extends JComponent {
     private final int OFFSET = 30;
     private final Game game;
     private List<List<Move>> filteredMoves = new ArrayList<>();
-    private Coords selectedCoords = null;
+    private Square selectedSquares = null;
     private DashboardPanel dashboardPanel;
 
     private final PaletteColors colors;
@@ -66,7 +66,7 @@ public class BoardPanel extends JComponent {
                 try {
                     game.processTurn(new ArrayList<>(move));
                     if (dashboardPanel != null) dashboardPanel.updateInfo();
-                    selectedCoords = null;
+                    selectedSquares = null;
                     filteredMoves = new ArrayList<>();
                     repaint();
 
@@ -84,10 +84,10 @@ public class BoardPanel extends JComponent {
         List<List<Move>> pieceMoves = game.getMovesFor(row, col);
 
         if (!pieceMoves.isEmpty()) {
-            selectedCoords = new Coords(row, col);
+            selectedSquares = new Square(row, col);
             filteredMoves = pieceMoves;
         } else {
-            selectedCoords = null;
+            selectedSquares = null;
             filteredMoves = new ArrayList<>();
         }
         repaint();
@@ -127,7 +127,7 @@ public class BoardPanel extends JComponent {
                 drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedCoords != null && selectedCoords.row() == i && selectedCoords.col() == j) {
+                if (selectedSquares != null && selectedSquares.row() == i && selectedSquares.col() == j) {
                     g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
@@ -141,13 +141,17 @@ public class BoardPanel extends JComponent {
             }
         }
 
+        drawIndicators(g2, HIGHLIGHT_OVAL_SIZE);
+    }
+
+    private void drawIndicators(Graphics2D g2, int HIGHLIGHT_OVAL_SIZE) {
         // Draw suggested move indicators (Green Dots)
         g2.setColor(colors.HIGHLIGHT_MOVE);
         for (List<Move> move : filteredMoves) {
             Move lastMove = move.getLast();
             int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
             int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
-            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE/2, cy - HIGHLIGHT_OVAL_SIZE/2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
+            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE /2, cy - HIGHLIGHT_OVAL_SIZE /2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
         }
     }
 
@@ -237,7 +241,7 @@ public class BoardPanel extends JComponent {
         return this.filteredMoves;
     }
 
-    public Coords getSelectedCoords() { return selectedCoords; }
+    public Square getSelectedCoords() { return selectedSquares; }
 
     private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
         final int currentRow = i;

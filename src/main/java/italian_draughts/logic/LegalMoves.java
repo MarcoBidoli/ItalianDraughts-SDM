@@ -38,21 +38,26 @@ public class LegalMoves {
         return moves;
     }
 
-    public List<List<Move>> eating() throws InvalidMoveException {
-        List<List<Move>> allEatings = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (gameBoard.isPieceOwnedBy(player, i, j)) {
-                    findEatings(i, j, new ArrayList<>(), allEatings);
+    public List<List<Move>> eating() {
+        List<List<Move>> allEatingMoves = new ArrayList<>();
+        // player owned pieces stream
+        for (Square square : Board.PLAYABLE_SQUARES) {
+            int r = square.row();
+            int c = square.col();
+            if (gameBoard.isPieceOwnedBy(player, r, c)) { // find eating for each piece owned by player
+                try {
+                    findEatings(r, c, new ArrayList<>(), allEatingMoves);
+                } catch (InvalidMoveException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
 
-        if (!allEatings.isEmpty())
-            sortEatings(allEatings);
+        if (!allEatingMoves.isEmpty())
+            sortEatings(allEatingMoves);
 
-        return allEatings.stream()
-                .filter(eating -> checkBest(eating, allEatings.getFirst()))
+        return allEatingMoves.stream()
+                .filter(eating -> checkBest(eating, allEatingMoves.getFirst()))
                 .toList();
     }
 
@@ -160,30 +165,30 @@ public class LegalMoves {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 
         // Putting all player pieces coordinates in a list
-        List<Coords> myPiecesCoords = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                if(gameBoard.isPieceOwnedBy(player, i, j))
-                    myPiecesCoords.add(new Coords(i, j));
+        List<Square> squaresWithOwnedPieces = Board.PLAYABLE_SQUARES.stream()
+                .filter(square -> gameBoard.isPieceOwnedBy(player, square.row(), square.col()))
+                .toList();
 
         // For each save coordinate, check what legal moves are associated with that piece
         // If player == BLACK front moves are increasing i
-        for (Coords coord : myPiecesCoords) {
+        for (Square square : squaresWithOwnedPieces) {
+            int row = square.row();
+            int col = square.col();
             List<Move> movesForThisPiece = new ArrayList<>();
 
             // for all pieces, checking the frontwards moves
 
-            // (coord) -> (row+direction, col+1)
-            addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() + 1), movesForThisPiece);
-            // (coord) -> (row+direction, col-1)
-            addCoordToLegalMoves(coord, new Coords(coord.row() + direction, coord.col() - 1), movesForThisPiece);
+            // (square) -> (row+direction, col+1)
+            addToLegalMoves(square, new Square(row + direction, col + 1), movesForThisPiece);
+            // (square) -> (row+direction, col-1)
+            addToLegalMoves(square, new Square(row + direction, col - 1), movesForThisPiece);
 
             // if king, checking the backwards moves
-            if (gameBoard.isKingAt(coord.row(), coord.col())) {
-                // (coord) -> (row-direction, col+1)
-                addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() + 1), movesForThisPiece);
-                // (coord) -> (row-direction, col-1)
-                addCoordToLegalMoves(coord, new Coords(coord.row() - direction, coord.col() - 1), movesForThisPiece);
+            if (gameBoard.isKingAt(row, col)) {
+                // (square) -> (row-direction, col+1)
+                addToLegalMoves(square, new Square(row - direction, col + 1), movesForThisPiece);
+                // (square) -> (row-direction, col-1)
+                addToLegalMoves(square, new Square(row - direction, col - 1), movesForThisPiece);
             }
 
             if (!movesForThisPiece.isEmpty())
@@ -192,14 +197,12 @@ public class LegalMoves {
         return listOfAllMoves;
     }
 
-    private void addCoordToLegalMoves(Coords fromCoord, Coords toCoord, List<Move> movesForThisPiece) {
+    private void addToLegalMoves(Square fromSquare, Square toSquare, List<Move> movesForThisPiece) {
         // Avoid out of board moves
-        if (Board.positionIsOffBoard(toCoord.row(), toCoord.col())) return;
+        if (Board.positionIsOffBoard(toSquare.row(), toSquare.col())) return;
 
         // check destination is empty
-        if (gameBoard.isEmptyCell(toCoord.row(), toCoord.col()))
-            movesForThisPiece.add(new Move(fromCoord.row(), fromCoord.col(), toCoord.row(), toCoord.col()));
+        if (gameBoard.isEmptyCell(toSquare.row(), toSquare.col()))
+            movesForThisPiece.add(new Move(fromSquare.row(), fromSquare.col(), toSquare.row(), toSquare.col()));
     }
-
-
 }

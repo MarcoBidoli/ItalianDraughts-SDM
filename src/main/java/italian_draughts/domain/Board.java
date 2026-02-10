@@ -8,18 +8,18 @@ import java.util.function.Consumer;
 public class Board {
     private final Cell[][] board;
 
-    private static final List<Coords> PLAYABLE_SQUARES;
-    private static final List<Coords> ALL_SQUARES;
+    public static final List<Square> PLAYABLE_SQUARES;
+    public static final List<Square> ALL_SQUARES;
 
     static {
-        List<Coords> valid_squares = new ArrayList<>();
-        List<Coords> all_squares = new ArrayList<>();
+        List<Square> valid_squares = new ArrayList<>();
+        List<Square> all_squares = new ArrayList<>();
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
                 if ((r + c) % 2 == 0) {
-                    valid_squares.add(new Coords(r, c));
+                    valid_squares.add(new Square(r, c));
                 }
-                all_squares.add(new Coords(r, c));
+                all_squares.add(new Square(r, c));
             }
         }
         PLAYABLE_SQUARES = Collections.unmodifiableList(valid_squares);
@@ -31,12 +31,12 @@ public class Board {
         initCells();
     }
 
-    private void forEachSquare(List<Coords> list, Consumer<Coords> action) {
-        for (Coords sq : list) action.accept(sq);
+    public void forEachSquare(List<Square> list, Consumer<Square> action) {
+        for (Square sq : list) action.accept(sq);
     }
 
     // Shortcut to avoid repeating board[r][c] logic everywhere
-    private void onCell(Coords sq, Consumer<Cell> action) {
+    public void onCell(Square sq, Consumer<Cell> action) {
         action.accept(board[sq.row()][sq.col()]);
     }
 
@@ -161,7 +161,7 @@ public class Board {
 
     public int countColorPieces(GameColor color) {
         int count = 0;
-        for (Coords square : PLAYABLE_SQUARES) {
+        for (Square square : PLAYABLE_SQUARES) {
             Cell cell = getCell(square.row(), square.col());
             if (!cell.isEmpty()) {
                 Piece pieceOnCell = cell.getPiece();
