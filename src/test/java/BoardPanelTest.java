@@ -1,4 +1,5 @@
 import italian_draughts.domain.*;
+import italian_draughts.gui.BoardController;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.gui.PaletteColors;
@@ -19,9 +20,10 @@ public class BoardPanelTest {
     public void showCorrectBoard() {
         PaletteColors colors = new PaletteColors();
         Game game = new Game(w, b);
+        BoardController controller = new BoardController(game);
         Board board = game.getBoard();
         board.setGame();
-        BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
+        BoardPanel panel = new BoardPanel(controller, game);
         panel.setSize(panel.getPreferredSize());
 
         BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -43,11 +45,12 @@ public class BoardPanelTest {
     @Test
     void selectionLogicTest() throws InvalidMoveException {
         Game game = new Game(w, b);
+        BoardController controller = new BoardController(game);
         Board board = game.getBoard();
         board.placePiece(GameColor.WHITE, 5, 1);
         game.calculateLegalMoves();
 
-        BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
+        BoardPanel panel = new BoardPanel(controller, game);
 
         panel.handleLogic(5, 1);
 
