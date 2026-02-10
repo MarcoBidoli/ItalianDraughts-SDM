@@ -17,6 +17,9 @@ public class BoardController {
     }
 
     public void actionPerformed(int row, int col) {
+        if (game.getStatus() != GameStatus.ONGOING) {
+            return;
+        }
         game.handleInput(row, col);
     }
 
