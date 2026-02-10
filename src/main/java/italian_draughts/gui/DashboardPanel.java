@@ -9,14 +9,15 @@ import italian_draughts.logic.GameObserver;
 import javax.swing.*;
 import java.awt.*;
 
-public class DashboardPanel extends JPanel implements GameObserver {
+public class DashboardPanel extends JComponent implements GameObserver {
     private final JLabel status;
     private final JLabel count;
     private final Game game;
+    private final PaletteColors colors;
 
     public DashboardPanel(Game game) {
         this.game = game;
-        PaletteColors colors = new PaletteColors();
+        this.colors = new PaletteColors();
         //noinspection MagicNumber
         this.setLayout(new BorderLayout(20, 0));
         //noinspection MagicNumber
@@ -112,6 +113,21 @@ public class DashboardPanel extends JPanel implements GameObserver {
 
     @Override
     public void modelChanged() {
+        updateInfo();
         repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(colors.DASHBOARD_BG);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
+
     }
 }
