@@ -233,10 +233,12 @@ public class Game {
 
     public void agreedDrawHandling(){
         status = GameStatus.DRAW;
+        notifyObservers();
     }
 
     public void resignHandling(GameColor loser) {
         status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+        notifyObservers();
     }
 
     public void setCurrentTurn(Player player) {
