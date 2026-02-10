@@ -178,12 +178,8 @@ public class Game {
     }
 
     public void calculateLegalMoves() {
-        try {
-            LegalMoves lm = new LegalMoves(gameBoard, currentPlayer);
-            this.currentLegalMoves = lm.getLegalMoves();
-        } catch (InvalidMoveException e) {
-            this.currentLegalMoves = new ArrayList<>();
-        }
+        LegalMoves lm = new LegalMoves(gameBoard, currentPlayer);
+        this.currentLegalMoves = lm.getLegalMoves();
     }
 
     private boolean hasAnyPiece(GameColor color) {
