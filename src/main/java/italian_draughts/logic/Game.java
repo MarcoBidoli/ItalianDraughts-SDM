@@ -243,11 +243,11 @@ public class Game {
     }
 
 
-    private void addObserver(GameObserver gameObserver) {
+    public void addObserver(GameObserver gameObserver) {
         observers.add(gameObserver);
     }
 
-    private void removeObserver(GameObserver gameObserver) {
+    public void removeObserver(GameObserver gameObserver) {
         observers.remove(gameObserver);
     }
 
