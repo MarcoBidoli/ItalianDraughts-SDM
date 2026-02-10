@@ -217,6 +217,7 @@ public class Game {
     public List<List<Move>> getMovesFor(int row, int col) {
         try {
             LegalMoves legalMoves = new LegalMoves(this.gameBoard, this.currentPlayer);
+            notifyObservers();
             return legalMoves.getSinglePieceLegalMoves(row, col);
         } catch (InvalidMoveException e) {
             throw new RuntimeException(e);
