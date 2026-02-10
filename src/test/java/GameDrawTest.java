@@ -7,10 +7,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameDrawTest {
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
 
     @Test
     void drawTriggeredAfter40QuietMovesWhenBothHaveKings() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board gb = game.getBoard();
         gb.initCells();
 
@@ -47,7 +49,7 @@ public class GameDrawTest {
 
     @Test
     void drawTriggeredByRepetitionRule() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
 
         board.emptyBoard();

@@ -50,7 +50,7 @@ public class DashboardPanel extends JPanel {
     }
 
     private void handleDrawRequest() {
-        GameColor req = game.getCurrentPlayer();
+        GameColor req = game.getCurrentPlayer().getColor();
         GameColor opp = (req == GameColor.WHITE) ? GameColor.BLACK : GameColor.WHITE;
 
         int resp = JOptionPane.showConfirmDialog(this, req + " asks for DRAW. " + opp + " do you agree?", "Draw request", JOptionPane.YES_NO_OPTION);
@@ -63,7 +63,7 @@ public class DashboardPanel extends JPanel {
     }
 
     private void handleResign() {
-        GameColor loser = game.getCurrentPlayer();
+        GameColor loser = game.getCurrentPlayer().getColor();
         String winner = (loser == GameColor.WHITE) ? "BLACK" : "WHITE";
 
         int conf = JOptionPane.showConfirmDialog(this, loser + ", are you sure you want to call RESIGN?", "Resign", JOptionPane.YES_NO_OPTION);
@@ -76,9 +76,9 @@ public class DashboardPanel extends JPanel {
     }
 
     public void updateInfo() {
-        String turn = this.game.getCurrentPlayer() == GameColor.WHITE ? "WHITE" : "BLACK";
+        String turn = this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? "WHITE" : "BLACK";
         status.setText(turn + "'S TURN");
-        status.setForeground(this.game.getCurrentPlayer() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+        status.setForeground(this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
         Board board = this.game.getBoard();
         int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);

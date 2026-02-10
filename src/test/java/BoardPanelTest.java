@@ -12,11 +12,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardPanelTest {
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
 
     @Test
     public void showCorrectBoard() {
         PaletteColors colors = new PaletteColors();
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
         board.setGame();
         BoardPanel panel = new BoardPanel(game, new DashboardPanel(game));
@@ -40,7 +42,7 @@ public class BoardPanelTest {
 
     @Test
     void selectionLogicTest() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
         board.placePiece(GameColor.WHITE, 5, 1);
         game.calculateLegalMoves();

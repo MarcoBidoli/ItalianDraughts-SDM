@@ -9,7 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ActualMovingTest {
     private final Board board = new Board();
-    private final Game game = new Game();
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
+    private final Game game = new Game(w, b);
     private final List<Move> moves = new ArrayList<>();
     @Test
     public void testMoving() throws InvalidMoveException {

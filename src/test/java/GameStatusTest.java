@@ -8,16 +8,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStatusTest {
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
 
     @Test
     void newGameStartsOngoing() {
-        Game game = new Game();
+        Game game = new Game(w, b);
         assertEquals(GameStatus.ONGOING, game.getStatus());
     }
 
     @Test
     void whiteWinsWhenNoBlackPiecesRemain() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
 
         // Svuota la scacchiera del game
@@ -35,7 +37,7 @@ public class GameStatusTest {
 
     @Test
     public void testWinConditionWhenNoMovesAvailable() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
         // board where Black is one move away from being trapped
         // and White is about to make that move.
@@ -43,7 +45,7 @@ public class GameStatusTest {
         board.placePiece(GameColor.WHITE, PieceType.KING, 2, 6);
         board.placePiece(GameColor.BLACK, 0, 6);
         board.printBoard();
-        game.setCurrentTurn(GameColor.WHITE);
+        game.setCurrentTurn(new HumanPlayer(GameColor.WHITE));
         List<Move> whiteWinningMove = new ArrayList<>(List.of(new Move(2, 6,1, 5)));
 
         // Process the turn

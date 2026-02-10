@@ -1,8 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.GameStatus;
-import italian_draughts.domain.InvalidMoveException;
-import italian_draughts.domain.Move;
+import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
 
 import java.util.List;
@@ -12,38 +8,43 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTurnTest {
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
 
     @Test
     void gameStartsWithWhiteTurn() {
-        Game game = new Game();
-        assertEquals(GameColor.WHITE, game.getCurrentPlayer());
+        Game game = new Game(w, b);
+        assertEquals(w, game.getCurrentPlayer());
     }
 
     @Test
     void nextTurnSwitchesPlayer() {
-        Game game = new Game();
+        Game game = new Game(w, b);
 
         game.nextTurn();
-        assertEquals(GameColor.BLACK, game.getCurrentPlayer());
+        assertEquals(b, game.getCurrentPlayer());
 
         game.nextTurn();
-        assertEquals(GameColor.WHITE, game.getCurrentPlayer());
+        assertEquals(w, game.getCurrentPlayer());
     }
 
     @Test
-    void oppositeReturnsOtherColor() {
-        assertEquals(GameColor.WHITE, Game.opposite(GameColor.BLACK));
-        assertEquals(GameColor.BLACK, Game.opposite(GameColor.WHITE));
+    void getOpponentReturnsCorrectPlayer() {
+        Game game = new Game(w, b);
+
+        assertSame(w, game.getOpponent(b));
+        assertSame(b, game.getOpponent(w));
     }
 
     @Test
     void oppositeThrowsOnNull() {
-        assertThrows(IllegalArgumentException.class, () -> Game.opposite(null));
+        Game g = new Game(w, b);
+        assertThrows(IllegalArgumentException.class, () -> g.getOpponent(null));
     }
 
     @Test
     void processTurnWithoutDrawSwitchesTurn() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
 
         // setup minimo: due pedine che possono muovere senza cattura
@@ -52,7 +53,7 @@ public class GameTurnTest {
 
         game.processTurn(List.of(new Move(5, 1, 4, 2)));
 
-        assertEquals(GameColor.BLACK, game.getCurrentPlayer());
+        assertEquals(b, game.getCurrentPlayer());
         assertEquals(GameStatus.ONGOING, game.getStatus());
     }
 
