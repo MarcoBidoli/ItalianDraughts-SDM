@@ -9,7 +9,11 @@ import java.util.Map;
 
 public class Game {
     private final Board gameBoard;
-    private GameColor currentPlayer;
+
+    private final Player blackPlayer;
+    private final Player whitePlayer;
+
+    private Player currentPlayer;
     private GameStatus status;
     private int quietMovesNoCapture;
     private final Map<List<SquareEncoder>, Integer> visits;
@@ -17,15 +21,17 @@ public class Game {
 
     private List<List<Move>> currentLegalMoves;
 
-    public Game() {
-        this.gameBoard = new Board();      // crea una nuova scacchiera vuota
-        this.currentPlayer = GameColor.WHITE;  // scelta: parte il bianco
+    public Game(Player whitePlayer, Player blackPlayer) {
+        this.gameBoard = new Board(); // crea una nuova scacchiera vuota
+        this.blackPlayer = blackPlayer;
+        this.whitePlayer = whitePlayer;
+        this.currentPlayer = whitePlayer; // scelta: parte il bianco
         this.status = GameStatus.ONGOING;
         this.visits = new HashMap<>();
         this.currentLegalMoves = new ArrayList<>();
     }
 
-    public GameColor getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
@@ -34,15 +40,15 @@ public class Game {
     }
 
     public void nextTurn() {
-        currentPlayer = opposite(currentPlayer);
+        currentPlayer = getOpponent(currentPlayer);
     }
 
-    // opposite() = dato un colore, ritorna l'altro
-    public static GameColor opposite(GameColor player) {
+    public Player getOpponent(Player player) {
         if (player == null) {
-            throw new IllegalArgumentException("player cannot be null");
+            throw new IllegalArgumentException("Player cannot be null");
         }
-        return (player == GameColor.BLACK) ? GameColor.WHITE : GameColor.BLACK;
+
+        return (player.getColor() == GameColor.BLACK) ? this.whitePlayer : this.blackPlayer;
     }
 
     public void processTurn(List<Move> moves) throws InvalidMoveException {
@@ -67,12 +73,13 @@ public class Game {
         checkWin();
     }
 
-    private boolean hasKing(GameColor color) {
+    private boolean hasKing(Player player) {
+        GameColor playerColor = player.getColor();
         //noinspection ChainedMethodCall
         return Board.ALL_SQUARES.stream()
                 .anyMatch(square -> {
                     Piece p = gameBoard.getPieceAt(square.row(), square.col());
-                    return p != null && p.getColor() == color && p.isKing();
+                    return p != null && p.getColor() == playerColor && p.isKing();
                 });
     }
 
@@ -84,7 +91,7 @@ public class Game {
         }
 
         // La Move-Count Rule si applica solo se entrambi hanno almeno un king
-        boolean bothHaveKings = hasKing(GameColor.WHITE) && hasKing(GameColor.BLACK);
+        boolean bothHaveKings = hasKing(whitePlayer) && hasKing(blackPlayer);
         if (!bothHaveKings) {
             quietMovesNoCapture = 0; // RIPETIZIONE VOLUTA, need check
             return;
@@ -178,16 +185,17 @@ public class Game {
     }
 
     public void calculateLegalMoves() {
-        LegalMoves lm = new LegalMoves(gameBoard, currentPlayer);
+        LegalMoves lm = new LegalMoves(gameBoard, currentPlayer.getColor());
         this.currentLegalMoves = lm.getLegalMoves();
     }
 
-    private boolean hasAnyPiece(GameColor color) {
+    private boolean hasAnyPiece(Player player) {
+        GameColor playerColor = player.getColor();
         //noinspection ChainedMethodCall
         return Board.ALL_SQUARES.stream()
                 .anyMatch(square -> {
                     Piece p = gameBoard.getPieceAt(square.row(), square.col());
-                    return p != null && p.getColor() == color;
+                    return p != null && p.getColor() == playerColor;
                 });
     }
 
@@ -196,7 +204,7 @@ public class Game {
 
         // Caso 1: il giocatore di turno non ha più pezzi
         if (!hasAnyPiece(currentPlayer)) {
-            status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+            status = (currentPlayer.getColor() == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
             currentLegalMoves = new ArrayList<>();
             return;
         }
@@ -204,7 +212,7 @@ public class Game {
         // Caso 2: il giocatore di turno non ha mosse legali
         calculateLegalMoves();
         if (currentLegalMoves.isEmpty()) {
-            status = (currentPlayer == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+            status = (currentPlayer.getColor() == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
         }
     }
 
@@ -214,7 +222,7 @@ public class Game {
 
     public List<List<Move>> getMovesFor(int row, int col) {
         try {
-            LegalMoves legalMoves = new LegalMoves(this.gameBoard, this.currentPlayer);
+            LegalMoves legalMoves = new LegalMoves(gameBoard, currentPlayer.getColor());
             return legalMoves.getSinglePieceLegalMoves(row, col);
         } catch (InvalidMoveException e) {
             throw new RuntimeException(e);
@@ -229,8 +237,8 @@ public class Game {
         status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
     }
 
-    public void setCurrentTurn(GameColor player) {
-        this.currentPlayer = player;
+    public void setCurrentTurn(Player player) {
+        currentPlayer = player;
     }
 
 

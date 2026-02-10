@@ -1,7 +1,4 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
-import italian_draughts.domain.Move;
+import italian_draughts.domain.*;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
@@ -12,9 +9,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DashboardPanelTest {
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
+
     @Test
     public void updateStatusCountTest() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
 
         board.placePiece(GameColor.WHITE, 7, 1);
@@ -33,7 +33,7 @@ public class DashboardPanelTest {
 
     @Test
     public void changeTurnTest() throws InvalidMoveException {
-        Game game = new Game();
+        Game game = new Game(w, b);
         Board board = game.getBoard();
 
         DashboardPanel dBP = new DashboardPanel(game);

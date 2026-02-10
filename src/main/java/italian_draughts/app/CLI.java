@@ -9,7 +9,9 @@ import java.util.List;
 
 // TODO: update with current logic and rules and make it same level of GUI functionalities or remove entirely
 public class CLI {
-    private final Game game = new Game();
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
+    private final Game game = new Game(w, b);
     private int turnCounter = 1;
 
     void main() throws InvalidMoveException {
@@ -19,12 +21,12 @@ public class CLI {
         board.setGame();
 
         while (status == GameStatus.ONGOING && !playerInput.equals("q")) {
-            GameColor player = game.getCurrentPlayer();
+            Player player = game.getCurrentPlayer();
 
             IO.println("\n\n" + player + "'s TURN | Turn: " + turnCounter);
             board.printBoard();
 
-            LegalMoves lm = new LegalMoves(board, player);
+            LegalMoves lm = new LegalMoves(board, player.getColor());
             List<List<Move>> legalMovesForCurrentPlayer = lm.getLegalMoves();
 
             // display legal moves to the player where to choose from

@@ -1,5 +1,8 @@
 package italian_draughts.app;
 import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.HumanPlayer;
+import italian_draughts.domain.Player;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
@@ -13,7 +16,9 @@ import java.io.IOException;
 public class Main {
     void main() {
 
-        Game game = new Game();
+        Player w = new HumanPlayer(GameColor.WHITE);
+        Player b = new HumanPlayer(GameColor.BLACK);
+        Game game = new Game(w, b);
         Board gameBoard = game.getBoard();
         gameBoard.setGame();
         game.calculateLegalMoves();

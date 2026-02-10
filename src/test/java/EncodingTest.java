@@ -1,9 +1,5 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.InvalidMoveException;
-import italian_draughts.domain.Move;
+import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
-import italian_draughts.domain.SquareEncoder;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EncodingTest {
     private final Board board;
+    Player w = new HumanPlayer(GameColor.WHITE);
+    Player b = new HumanPlayer(GameColor.BLACK);
 
     public EncodingTest() {
         board = new Board();
@@ -25,7 +23,7 @@ public class EncodingTest {
         board.initCells();
         board.placePiece(GameColor.WHITE, 4, 4);
         board.placePiece(GameColor.BLACK, 0, 0);
-        Game game = new Game();
+        Game game = new Game(w, b);
         game.boardEncoder(board);
         Map<List<SquareEncoder>, Integer> visits = game.getVisits();
         assertEquals(1, visits.size());
@@ -60,7 +58,7 @@ public class EncodingTest {
         board.placePiece(GameColor.BLACK, 0, 0);
         board.placePiece(GameColor.WHITE, 4, 4);
         board.placePiece(GameColor.BLACK, 3, 3);
-        Game game = new Game();
+        Game game = new Game(w, b);
         game.boardEncoder(board);
         Map<List<SquareEncoder>, Integer> gameGetVisits = game.getVisits();
         ArrayList<List<SquareEncoder>> allEnc = new ArrayList<>(gameGetVisits.keySet());
