@@ -17,13 +17,13 @@ public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
     private final BoardController controller;
-
     private final PaletteColors colors;
+    private final Game game;
 
-    public BoardPanel(BoardController controller) {
+    public BoardPanel(BoardController controller, Game game) {
         this.controller = controller;
         this.colors = new PaletteColors();
-
+        this.game = game;
         this.setPreferredSize(new Dimension(TILE_SIZE * 8 + OFFSET, TILE_SIZE * 8 + OFFSET));
 
         this.addMouseListener(new MouseAdapter() {
@@ -64,7 +64,11 @@ public class BoardPanel extends JComponent implements GameObserver {
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
         // Get all legal moves once per repaint cycle for performance
-        List<List<Move>> allMoves = controller.getGameCurrentLegalMoves();
+        List<List<Move>> allMoves = game.getCurrentLegalMoves();
+        Board board = game.getBoard();
+        Square selected = game.getSelectedSquare();
+        List<List<Move>> filteredMoves = game.getFilteredMoves();
+
 
         // Draw Wooden Margins/Frame
         g2.setColor(colors.WOOD_MARGIN);
@@ -72,46 +76,46 @@ public class BoardPanel extends JComponent implements GameObserver {
         g2.fillRect(0, 8 * TILE_SIZE, 8 * TILE_SIZE + OFFSET, OFFSET); // Bottom horizontal bar
 
         // Iterate through the grid
-        for (int i = 0; i < 8; i++) {
+        for (int row = 0; row < 8; row++) {
             // Draw Coordinate Labels (8-1 and A-H)
-            drawCoordinates(g2, i);
-            for (int j = 0; j < 8; j++) {
-                int x = j * TILE_SIZE + OFFSET;
-                int y = i * TILE_SIZE;
+            drawCoordinates(g2, row);
+            for (int col = 0; col < 8; col++) {
+                int x = col * TILE_SIZE + OFFSET;
+                int y = row * TILE_SIZE;
 
                 // A. Draw Checkerboard Tiles
-                g2.setColor((i + j) % 2 == 0 ? colors.WOOD_DARK : colors.WOOD_LIGHT);
+                g2.setColor((row + col) % 2 == 0 ? colors.WOOD_DARK : colors.WOOD_LIGHT);
                 g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 // Create a "hit zone" visual to tell the player which pieces can move
-                drawPossibleMoves(i, j, allMoves, g2, x, y);
+                drawPossibleMoves(row, col, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (controller.getSelectedSquares() != null && controller.getSelectedSquares().row() == i && controller.getSelectedSquares().col() == j) {
+                if (selected != null && selected.row() == row && selected.col() == col) {
                     g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
                 // Draw the Piece (Must be drawn after highlights to appear on top)
-                Board board = controller.getGamesBoard();
-                Cell cell = board.getCell(i, j);
+                Cell cell = board.getCell(row, col);
                 if (!cell.isEmpty()) {
-                    drawPiece(g2, i, j, cell.getPiece());
+                    drawPiece(g2, row, col, cell.getPiece());
                 }
             }
         }
 
-        drawIndicators(g2, HIGHLIGHT_OVAL_SIZE);
+        drawIndicators(g2, filteredMoves);
     }
 
-    private void drawIndicators(Graphics2D g2, int HIGHLIGHT_OVAL_SIZE) {
+    private void drawIndicators(Graphics2D g2, List<List<Move>> moves) {
+        final int DOT_SIZE = 20;
         // Draw suggested move indicators (Green Dots)
         g2.setColor(colors.HIGHLIGHT_MOVE);
-        for (List<Move> move : controller.getFilteredMoves()) {
-            Move lastMove = move.getLast();
+        for (List<Move> seq : moves) {
+            Move lastMove = seq.getLast();
             int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
             int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
-            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE /2, cy - HIGHLIGHT_OVAL_SIZE /2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
+            g2.fillOval(cx - DOT_SIZE / 2, cy - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
         }
     }
 
