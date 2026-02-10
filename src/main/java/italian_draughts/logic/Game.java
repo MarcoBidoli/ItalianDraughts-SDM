@@ -24,6 +24,7 @@ public class Game {
         this.status = GameStatus.ONGOING;
         this.visits = new HashMap<>();
         this.currentLegalMoves = new ArrayList<>();
+        notifyObservers();
     }
 
     public GameColor getCurrentPlayer() {
@@ -217,7 +218,6 @@ public class Game {
     public List<List<Move>> getMovesFor(int row, int col) {
         try {
             LegalMoves legalMoves = new LegalMoves(this.gameBoard, this.currentPlayer);
-            notifyObservers();
             return legalMoves.getSinglePieceLegalMoves(row, col);
         } catch (InvalidMoveException e) {
             throw new RuntimeException(e);
@@ -226,10 +226,12 @@ public class Game {
 
     public void agreedDrawHandling(){
         status = GameStatus.DRAW;
+        notifyObservers();
     }
 
     public void resignHandling(GameColor loser) {
         status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+        notifyObservers();
     }
 
     public void setCurrentTurn(GameColor player) {
