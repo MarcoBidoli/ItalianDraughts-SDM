@@ -2,6 +2,7 @@ package italian_draughts.logic;
 
 import italian_draughts.domain.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Game {
     public static final int MAX_QUIET_MOVES = 40;
 
     private List<GameObserver> observers = new ArrayList<>();
-    private List<List<Move>> currentLegalMoves;
+    private List<List<Move>> currentLegalMoves;private Square selectedSquare = null;
+    private List<List<Move>> filteredMoves = new ArrayList<>();
 
     public Game() {
         this.gameBoard = new Board();      // crea una nuova scacchiera vuota
@@ -24,7 +26,6 @@ public class Game {
         this.status = GameStatus.ONGOING;
         this.visits = new HashMap<>();
         this.currentLegalMoves = new ArrayList<>();
-        notifyObservers();
     }
 
     public GameColor getCurrentPlayer() {
@@ -47,6 +48,35 @@ public class Game {
         return (player == GameColor.BLACK) ? GameColor.WHITE : GameColor.BLACK;
     }
 
+    public void handleInput(int row, int col) {
+        for(List<Move> move : filteredMoves) {
+            Move last = move.getLast();
+            if(last.toRow == row && last.toCol == col) {
+                try {
+                    processTurn(new ArrayList<>(move));
+                    return;
+                } catch (InvalidMoveException e) {
+                    return;
+                }
+            }
+        }
+
+        updateSelection(row, col);
+    }
+
+    private void updateSelection(int row, int col) {
+        List<List<Move>> moves = getMovesFor(row, col);
+
+        if(!moves.isEmpty()) {
+            this.selectedSquare = new Square(row, col);
+            this.filteredMoves = moves;
+        } else {
+            this.selectedSquare = null;
+            this.filteredMoves = new ArrayList<>();
+        }
+        notifyObservers();
+    }
+
     public void processTurn(List<Move> moves) throws InvalidMoveException {
         if (status != GameStatus.ONGOING) return;
         if (moves == null || moves.isEmpty()) {
@@ -54,19 +84,18 @@ public class Game {
         }
 
         // 1) Applica le mosse e ottieni info cattura (single source of truth)
-        boolean captureOccurred = movePieces(new ArrayList<>(moves), this.gameBoard);
+        boolean captureOccurred = movePieces(moves, this.gameBoard);
+
+        this.selectedSquare = null;
+        this.filteredMoves = new ArrayList<>();
 
         // 2) Check draw (repetition + move-count)
         checkDraw(captureOccurred);
-        if (status != GameStatus.ONGOING) {
-            return; // in caso di DRAW, non cambia turno
+        if (status == GameStatus.ONGOING) {
+            nextTurn();
+            checkWin();
         }
 
-        // 3) Turno successivo
-        nextTurn();
-
-        // 4) Check win (pezzi finiti o nessuna mossa legale per il nuovo currentPlayer)
-        checkWin();
         notifyObservers();
     }
 
@@ -247,5 +276,14 @@ public class Game {
         for(GameObserver obs : observers) {
             obs.modelChanged();
         }
+    }
+
+
+    public Square getSelectedSquare() {
+        return selectedSquare;
+    }
+
+    public List<List<Move>> getFilteredMoves() {
+        return filteredMoves;
     }
 }
