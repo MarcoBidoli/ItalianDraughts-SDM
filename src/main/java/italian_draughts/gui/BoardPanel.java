@@ -16,20 +16,13 @@ import java.util.stream.Stream;
 public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
-    private final Game game;
-    private DashboardPanel dashboardPanel;
     private BoardController controller;
 
     private final PaletteColors colors;
 
-    public BoardPanel(Game game, DashboardPanel dashboardPanel, BoardController controller) {
+    public BoardPanel(BoardController controller) {
         this.controller = controller;
-        this.game = game;
         this.colors = new PaletteColors();
-        this.dashboardPanel = dashboardPanel;
-        if (this.dashboardPanel != null) {
-            this.dashboardPanel.updateInfo();
-        }
 
         this.setPreferredSize(new Dimension(TILE_SIZE * 8 + OFFSET, TILE_SIZE * 8 + OFFSET));
 
@@ -50,7 +43,7 @@ public class BoardPanel extends JComponent implements GameObserver {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
 
-                List<List<Move>> currentLegalMoves = game.getCurrentLegalMoves();
+                List<List<Move>> currentLegalMoves = controller.getGameCurrentLegalMoves();
                 Stream<List<Move>> legalMovesStream = currentLegalMoves.stream();
                 boolean isSelectable = legalMovesStream
                         .anyMatch(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col);
@@ -71,7 +64,7 @@ public class BoardPanel extends JComponent implements GameObserver {
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
         // Get all legal moves once per repaint cycle for performance
-        List<List<Move>> allMoves = game.getCurrentLegalMoves();
+        List<List<Move>> allMoves = controller.getGameCurrentLegalMoves();
 
         // Draw Wooden Margins/Frame
         g2.setColor(colors.WOOD_MARGIN);
@@ -100,7 +93,7 @@ public class BoardPanel extends JComponent implements GameObserver {
                 }
 
                 // Draw the Piece (Must be drawn after highlights to appear on top)
-                Board board = game.getBoard();
+                Board board = controller.getGamesBoard();
                 Cell cell = board.getCell(i, j);
                 if (!cell.isEmpty()) {
                     drawPiece(g2, i, j, cell.getPiece());
@@ -183,12 +176,6 @@ public class BoardPanel extends JComponent implements GameObserver {
         g2.setColor(new Color(255, 255, 255, 120));
         g2.setStroke(new BasicStroke(1));
         g2.drawPolygon(px, py, 7);
-    }
-
-
-    public void setDashboardPanel(DashboardPanel dp) {
-        this.dashboardPanel = dp;
-        if (this.dashboardPanel != null) this.dashboardPanel.updateInfo();
     }
 
     private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
