@@ -72,6 +72,7 @@ public class Game {
 
         // 4) Check win (pezzi finiti o nessuna mossa legale per il nuovo currentPlayer)
         checkWin();
+        notifyObservers();
     }
 
     private boolean hasKing(Player player) {
@@ -245,10 +246,6 @@ public class Game {
 
     public void addObserver(GameObserver gameObserver) {
         observers.add(gameObserver);
-    }
-
-    public void removeObserver(GameObserver gameObserver) {
-        observers.remove(gameObserver);
     }
 
     private void notifyObservers(){
