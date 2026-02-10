@@ -4,10 +4,12 @@ import italian_draughts.domain.Board;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.GameStatus;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameObserver;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class DashboardPanel extends JPanel {
+public class DashboardPanel extends JPanel implements GameObserver {
     private final JLabel status;
     private final JLabel count;
     private final Game game;
@@ -106,5 +108,10 @@ public class DashboardPanel extends JPanel {
             default -> stringStatus = "";
         }
         return stringStatus;
+    }
+
+    @Override
+    public void modelChanged() {
+        repaint();
     }
 }
