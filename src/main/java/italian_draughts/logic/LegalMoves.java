@@ -23,7 +23,7 @@ public class LegalMoves {
                 .toList();
     }
 
-    public List<List<Move>> getLegalMoves() throws InvalidMoveException {
+    public List<List<Move>> getLegalMoves() {
         List<List<Move>> moves = new ArrayList<>(eating()); // initialize the moves with legal eatings
 
         // if none, check for legal simple moves
