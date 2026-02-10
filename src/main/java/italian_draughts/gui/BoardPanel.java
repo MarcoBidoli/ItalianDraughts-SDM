@@ -2,6 +2,7 @@ package italian_draughts.gui;
 
 import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,17 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class BoardPanel extends JComponent {
+public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
     private final Game game;
-    private List<List<Move>> filteredMoves = new ArrayList<>();
-    private Square selectedSquares = null;
     private DashboardPanel dashboardPanel;
+    private BoardController controller;
 
     private final PaletteColors colors;
 
-    public BoardPanel(Game game, DashboardPanel dashboardPanel) {
+    public BoardPanel(Game game, DashboardPanel dashboardPanel, BoardController controller) {
+        this.controller = controller;
         this.game = game;
         this.colors = new PaletteColors();
         this.dashboardPanel = dashboardPanel;
@@ -38,7 +39,7 @@ public class BoardPanel extends JComponent {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
                 if (Board.onBoard(row, col)) {
-                    handleLogic(row, col);
+                    controller.actionPerformed(row, col);
                 }
             }
         });
@@ -57,40 +58,6 @@ public class BoardPanel extends JComponent {
                 setCursor(isSelectable ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : Cursor.getDefaultCursor());
             }
         });
-    }
-
-    public void handleLogic(int row, int col) {
-        for (List<Move> move : filteredMoves) {
-            Move lastMove = move.getLast();
-            if (lastMove.toRow == row && lastMove.toCol == col) {
-                try {
-                    game.processTurn(new ArrayList<>(move));
-                    if (dashboardPanel != null) dashboardPanel.updateInfo();
-                    selectedSquares = null;
-                    filteredMoves = new ArrayList<>();
-                    repaint();
-
-                    checkGameOver();
-
-                    return;
-                } catch (InvalidMoveException e) {
-                    JOptionPane.showMessageDialog(this, "An error with the move has occurred!");
-                    return;
-                }
-            }
-        }
-
-        // Handle domain.Piece Selection
-        List<List<Move>> pieceMoves = game.getMovesFor(row, col);
-
-        if (!pieceMoves.isEmpty()) {
-            selectedSquares = new Square(row, col);
-            filteredMoves = pieceMoves;
-        } else {
-            selectedSquares = null;
-            filteredMoves = new ArrayList<>();
-        }
-        repaint();
     }
 
     @Override
@@ -127,7 +94,7 @@ public class BoardPanel extends JComponent {
                 drawPossibleMoves(i, j, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedSquares != null && selectedSquares.row() == i && selectedSquares.col() == j) {
+                if (controller.getSelectedSquares() != null && controller.getSelectedSquares().row() == i && controller.getSelectedSquares().col() == j) {
                     g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
@@ -147,7 +114,7 @@ public class BoardPanel extends JComponent {
     private void drawIndicators(Graphics2D g2, int HIGHLIGHT_OVAL_SIZE) {
         // Draw suggested move indicators (Green Dots)
         g2.setColor(colors.HIGHLIGHT_MOVE);
-        for (List<Move> move : filteredMoves) {
+        for (List<Move> move : controller.getFilteredMoves()) {
             Move lastMove = move.getLast();
             int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
             int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
@@ -218,30 +185,11 @@ public class BoardPanel extends JComponent {
         g2.drawPolygon(px, py, 7);
     }
 
-    private void checkGameOver() {
-        GameStatus status = game.getStatus();
-        if (status != GameStatus.ONGOING) {
-            String msg = switch (status) {
-                case GameStatus.WHITE_WINS -> "WHITE WINS!";
-                case GameStatus.BLACK_WINS -> "BLACK WINS!";
-                case GameStatus.DRAW -> "DRAW!";
-                default -> "";
-            };
-            JOptionPane.showMessageDialog(this, msg, "Game Over", JOptionPane.INFORMATION_MESSAGE);
-            System.exit(0);
-        }
-    }
 
     public void setDashboardPanel(DashboardPanel dp) {
         this.dashboardPanel = dp;
         if (this.dashboardPanel != null) this.dashboardPanel.updateInfo();
     }
-
-    public List<List<Move>> getFilteredMoves() {
-        return this.filteredMoves;
-    }
-
-    public Square getSelectedCoords() { return selectedSquares; }
 
     private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
         final int currentRow = i;
@@ -291,4 +239,8 @@ public class BoardPanel extends JComponent {
         g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
     }
 
+    @Override
+    public void modelChanged() {
+        repaint();
+    }
 }
