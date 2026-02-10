@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
-    private BoardController controller;
+    private final BoardController controller;
 
     private final PaletteColors colors;
 
