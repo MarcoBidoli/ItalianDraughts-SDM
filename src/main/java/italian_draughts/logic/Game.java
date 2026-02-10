@@ -15,6 +15,7 @@ public class Game {
     private final Map<List<SquareEncoder>, Integer> visits;
     public static final int MAX_QUIET_MOVES = 40;
 
+    private List<GameObserver> observers = new ArrayList<>();
     private List<List<Move>> currentLegalMoves;
 
     public Game() {
@@ -234,4 +235,17 @@ public class Game {
     }
 
 
+    private void addObserver(GameObserver gameObserver) {
+        observers.add(gameObserver);
+    }
+
+    private void removeObserver(GameObserver gameObserver) {
+        observers.remove(gameObserver);
+    }
+
+    private void notifyObservers(){
+        for(GameObserver obs : observers) {
+            obs.modelChanged();
+        }
+    }
 }
