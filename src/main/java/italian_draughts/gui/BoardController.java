@@ -17,32 +17,7 @@ public class BoardController {
     }
 
     public void actionPerformed(int row, int col) {
-        for (List<Move> move : filteredMoves) {
-            Move lastMove = move.getLast();
-            if (lastMove.toRow == row && lastMove.toCol == col) {
-                try {
-                    game.processTurn(new ArrayList<>(move));
-                    selectedSquares = null;
-                    filteredMoves = new ArrayList<>();
-                    checkGameOver();
-                    return;
-                } catch (InvalidMoveException e) {
-
-                    return;
-                }
-            }
-        }
-
-        // Handle domain.Piece Selection
-        List<List<Move>> pieceMoves = game.getMovesFor(row, col);
-
-        if (!pieceMoves.isEmpty()) {
-            selectedSquares = new Square(row, col);
-            filteredMoves = pieceMoves;
-        } else {
-            selectedSquares = null;
-            filteredMoves = new ArrayList<>();
-        }
+        game.handleInput(row, col);
     }
 
     private void checkGameOver() {
