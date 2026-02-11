@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class Game {
 
+    public static final int MAX_QUIET_MOVES = DrawController.MAX_QUIET_MOVES;
+
     private final Board gameBoard;
 
     private final Player blackPlayer;
