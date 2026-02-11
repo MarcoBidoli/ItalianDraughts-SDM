@@ -1,5 +1,5 @@
 import italian_draughts.domain.*;
-import italian_draughts.gui.BoardController;
+import italian_draughts.logic.GameController;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ public class DashboardPanelTest {
         board.placePiece(GameColor.WHITE, 7, 3);
         board.placePiece(GameColor.BLACK, 0, 0);
 
-        DashboardPanel dBP = new DashboardPanel(game, new BoardController(game));
+        DashboardPanel dBP = new DashboardPanel(game, new GameController(game));
         game.addObserver(dBP);
         dBP.modelChanged();
 
@@ -38,7 +38,7 @@ public class DashboardPanelTest {
         Game game = new Game(w, b);
         Board board = game.getBoard();
 
-        DashboardPanel dBP = new DashboardPanel(game, new BoardController(game));
+        DashboardPanel dBP = new DashboardPanel(game, new GameController(game));
         game.addObserver(dBP);
 
         String statusText = dBP.getStatusText();

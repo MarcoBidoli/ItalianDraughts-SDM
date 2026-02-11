@@ -1,14 +1,15 @@
-package italian_draughts.gui;
+package italian_draughts.logic;
 
-import italian_draughts.domain.*;
-import italian_draughts.logic.Game;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.GameStatus;
+import italian_draughts.domain.Move;
 
 import java.util.List;
 
-public class BoardController {
+public class GameController {
     private final Game game;
 
-    public BoardController(Game game) {
+    public GameController(Game game) {
         this.game = game;
     }
 

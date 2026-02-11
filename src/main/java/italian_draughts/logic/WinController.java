@@ -13,7 +13,7 @@ public class WinController {
         // Caso 1: il giocatore di turno non ha più pezzi
         if (!hasAnyPiece(board, currentPlayer)) {
             currentLegalMoves = new ArrayList<>();
-            return (currentPlayer.getColor() == GameColor.WHITE)
+            return (currentPlayer.color() == GameColor.WHITE)
                     ? GameStatus.BLACK_WINS
                     : GameStatus.WHITE_WINS;
         }
@@ -21,7 +21,7 @@ public class WinController {
         // Caso 2: il giocatore di turno non ha mosse legali
         calculateLegalMoves(board, currentPlayer);
         if (currentLegalMoves.isEmpty()) {
-            return (currentPlayer.getColor() == GameColor.WHITE)
+            return (currentPlayer.color() == GameColor.WHITE)
                     ? GameStatus.BLACK_WINS
                     : GameStatus.WHITE_WINS;
         }
@@ -30,12 +30,13 @@ public class WinController {
     }
 
     public void calculateLegalMoves(Board board, Player currentPlayer) {
-        LegalMoves lm = new LegalMoves(board, currentPlayer.getColor());
+        LegalMoves lm = new LegalMoves(board, currentPlayer.color());
         currentLegalMoves = lm.getLegalMoves();
     }
 
+    @SuppressWarnings("ChainedMethodCall")
     private boolean hasAnyPiece(Board board, Player player) {
-        GameColor playerColor = player.getColor();
+        GameColor playerColor = player.color();
         return Board.ALL_SQUARES.stream()
                 .anyMatch(square -> {
                     Piece p = board.getPieceAt(square.row(), square.col());

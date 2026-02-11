@@ -1,8 +1,5 @@
-import italian_draughts.domain.Board;
-import italian_draughts.domain.GameColor;
-import italian_draughts.domain.HumanPlayer;
-import italian_draughts.domain.Player;
-import italian_draughts.gui.BoardController;
+import italian_draughts.domain.*;
+import italian_draughts.logic.GameController;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.PaletteColors;
 import italian_draughts.logic.Game;
@@ -21,7 +18,7 @@ public class BoardPanelTest {
     public void showCorrectBoard() {
         PaletteColors colors = new PaletteColors();
         Game game = new Game(w, b);
-        BoardController controller = new BoardController(game);
+        GameController controller = new GameController(game);
         Board board = game.getBoard();
         board.setGame();
         BoardPanel panel = new BoardPanel(controller, game);
