@@ -209,8 +209,4 @@ public class Game {
     public void boardEncoder(Board board) {
         drawController.boardEncoder(board);
     }
-
-    public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
-        return moveController.movePieces(move, board);
-    }
 }
