@@ -27,14 +27,6 @@ public class BoardController {
         game.agreedDrawHandling();
     }
 
-    private void checkGameOver() {
-        GameStatus status = game.getStatus();
-        if (status != GameStatus.ONGOING) {
-
-            System.exit(0);
-        }
-    }
-
     public List<List<Move>> getGameCurrentLegalMoves() {
         return game.getCurrentLegalMoves();
     }
