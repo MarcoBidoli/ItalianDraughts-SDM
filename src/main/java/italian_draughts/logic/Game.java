@@ -2,7 +2,6 @@ package italian_draughts.logic;
 
 import italian_draughts.domain.*;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,7 @@ public class Game {
 
     private List<GameObserver> observers = new ArrayList<>();
     private List<List<Move>> currentLegalMoves;private Square selectedSquare = null;
-    private List<List<Move>> filteredMoves = new ArrayList<>();
+    private List<List<Move>> selectedPieceMoves = new ArrayList<>();
 
     public Game() {
         this.gameBoard = new Board();      // crea una nuova scacchiera vuota
@@ -48,8 +47,8 @@ public class Game {
         return (player == GameColor.BLACK) ? GameColor.WHITE : GameColor.BLACK;
     }
 
-    public void handleInput(int row, int col) {
-        for(List<Move> move : filteredMoves) {
+    public void niente(int row, int col) {
+        for(List<Move> move : selectedPieceMoves) {
             Move last = move.getLast();
             if(last.toRow == row && last.toCol == col) {
                 try {
@@ -69,10 +68,11 @@ public class Game {
 
         if(!moves.isEmpty()) {
             this.selectedSquare = new Square(row, col);
-            this.filteredMoves = moves;
+            this.selectedPieceMoves = moves;
         } else {
+            //when click on a piece with no possible moves, to remove green indicators
             this.selectedSquare = null;
-            this.filteredMoves = new ArrayList<>();
+            this.selectedPieceMoves = new ArrayList<>();
         }
         notifyObservers();
     }
@@ -87,7 +87,7 @@ public class Game {
         boolean captureOccurred = movePieces(moves, this.gameBoard);
 
         this.selectedSquare = null;
-        this.filteredMoves = new ArrayList<>();
+        this.selectedPieceMoves = new ArrayList<>();
 
         // 2) Check draw (repetition + move-count)
         checkDraw(captureOccurred);
@@ -283,7 +283,7 @@ public class Game {
         return selectedSquare;
     }
 
-    public List<List<Move>> getFilteredMoves() {
-        return filteredMoves;
+    public List<List<Move>> getSelectedPieceMoves() {
+        return selectedPieceMoves;
     }
 }

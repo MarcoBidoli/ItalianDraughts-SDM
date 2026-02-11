@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -67,7 +66,7 @@ public class BoardPanel extends JComponent implements GameObserver {
         List<List<Move>> allMoves = game.getCurrentLegalMoves();
         Board board = game.getBoard();
         Square selected = game.getSelectedSquare();
-        List<List<Move>> filteredMoves = game.getFilteredMoves();
+        List<List<Move>> selectedPieceMoves = game.getSelectedPieceMoves();
 
 
         // Draw Wooden Margins/Frame
@@ -104,7 +103,7 @@ public class BoardPanel extends JComponent implements GameObserver {
             }
         }
 
-        drawIndicators(g2, filteredMoves);
+        drawIndicators(g2, selectedPieceMoves);
     }
 
     private void drawIndicators(Graphics2D g2, List<List<Move>> moves) {
