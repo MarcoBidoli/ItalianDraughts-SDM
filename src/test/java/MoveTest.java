@@ -26,9 +26,9 @@ public class MoveTest {
     @Test
     void validCoordinates() {
         Move move = new Move(0, 1, 2, 3);
-        assertEquals(0, move.fromRow);
-        assertEquals(1, move.fromCol);
-        assertEquals(2, move.toRow);
-        assertEquals(3, move.toCol);
+        assertEquals(0, move.fromRow());
+        assertEquals(1, move.fromCol());
+        assertEquals(2, move.toRow());
+        assertEquals(3, move.toCol());
     }
 }
