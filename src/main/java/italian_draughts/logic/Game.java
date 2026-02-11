@@ -34,7 +34,7 @@ public class Game {
 
         this.drawController = new DrawController();
         this.winController = new WinController();
-        this.moveController = new MoveController(drawController);
+        this.moveController = new MoveController();
     }
 
     public Player getCurrentPlayer() {
@@ -120,6 +120,12 @@ public class Game {
         this.selectedSquare = null;
         this.selectedPieceMoves = new ArrayList<>();
 
+        // aggiornamento trackers
+        if (captureOccurred) {
+            drawController.clearVisits();
+        }
+        drawController.boardEncoder(gameBoard);
+
         // draw
         if (drawController.checkDraw(captureOccurred, gameBoard, whitePlayer, blackPlayer)) {
             status = GameStatus.DRAW;
@@ -136,6 +142,7 @@ public class Game {
 
         notifyObservers();
     }
+
 
     // STATUS / LEGAL MOVES
 

@@ -9,12 +9,6 @@ import java.util.List;
 
 public class MoveController {
 
-    private final DrawController drawController;
-
-    public MoveController(DrawController drawController) {
-        this.drawController = drawController;
-    }
-
     public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
         boolean captureOccurred = false;
 
@@ -34,12 +28,9 @@ public class MoveController {
                 captureOccurred = true;
                 board.emptyCell((currentMove.fromRow() + currentMove.toRow()) / 2,
                         (currentMove.toCol() + currentMove.fromCol()) / 2);
-
-                drawController.clearVisits();
             }
         }
 
-        drawController.boardEncoder(board);
         return captureOccurred;
     }
 
@@ -49,3 +40,4 @@ public class MoveController {
         }
     }
 }
+
