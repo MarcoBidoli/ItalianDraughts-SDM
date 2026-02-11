@@ -3,14 +3,10 @@ package italian_draughts.gui;
 import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BoardController {
     private final Game game;
-    private List<List<Move>> filteredMoves = new ArrayList<>();
-    private Square selectedSquares = null;
 
     public BoardController(Game game) {
         this.game = game;
@@ -20,7 +16,7 @@ public class BoardController {
         if (game.getStatus() != GameStatus.ONGOING) {
             return;
         }
-        game.handleInput(row, col);
+        game.handleSelection(row, col);
     }
 
     private void checkGameOver() {
@@ -37,17 +33,7 @@ public class BoardController {
         }
     }
 
-    public List<List<Move>> getFilteredMoves() {
-        return this.filteredMoves;
-    }
-
-    public Square getSelectedSquares() { return selectedSquares; }
-
     public List<List<Move>> getGameCurrentLegalMoves() {
         return game.getCurrentLegalMoves();
-    }
-
-    public Board getGamesBoard() {
-        return game.getBoard();
     }
 }
