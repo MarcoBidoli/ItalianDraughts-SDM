@@ -19,7 +19,7 @@ public class Game {
     private final Map<List<SquareEncoder>, Integer> visits;
     public static final int MAX_QUIET_MOVES = 40;
 
-    private List<GameObserver> observers = new ArrayList<>();
+    private final List<GameObserver> observers = new ArrayList<>();
     private List<List<Move>> currentLegalMoves;private Square selectedSquare = null;
     private List<List<Move>> selectedPieceMoves = new ArrayList<>();
 
