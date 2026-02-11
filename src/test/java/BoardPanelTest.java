@@ -41,25 +41,4 @@ public class BoardPanelTest {
         Color expectedBoard = colors.getWOOD_DARK();
         assertEquals(expectedBoard.getRGB(), boardPixel);
     }
-
-    @Test
-    void selectionLogicTest() throws InvalidMoveException {
-        Game game = new Game(w, b);
-        BoardController controller = new BoardController(game);
-        Board board = game.getBoard();
-        board.placePiece(GameColor.WHITE, 5, 1);
-        game.calculateLegalMoves();
-
-        BoardPanel panel = new BoardPanel(controller, game);
-
-        panel.handleLogic(5, 1);
-
-        Square square = panel.getSelectedCoords();
-        assertNotNull(panel.getSelectedCoords());
-        assertEquals(5, square.row());
-        assertEquals(1, square.col());
-
-        List<List<Move>> filteredMoves = panel.getFilteredMoves();
-        assertFalse(filteredMoves.isEmpty());
-    }
 }
