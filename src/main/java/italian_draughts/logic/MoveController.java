@@ -7,8 +7,19 @@ import italian_draughts.domain.Piece;
 
 import java.util.List;
 
+/**
+ * Controller for the moves.
+ * It is responsible for moving the pieces on the board.
+ */
 public class MoveController {
 
+    /**
+     * Moves the pieces on the board according to the given move.
+     * @param move The move to be executed.
+     * @param board The board on which the move is to be executed.
+     * @return True if a capture occurred, false otherwise.
+     * @throws InvalidMoveException If the move is invalid.
+     */
     public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
         boolean captureOccurred = false;
 
@@ -40,4 +51,3 @@ public class MoveController {
         }
     }
 }
-

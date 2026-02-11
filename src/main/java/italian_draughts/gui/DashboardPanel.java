@@ -11,6 +11,9 @@ import italian_draughts.logic.GameObserver;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The panel that displays the game dashboard.
+ */
 public class DashboardPanel extends JComponent implements GameObserver {
     private final JLabel status;
     private final JLabel count;
@@ -18,6 +21,11 @@ public class DashboardPanel extends JComponent implements GameObserver {
     private final PaletteColors colors;
     private final GameController controller;
 
+    /**
+     * Creates a new DashboardPanel.
+     * @param game The game model.
+     * @param controller The game controller.
+     */
     public DashboardPanel(Game game, GameController controller) {
         this.game = game;
         this.colors = new PaletteColors();
@@ -122,10 +130,18 @@ public class DashboardPanel extends JComponent implements GameObserver {
         }
     }
 
+    /**
+     * Gets the status text.
+     * @return The status text.
+     */
     public String getStatusText() {
         return status.getText();
     }
 
+    /**
+     * Gets the count text.
+     * @return The count text.
+     */
     public String getCountText() {
         return count.getText();
     }

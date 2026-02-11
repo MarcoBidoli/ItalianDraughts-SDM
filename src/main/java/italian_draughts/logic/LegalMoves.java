@@ -5,17 +5,31 @@ import italian_draughts.domain.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for calculating the legal moves for a given player.
+ */
 public class LegalMoves {
     private final Board gameBoard;
     private final GameColor player;
     private final int direction;
 
+    /**
+     * Constructor for the LegalMoves class.
+     * @param gameBoard The board of the game.
+     * @param player The player for whom to calculate the legal moves.
+     */
     public LegalMoves(Board gameBoard, GameColor player) {
         this.gameBoard = gameBoard;
         this.player = player;
         this.direction = this.player.equals(GameColor.BLACK) ? 1 : -1;
     }
 
+    /**
+     * Returns the legal moves for a single piece.
+     * @param row The row of the piece.
+     * @param col The column of the piece.
+     * @return A list of lists of moves, where each inner list represents a sequence of moves.
+     */
     public List<List<Move>> getSinglePieceLegalMoves(int row, int col) {
         List<List<Move>> allMoves = getLegalMoves();
         List<List<Move>> list = new ArrayList<>();
@@ -26,6 +40,12 @@ public class LegalMoves {
         return list;
     }
 
+    /**
+     * Returns all the legal moves for the current player.
+     * It first checks for eating moves. If there are any, it returns them.
+     * Otherwise, it checks for moving moves.
+     * @return A list of lists of moves, where each inner list represents a sequence of moves.
+     */
     public List<List<Move>> getLegalMoves() {
         List<List<Move>> moves = new ArrayList<>(eating()); // initialize the moves with legal eatings
 
@@ -41,6 +61,10 @@ public class LegalMoves {
         return moves;
     }
 
+    /**
+     * Calculates all the possible eating moves for the current player.
+     * @return A list of lists of eating moves.
+     */
     public List<List<Move>> eating() {
         List<List<Move>> allEatingMoves = new ArrayList<>();
         // player owned pieces stream
@@ -168,6 +192,10 @@ public class LegalMoves {
         return gameBoard.getPieceAt(x, y) == null || gameBoard.isKingAt(x, y) || !gameBoard.isKingAt(xOpp, yOpp);
     }
 
+    /**
+     * Calculates all the possible moving moves for the current player.
+     * @return A list of lists of moving moves.
+     */
     public List<List<Move>> moving() {
         List<List<Move>> listOfAllMoves = new ArrayList<>();
 

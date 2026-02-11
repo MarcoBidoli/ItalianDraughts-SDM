@@ -13,12 +13,20 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * The panel that displays the game board.
+ */
 public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
     private final PaletteColors colors;
     private final Game game;
 
+    /**
+     * Creates a new BoardPanel.
+     * @param controller The game controller.
+     * @param game The game model.
+     */
     public BoardPanel(GameController controller, Game game) {
         this.colors = new PaletteColors();
         this.game = game;
@@ -221,6 +229,11 @@ public class BoardPanel extends JComponent implements GameObserver {
         }
     }
 
+    /**
+     * Draws the coordinates on the board.
+     * @param g2 The graphics context.
+     * @param i The row index.
+     */
     public void drawCoordinates(Graphics2D g2, int i) {
         //noinspection MagicNumber
         g2.setColor(new Color(240, 240, 240));
