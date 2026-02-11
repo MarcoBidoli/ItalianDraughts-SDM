@@ -1,16 +1,17 @@
-import italian_draughts.domain.*;
+import italian_draughts.domain.Board;
+import italian_draughts.domain.GameColor;
+import italian_draughts.domain.HumanPlayer;
+import italian_draughts.domain.Player;
 import italian_draughts.gui.BoardController;
 import italian_draughts.gui.BoardPanel;
-import italian_draughts.gui.DashboardPanel;
 import italian_draughts.gui.PaletteColors;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardPanelTest {
     Player w = new HumanPlayer(GameColor.WHITE);
