@@ -2,6 +2,9 @@ package italian_draughts.gui;
 
 import java.awt.*;
 
+/**
+ * A palette of colors used in the GUI.
+ */
 @SuppressWarnings("ClassWithTooManyFields")
 public class PaletteColors {
     protected final Color WOOD_LIGHT = new Color(223, 191, 159);
@@ -17,10 +20,18 @@ public class PaletteColors {
     protected final Color DRAW_BTT = new Color(52, 152, 219);
 
 
+    /**
+     * Gets the wood margin color.
+     * @return The wood margin color.
+     */
     public Color getWOOD_MARGIN() {
         return WOOD_MARGIN;
     }
 
+    /**
+     * Gets the wood dark color.
+     * @return The wood dark color.
+     */
     public Color getWOOD_DARK() {
         return WOOD_DARK;
     }

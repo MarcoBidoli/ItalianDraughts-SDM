@@ -1,11 +1,22 @@
 package italian_draughts.domain;
 
+/**
+ * Represents a move on the board.
+ */
 public class Move {
     private final int fromRow;
     private final int fromCol;
     private final int toRow;
     private final int toCol;
 
+    /**
+     * Creates a new Move.
+     * @param fromRow The starting row of the move.
+     * @param fromCol The starting column of the move.
+     * @param toRow The ending row of the move.
+     * @param toCol The ending column of the move.
+     * @throws IllegalArgumentException If the move is invalid.
+     */
     public Move(int fromRow, int fromCol, int toRow, int toCol) throws IllegalArgumentException {
         if (Board.positionIsOffBoard(fromRow, fromCol))
             throw new IllegalArgumentException("Start cell is not in board");

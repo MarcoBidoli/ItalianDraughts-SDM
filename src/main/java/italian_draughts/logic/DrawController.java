@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for the draw.
+ * It is responsible for checking if the game is a draw.
+ */
 public class DrawController {
 
     public static final int MAX_QUIET_MOVES = 40;
@@ -14,7 +18,14 @@ public class DrawController {
     private int quietMovesNoCapture = 0;
     private final Map<List<SquareEncoder>, Integer> visits = new HashMap<>();
 
-    // Ritorna true se scatta patta
+    /**
+     * Checks if the game is a draw.
+     * @param captureOccurred True if a capture occurred in the last move, false otherwise.
+     * @param board The board of the game.
+     * @param whitePlayer The white player.
+     * @param blackPlayer The black player.
+     * @return True if the game is a draw, false otherwise.
+     */
     public boolean checkDraw(boolean captureOccurred, Board board, Player whitePlayer, Player blackPlayer) {
         // 1) repetition rule
         if (checkRepetition()) {
@@ -52,6 +63,10 @@ public class DrawController {
         return quietMovesNoCapture >= MAX_QUIET_MOVES;
     }
 
+    /**
+     * Encodes the board.
+     * @param board The board of the game.
+     */
     public void boardEncoder(Board board) {
         List<SquareEncoder> encoding = new ArrayList<>();
         int index = 0;
@@ -67,6 +82,10 @@ public class DrawController {
         visits.merge(encoding, 1, Integer::sum);
     }
 
+    /**
+     * Checks if a repetition occurred.
+     * @return True if a repetition occurred, false otherwise.
+     */
     public boolean checkRepetition() {
         for (int count : visits.values()) {
             if (count >= 3) {
@@ -76,10 +95,17 @@ public class DrawController {
         return false;
     }
 
+    /**
+     * Returns the visits.
+     * @return The visits.
+     */
     public Map<List<SquareEncoder>, Integer> getVisits() {
         return visits;
     }
 
+    /**
+     * Clears the visits.
+     */
     public void clearVisits() {
         visits.clear();
     }

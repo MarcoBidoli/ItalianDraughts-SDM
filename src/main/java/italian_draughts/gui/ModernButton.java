@@ -3,8 +3,17 @@ package italian_draughts.gui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A modern button with rounded corners.
+ */
 public class ModernButton extends JButton {
 
+    /**
+     * Creates a new ModernButton.
+     * @param text The text of the button.
+     * @param bg The background color of the button.
+     * @param fg The foreground color of the button.
+     */
     public ModernButton(String text, Color bg, Color fg) {
         super(text);
         setBackground(bg);

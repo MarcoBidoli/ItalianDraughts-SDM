@@ -16,7 +16,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Main class of the application.
+ * It is the entry point of the program.
+ */
 public class Main {
+    /**
+     * Entry point of the program.
+     * It initializes the game and the GUI.
+     */
     void main() {
 
         Player w = new HumanPlayer(GameColor.WHITE);
