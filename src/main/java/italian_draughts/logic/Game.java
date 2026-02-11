@@ -47,10 +47,13 @@ public class Game {
         return (player == GameColor.BLACK) ? GameColor.WHITE : GameColor.BLACK;
     }
 
-    public void niente(int row, int col) {
+    //if row-col is the first selection, updates selectedPiece and its moves
+    //either way it process the turn
+    public void handleSelection(int row, int col) {
+        //if selectedPieceMoves is empty, skips to updateSelection, which fills it
         for(List<Move> move : selectedPieceMoves) {
             Move last = move.getLast();
-            if(last.toRow == row && last.toCol == col) {
+            if(last.toRow() == row && last.toCol() == col) {
                 try {
                     processTurn(new ArrayList<>(move));
                     return;
@@ -60,24 +63,34 @@ public class Game {
             }
         }
 
-        updateSelection(row, col);
+        updateSelectedPiece(row, col);
+        updateSelectedPieceMoves(row, col);
+        notifyObservers();
     }
 
-    private void updateSelection(int row, int col) {
+    private void updateSelectedPiece(int row, int col) {
         List<List<Move>> moves = getMovesFor(row, col);
 
         if(!moves.isEmpty()) {
             this.selectedSquare = new Square(row, col);
-            this.selectedPieceMoves = moves;
         } else {
             //when click on a piece with no possible moves, to remove green indicators
             this.selectedSquare = null;
-            this.selectedPieceMoves = new ArrayList<>();
         }
-        notifyObservers();
     }
 
-    public void processTurn(List<Move> moves) throws InvalidMoveException {
+    private void updateSelectedPieceMoves(int row, int col) {
+        List<List<Move>> moves = getMovesFor(row, col);
+
+        if(!moves.isEmpty()) {
+            this.selectedPieceMoves = moves;
+        } else {
+            //when click on a piece with no possible moves, to remove green indicators
+            this.selectedPieceMoves = new ArrayList<>();
+        }
+    }
+
+    private void processTurn(List<Move> moves) throws InvalidMoveException {
         if (status != GameStatus.ONGOING) return;
         if (moves == null || moves.isEmpty()) {
             throw new InvalidMoveException("Turn must contain at least one move");
@@ -149,21 +162,21 @@ public class Game {
 
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
-            Piece pieceToMove = board.getPieceAt(currentMove.fromRow, currentMove.fromCol);
+            Piece pieceToMove = board.getPieceAt(currentMove.fromRow(), currentMove.fromCol());
 
             //promotion
             promotionCheck(currentMove, pieceToMove);
 
             //moving
-            board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
-            board.emptyCell(currentMove.fromRow, currentMove.fromCol);
+            board.placePiece(pieceToMove, currentMove.toRow(), currentMove.toCol());
+            board.emptyCell(currentMove.fromRow(), currentMove.fromCol());
 
-            boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
+            boolean isCapture = Math.abs(currentMove.fromRow() - currentMove.toRow()) == 2;
             //if a capture, empty middle cell
             if (isCapture) {
                 captureOccurred = true;
-                board.emptyCell((currentMove.fromRow + currentMove.toRow) / 2,
-                        (currentMove.toCol + currentMove.fromCol) / 2);
+                board.emptyCell((currentMove.fromRow() + currentMove.toRow()) / 2,
+                        (currentMove.toCol() + currentMove.fromCol()) / 2);
                 visits.clear();
             }
         }
@@ -200,7 +213,7 @@ public class Game {
     }
 
     private static void promotionCheck(Move currentMove, Piece pieceToMove) {
-        if((currentMove.toRow == 0 || currentMove.toRow == 7) && !pieceToMove.isKing()){
+        if((currentMove.toRow() == 0 || currentMove.toRow() == 7) && !pieceToMove.isKing()){
             pieceToMove.setKing(true);
         }
     }
