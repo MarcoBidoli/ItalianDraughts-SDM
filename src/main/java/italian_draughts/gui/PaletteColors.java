@@ -2,6 +2,7 @@ package italian_draughts.gui;
 
 import java.awt.*;
 
+@SuppressWarnings("ClassWithTooManyFields")
 public class PaletteColors {
     protected final Color WOOD_LIGHT = new Color(223, 191, 159);
     protected final Color WOOD_DARK = new Color(153, 102, 51);

@@ -26,7 +26,7 @@ public class DrawController {
     }
 
     private boolean hasKing(Board board, Player player) {
-        GameColor playerColor = player.getColor();
+        GameColor playerColor = player.color();
         return Board.ALL_SQUARES.stream()
                 .anyMatch(square -> {
                     Piece p = board.getPieceAt(square.row(), square.col());

@@ -55,7 +55,7 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     private void handleDrawRequest() {
-        GameColor req = game.getCurrentPlayer().getColor();
+        GameColor req = game.getCurrentPlayer().color();
         GameColor opp = (req == GameColor.WHITE) ? GameColor.BLACK : GameColor.WHITE;
 
         int resp = JOptionPane.showConfirmDialog(this, req + " asks for DRAW. " + opp + " do you agree?", "Draw request", JOptionPane.YES_NO_OPTION);
@@ -67,7 +67,7 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     private void handleResign() {
-        GameColor loser = game.getCurrentPlayer().getColor();
+        GameColor loser = game.getCurrentPlayer().color();
         String winner = (loser == GameColor.WHITE) ? "BLACK" : "WHITE";
 
         int conf = JOptionPane.showConfirmDialog(this, loser + ", are you sure you want to call RESIGN?", "Resign", JOptionPane.YES_NO_OPTION);
@@ -100,16 +100,16 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     private void updateInfo() {
-        String turn = this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? "WHITE" : "BLACK";
+        String turn = this.game.getCurrentPlayer().color() == GameColor.WHITE ? "WHITE" : "BLACK";
         status.setText(turn + "'S TURN");
-        status.setForeground(this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+        status.setForeground(this.game.getCurrentPlayer().color() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
         Board board = this.game.getBoard();
         int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
         if(game.getStatus() == GameStatus.ONGOING) {
             status.setText(turn + "'S TURN");
-            status.setForeground(this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+            status.setForeground(this.game.getCurrentPlayer().color() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
         } else {
             status.setText("GAME OVER: " + getStringStatus(game.getStatus()));
             status.setForeground(Color.DARK_GRAY);

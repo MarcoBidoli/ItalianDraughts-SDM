@@ -15,12 +15,10 @@ import java.util.stream.Stream;
 public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
-    private final BoardController controller;
     private final PaletteColors colors;
     private final Game game;
 
     public BoardPanel(BoardController controller, Game game) {
-        this.controller = controller;
         this.colors = new PaletteColors();
         this.game = game;
         this.setPreferredSize(new Dimension(TILE_SIZE * 8 + OFFSET, TILE_SIZE * 8 + OFFSET));
@@ -52,6 +50,7 @@ public class BoardPanel extends JComponent implements GameObserver {
         });
     }
 
+    @SuppressWarnings("MethodWithMultipleLoops")
     @Override
     public void paintComponent(Graphics g) {
         final int HIGHLIGHT_OVAL_SIZE = 20;

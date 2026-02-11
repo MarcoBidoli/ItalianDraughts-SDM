@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface Player {
     Optional<Move> makeMove(Game game);
 
-    GameColor getColor();
+    GameColor color();
 }
