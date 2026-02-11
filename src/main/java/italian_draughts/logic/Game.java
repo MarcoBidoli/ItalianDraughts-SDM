@@ -19,9 +19,9 @@ public class Game {
     private Square selectedSquare = null;
     private List<List<Move>> selectedPieceMoves = new ArrayList<>();
 
-    private final DrawControl drawControl;
-    private final WinControl winControl;
-    private final MoveControl moveControl;
+    private final DrawController drawController;
+    private final WinController winController;
+    private final MoveController moveController;
 
     private final List<GameObserver> observers = new ArrayList<>();
 
@@ -32,9 +32,9 @@ public class Game {
         this.currentPlayer = whitePlayer; // parte il bianco
         this.status = GameStatus.ONGOING;
 
-        this.drawControl = new DrawControl();
-        this.winControl = new WinControl();
-        this.moveControl = new MoveControl(drawControl);
+        this.drawController = new DrawController();
+        this.winController = new WinController();
+        this.moveController = new MoveController(drawController);
     }
 
     public Player getCurrentPlayer() {
@@ -114,14 +114,14 @@ public class Game {
             throw new InvalidMoveException("Turn must contain at least one move");
         }
 
-        boolean captureOccurred = moveControl.movePieces(moves, this.gameBoard);
+        boolean captureOccurred = moveController.movePieces(moves, this.gameBoard);
 
         // clear selection
         this.selectedSquare = null;
         this.selectedPieceMoves = new ArrayList<>();
 
         // draw
-        if (drawControl.checkDraw(captureOccurred, gameBoard, whitePlayer, blackPlayer)) {
+        if (drawController.checkDraw(captureOccurred, gameBoard, whitePlayer, blackPlayer)) {
             status = GameStatus.DRAW;
             notifyObservers();
             return;
@@ -129,7 +129,7 @@ public class Game {
 
         // win
         nextTurn();
-        GameStatus winStatus = winControl.checkWin(gameBoard, currentPlayer);
+        GameStatus winStatus = winController.checkWin(gameBoard, currentPlayer);
         if (winStatus != GameStatus.ONGOING) {
             status = winStatus;
         }
@@ -144,11 +144,11 @@ public class Game {
     }
 
     public void calculateLegalMoves() {
-        winControl.calculateLegalMoves(gameBoard, currentPlayer);
+        winController.calculateLegalMoves(gameBoard, currentPlayer);
     }
 
     public List<List<Move>> getCurrentLegalMoves() {
-        return winControl.getCurrentLegalMoves();
+        return winController.getCurrentLegalMoves();
     }
 
     // ========== DRAW / RESIGN ==========
@@ -192,18 +192,18 @@ public class Game {
     // ========== DEBUG / SUPPORT METHODS ==========
 
     public Map<List<SquareEncoder>, Integer> getVisits() {
-        return drawControl.getVisits();
+        return drawController.getVisits();
     }
 
     public boolean checkRepetition() {
-        return drawControl.checkRepetition();
+        return drawController.checkRepetition();
     }
 
     public void boardEncoder(Board board) {
-        drawControl.boardEncoder(board);
+        drawController.boardEncoder(board);
     }
 
     public boolean movePieces(List<Move> move, Board board) throws InvalidMoveException {
-        return moveControl.movePieces(move, board);
+        return moveController.movePieces(move, board);
     }
 }
