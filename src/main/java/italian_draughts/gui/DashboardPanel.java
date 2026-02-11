@@ -114,6 +114,7 @@ public class DashboardPanel extends JComponent implements GameObserver {
         } else {
             status.setText("GAME OVER: " + getStringStatus(game.getStatus()));
             status.setForeground(Color.DARK_GRAY);
+            JOptionPane.showMessageDialog(this, getStringStatus(game.getStatus()), "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
