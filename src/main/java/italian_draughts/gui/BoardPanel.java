@@ -87,7 +87,7 @@ public class BoardPanel extends JComponent implements GameObserver {
                 g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 // Create a "hit zone" visual to tell the player which pieces can move
-                drawPossibleMoves(row, col, allMoves, g2, x, y);
+                highlightPlayablePieces(row, col, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
                 if (selectedSquare != null && selectedSquare.row() == row && selectedSquare.col() == col) {
@@ -103,10 +103,10 @@ public class BoardPanel extends JComponent implements GameObserver {
             }
         }
 
-        drawIndicators(g2, selectedPieceMoves);
+        drawMoveLandings(g2, selectedPieceMoves);
     }
 
-    private void drawIndicators(Graphics2D g2, List<List<Move>> moves) {
+    private void drawMoveLandings(Graphics2D g2, List<List<Move>> moves) {
         final int DOT_SIZE = 20;
         // Draw suggested move indicators (Green Dots)
         g2.setColor(colors.HIGHLIGHT_MOVE);
@@ -181,7 +181,7 @@ public class BoardPanel extends JComponent implements GameObserver {
         g2.drawPolygon(px, py, 7);
     }
 
-    private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
+    private void highlightPlayablePieces(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
         final int currentRow = i;
         final int currentCol = j;
 
