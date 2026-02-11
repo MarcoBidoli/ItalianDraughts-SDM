@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardPanelTest {
     Player w = new HumanPlayer(GameColor.WHITE);
