@@ -30,7 +30,7 @@ public class EatingLegalMovesTest {
     }
 
     @Test
-    public void doubleEat() throws InvalidMoveException {
+    public void doubleEat(){
         Board board = new Board();
         String boardString = "------------------b---------------b--------w--------------------";
         board.stringToBoard(boardString);
@@ -142,7 +142,7 @@ public class EatingLegalMovesTest {
     }
 
     @Test
-    public void multipleBestEatings() throws InvalidMoveException {
+    public void multipleBestEatings(){
         Board board = new Board();
         String stringBoard = "----------------------------------B-B------W--------------------";
         board.stringToBoard(stringBoard);

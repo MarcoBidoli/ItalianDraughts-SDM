@@ -1,11 +1,11 @@
 import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameStatusTest {
     Player w = new HumanPlayer(GameColor.WHITE);
@@ -18,11 +18,11 @@ public class GameStatusTest {
     }
 
     @Test
-    void whiteWinsWhenNoBlackPiecesRemain() throws InvalidMoveException {
+    void whiteWinsWhenNoBlackPiecesRemain(){
+        //TODO: implementing this test
+        //Just prepare a board with no moves and check status
     }
 
-    // TODO: remove the move after Ale&Fede refactoring
-    // Just prepare a board with no moves and check status
     @Test
     public void testWinConditionWhenNoMovesAvailable() throws InvalidMoveException {
         Game game = new Game(w, b);
@@ -45,8 +45,4 @@ public class GameStatusTest {
         assertEquals(GameStatus.WHITE_WINS, game.getStatus(),"White should win if Black has no legal moves left.");
     }
 
-    private static void handleMove(Game game, List<Move> move) {
-        game.handleSelection(move.getFirst().fromRow(), move.getFirst().fromCol());
-        game.handleSelection(move.getFirst().toRow(), move.getFirst().toCol());
-    }
 }
