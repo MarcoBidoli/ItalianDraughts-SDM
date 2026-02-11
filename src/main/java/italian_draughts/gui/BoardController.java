@@ -23,6 +23,10 @@ public class BoardController {
         game.resignHandling(loser);
     }
 
+    public void draw() {
+        game.agreedDrawHandling();
+    }
+
     private void checkGameOver() {
         GameStatus status = game.getStatus();
         if (status != GameStatus.ONGOING) {
