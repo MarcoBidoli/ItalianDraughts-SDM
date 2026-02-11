@@ -76,7 +76,7 @@ public class BoardTest {
         assertEquals(testPiece.isKing(), board.isKingAt(7,1));
     }
     @Test
-    public void checkStringToBoard() throws InvalidMoveException {
+    public void checkStringToBoard(){
         Board board = new Board();
         board.initCells();
         String strTest = "--w-------------b-----------------------------------------------";
