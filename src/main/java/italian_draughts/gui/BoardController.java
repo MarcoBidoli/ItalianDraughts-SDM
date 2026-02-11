@@ -19,6 +19,10 @@ public class BoardController {
         game.handleSelection(row, col);
     }
 
+    public void resign(GameColor loser) {
+        game.resignHandling(loser);
+    }
+
     private void checkGameOver() {
         GameStatus status = game.getStatus();
         if (status != GameStatus.ONGOING) {
