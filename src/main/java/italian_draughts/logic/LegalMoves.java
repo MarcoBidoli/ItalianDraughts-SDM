@@ -19,7 +19,7 @@ public class LegalMoves {
     public List<List<Move>> getSinglePieceLegalMoves(int row, int col) throws InvalidMoveException {
         List<List<Move>> allMoves = getLegalMoves();
         return allMoves.stream()
-                .filter(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col)
+                .filter(m -> m.getFirst().fromRow() == row && m.getFirst().fromCol() == col)
                 .toList();
     }
 
