@@ -55,7 +55,7 @@ public class Game {
             throw new IllegalArgumentException("Player cannot be null");
         }
 
-        return (player.getColor() == GameColor.BLACK) ? this.whitePlayer : this.blackPlayer;
+        return (player.color() == GameColor.BLACK) ? this.whitePlayer : this.blackPlayer;
     }
 
     // SELECTION
@@ -99,12 +99,8 @@ public class Game {
     }
 
     public List<List<Move>> getMovesFor(int row, int col) {
-        try {
-            LegalMoves legalMoves = new LegalMoves(gameBoard, currentPlayer.getColor());
-            return legalMoves.getSinglePieceLegalMoves(row, col);
-        } catch (InvalidMoveException e) {
-            throw new RuntimeException(e);
-        }
+        LegalMoves legalMoves = new LegalMoves(gameBoard, currentPlayer.color());
+        return legalMoves.getSinglePieceLegalMoves(row, col);
     }
 
     // TURN ORCHESTRATION

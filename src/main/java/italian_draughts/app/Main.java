@@ -1,12 +1,14 @@
 package italian_draughts.app;
+
 import italian_draughts.domain.Board;
-import italian_draughts.gui.BoardController;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.HumanPlayer;
 import italian_draughts.domain.Player;
 import italian_draughts.gui.BoardPanel;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameController;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +26,7 @@ public class Main {
         gameBoard.setGame();
         game.calculateLegalMoves();
 
-        BoardController controller = new BoardController(game);
+        GameController controller = new GameController(game);
         BoardPanel board = new BoardPanel(controller, game);
         DashboardPanel dashboard = new DashboardPanel(game, controller);
 
