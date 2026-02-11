@@ -4,7 +4,6 @@ import italian_draughts.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Game {
 
@@ -196,19 +195,5 @@ public class Game {
 
     public List<List<Move>> getSelectedPieceMoves() {
         return selectedPieceMoves;
-    }
-
-    // DEBUG / SUPPORT METHODS
-
-    public Map<List<SquareEncoder>, Integer> getVisits() {
-        return drawController.getVisits();
-    }
-
-    public boolean checkRepetition() {
-        return drawController.checkRepetition();
-    }
-
-    public void boardEncoder(Board board) {
-        drawController.boardEncoder(board);
     }
 }
