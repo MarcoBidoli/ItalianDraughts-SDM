@@ -45,7 +45,7 @@ public class BoardPanel extends JComponent implements GameObserver {
                 List<List<Move>> currentLegalMoves = controller.getGameCurrentLegalMoves();
                 Stream<List<Move>> legalMovesStream = currentLegalMoves.stream();
                 boolean isSelectable = legalMovesStream
-                        .anyMatch(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col);
+                        .anyMatch(m -> m.getFirst().fromRow() == row && m.getFirst().fromCol() == col);
 
                 setCursor(isSelectable ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : Cursor.getDefaultCursor());
             }
@@ -112,8 +112,8 @@ public class BoardPanel extends JComponent implements GameObserver {
         g2.setColor(colors.HIGHLIGHT_MOVE);
         for (List<Move> seq : moves) {
             Move lastMove = seq.getLast();
-            int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
-            int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
+            int cx = lastMove.toCol() * TILE_SIZE + OFFSET + TILE_SIZE / 2;
+            int cy = lastMove.toRow() * TILE_SIZE + TILE_SIZE / 2;
             g2.fillOval(cx - DOT_SIZE / 2, cy - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
         }
     }
@@ -188,7 +188,7 @@ public class BoardPanel extends JComponent implements GameObserver {
         Stream<List<Move>> allMovesStream = allMoves.stream();
         boolean isSelectable = allMovesStream.anyMatch(m -> {
             Move firstMove = m.getFirst();
-            return firstMove.fromRow == currentRow && firstMove.fromCol == currentCol;
+            return firstMove.fromRow() == currentRow && firstMove.fromCol() == currentCol;
         });
 
         if (isSelectable) {
