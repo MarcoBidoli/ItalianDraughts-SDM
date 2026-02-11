@@ -57,7 +57,7 @@ public class Game {
         return (player.getColor() == GameColor.BLACK) ? this.whitePlayer : this.blackPlayer;
     }
 
-    // ========== SELECTION  ==========
+    // SELECTION
 
     public void handleSelection(int row, int col) {
         for (List<Move> move : selectedPieceMoves) {
@@ -106,7 +106,7 @@ public class Game {
         }
     }
 
-    // ========== TURN ORCHESTRATION ==========
+    // TURN ORCHESTRATION
 
     private void processTurn(List<Move> moves) throws InvalidMoveException {
         if (status != GameStatus.ONGOING) return;
@@ -137,7 +137,7 @@ public class Game {
         notifyObservers();
     }
 
-    // ========== STATUS / LEGAL MOVES ==========
+    // STATUS / LEGAL MOVES
 
     public GameStatus getStatus() {
         return status;
@@ -167,7 +167,7 @@ public class Game {
         currentPlayer = player;
     }
 
-    // ========== OBSERVERS ==========
+    // OBSERVERS
 
     public void addObserver(GameObserver gameObserver) {
         observers.add(gameObserver);
@@ -179,7 +179,7 @@ public class Game {
         }
     }
 
-    // ========== GETTERS SELECTION ==========
+    // GETTERS SELECTION
 
     public Square getSelectedSquare() {
         return selectedSquare;
@@ -189,7 +189,7 @@ public class Game {
         return selectedPieceMoves;
     }
 
-    // ========== DEBUG / SUPPORT METHODS ==========
+    // DEBUG / SUPPORT METHODS
 
     public Map<List<SquareEncoder>, Integer> getVisits() {
         return drawController.getVisits();
