@@ -18,7 +18,8 @@ public class GameStatusTest {
     }
 
     @Test
-    void whiteWinsWhenNoBlackPiecesRemain() throws InvalidMoveException {
+    void whiteWinsWhenNoBlackPiecesRemain(){
+        //TODO: implementing this test
     }
 
     // TODO: remove the move after Ale&Fede refactoring
@@ -45,8 +46,4 @@ public class GameStatusTest {
         assertEquals(GameStatus.WHITE_WINS, game.getStatus(),"White should win if Black has no legal moves left.");
     }
 
-    private static void handleMove(Game game, List<Move> move) {
-        game.handleSelection(move.getFirst().fromRow(), move.getFirst().fromCol());
-        game.handleSelection(move.getFirst().toRow(), move.getFirst().toCol());
-    }
 }
