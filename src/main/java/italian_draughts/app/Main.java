@@ -26,7 +26,7 @@ public class Main {
 
         BoardController controller = new BoardController(game);
         BoardPanel board = new BoardPanel(controller, game);
-        DashboardPanel dashboard = new DashboardPanel(game);
+        DashboardPanel dashboard = new DashboardPanel(game, controller);
 
         game.addObserver(board);
         game.addObserver(dashboard);
