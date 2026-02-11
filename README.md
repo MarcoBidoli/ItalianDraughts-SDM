@@ -1,10 +1,11 @@
-# Italian Draughts - logic.Game
+# Italian Draughts - Game
 
 ## Introduction
-This repository was created fot the "Software Development Methods" exam at the University of Trieste.
+This repository was created for the "Software Development Methods" exam at the University of Trieste.
 
-The goal of this project is to develop a game using Test-Driven development (TDD) principles to iteratively improve the codebaase and follow the S.O.L.I.D. paradigm.
+The goal of this project is to develop a game using Test-Driven development (TDD) principles to iteratively improve the codebase and follow the S.O.L.I.D. paradigm.
 In addition, Agile methodologies were used to manage the project in a collaborative group environment.
+We also integrated **Continuous Integration** using **GitHub Actions** to automate the build and testing process.
 
 The game implemented is the Italian Draughts (checkers).
 
@@ -16,6 +17,7 @@ This project is built using Gradle and programmed in Java.
 - Apply Test-Driven Development (TDD)
 - Practice Agile development
 - Apply clean code and S.O.L.I.D. design principles
+- Implement Continuous Integration (CI)
 
 # Technologies
 
@@ -23,6 +25,7 @@ This project is built using Gradle and programmed in Java.
 - Gradle
 - JUnit
 - Git
+- GitHub Actions
 
 # Build instructions
 ```sh
@@ -34,9 +37,15 @@ This project is built using Gradle and programmed in Java.
 ./gradlew test
 ```
 
+# Run game
+```sh
+./gradlew run
+```
+
+
 # Javadocs
 ```sh
-javadoc -d docs/javadocs src/main/java/*.java
+javadoc -d docs/javadocs -sourcepath src/main/java -subpackages italian_draughts
 ```
 
 # Authors
