@@ -19,7 +19,9 @@ public class Game {
     private final Map<List<SquareEncoder>, Integer> visits;
     public static final int MAX_QUIET_MOVES = 40;
 
-    private List<List<Move>> currentLegalMoves;
+    private final List<GameObserver> observers = new ArrayList<>();
+    private List<List<Move>> currentLegalMoves;private Square selectedSquare = null;
+    private List<List<Move>> selectedPieceMoves = new ArrayList<>();
 
     public Game(Player whitePlayer, Player blackPlayer) {
         this.gameBoard = new Board(); // crea una nuova scacchiera vuota
@@ -51,26 +53,69 @@ public class Game {
         return (player.getColor() == GameColor.BLACK) ? this.whitePlayer : this.blackPlayer;
     }
 
-    public void processTurn(List<Move> moves) throws InvalidMoveException {
+    //if row-col is the first selection, updates selectedPiece and its moves
+    //either way it process the turn
+    public void handleSelection(int row, int col) {
+        //if selectedPieceMoves is empty, skips to updateSelection, which fills it
+        for(List<Move> move : selectedPieceMoves) {
+            Move last = move.getLast();
+            if(last.toRow() == row && last.toCol() == col) {
+                try {
+                    processTurn(new ArrayList<>(move));
+                    return;
+                } catch (InvalidMoveException e) {
+                    return;
+                }
+            }
+        }
+
+        updateSelectedPiece(row, col);
+        updateSelectedPieceMoves(row, col);
+        notifyObservers();
+    }
+
+    private void updateSelectedPiece(int row, int col) {
+        List<List<Move>> moves = getMovesFor(row, col);
+
+        if(!moves.isEmpty()) {
+            this.selectedSquare = new Square(row, col);
+        } else {
+            //when click on a piece with no possible moves, to remove green indicators
+            this.selectedSquare = null;
+        }
+    }
+
+    private void updateSelectedPieceMoves(int row, int col) {
+        List<List<Move>> moves = getMovesFor(row, col);
+
+        if(!moves.isEmpty()) {
+            this.selectedPieceMoves = moves;
+        } else {
+            //when click on a piece with no possible moves, to remove green indicators
+            this.selectedPieceMoves = new ArrayList<>();
+        }
+    }
+
+    private void processTurn(List<Move> moves) throws InvalidMoveException {
         if (status != GameStatus.ONGOING) return;
         if (moves == null || moves.isEmpty()) {
             throw new InvalidMoveException("Turn must contain at least one move");
         }
 
         // 1) Applica le mosse e ottieni info cattura (single source of truth)
-        boolean captureOccurred = movePieces(new ArrayList<>(moves), this.gameBoard);
+        boolean captureOccurred = movePieces(moves, this.gameBoard);
+
+        this.selectedSquare = null;
+        this.selectedPieceMoves = new ArrayList<>();
 
         // 2) Check draw (repetition + move-count)
         checkDraw(captureOccurred);
-        if (status != GameStatus.ONGOING) {
-            return; // in caso di DRAW, non cambia turno
+        if (status == GameStatus.ONGOING) {
+            nextTurn();
+            checkWin();
         }
 
-        // 3) Turno successivo
-        nextTurn();
-
-        // 4) Check win (pezzi finiti o nessuna mossa legale per il nuovo currentPlayer)
-        checkWin();
+        notifyObservers();
     }
 
     private boolean hasKing(Player player) {
@@ -124,21 +169,21 @@ public class Game {
 
         while (!move.isEmpty()) {
             Move currentMove = move.removeFirst();
-            Piece pieceToMove = board.getPieceAt(currentMove.fromRow, currentMove.fromCol);
+            Piece pieceToMove = board.getPieceAt(currentMove.fromRow(), currentMove.fromCol());
 
             //promotion
             promotionCheck(currentMove, pieceToMove);
 
             //moving
-            board.placePiece(pieceToMove, currentMove.toRow, currentMove.toCol);
-            board.emptyCell(currentMove.fromRow, currentMove.fromCol);
+            board.placePiece(pieceToMove, currentMove.toRow(), currentMove.toCol());
+            board.emptyCell(currentMove.fromRow(), currentMove.fromCol());
 
-            boolean isCapture = Math.abs(currentMove.fromRow - currentMove.toRow) == 2;
+            boolean isCapture = Math.abs(currentMove.fromRow() - currentMove.toRow()) == 2;
             //if a capture, empty middle cell
             if (isCapture) {
                 captureOccurred = true;
-                board.emptyCell((currentMove.fromRow + currentMove.toRow) / 2,
-                        (currentMove.toCol + currentMove.fromCol) / 2);
+                board.emptyCell((currentMove.fromRow() + currentMove.toRow()) / 2,
+                        (currentMove.toCol() + currentMove.fromCol()) / 2);
                 visits.clear();
             }
         }
@@ -175,7 +220,7 @@ public class Game {
     }
 
     private static void promotionCheck(Move currentMove, Piece pieceToMove) {
-        if((currentMove.toRow == 0 || currentMove.toRow == 7) && !pieceToMove.isKing()){
+        if((currentMove.toRow() == 0 || currentMove.toRow() == 7) && !pieceToMove.isKing()){
             pieceToMove.setKing(true);
         }
     }
@@ -231,10 +276,12 @@ public class Game {
 
     public void agreedDrawHandling(){
         status = GameStatus.DRAW;
+        notifyObservers();
     }
 
     public void resignHandling(GameColor loser) {
         status = (loser == GameColor.WHITE) ? GameStatus.BLACK_WINS : GameStatus.WHITE_WINS;
+        notifyObservers();
     }
 
     public void setCurrentTurn(Player player) {
@@ -242,4 +289,22 @@ public class Game {
     }
 
 
+    public void addObserver(GameObserver gameObserver) {
+        observers.add(gameObserver);
+    }
+
+    private void notifyObservers(){
+        for(GameObserver obs : observers) {
+            obs.modelChanged();
+        }
+    }
+
+
+    public Square getSelectedSquare() {
+        return selectedSquare;
+    }
+
+    public List<List<Move>> getSelectedPieceMoves() {
+        return selectedPieceMoves;
+    }
 }

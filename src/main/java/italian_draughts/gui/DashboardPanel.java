@@ -4,17 +4,22 @@ import italian_draughts.domain.Board;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.GameStatus;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameObserver;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class DashboardPanel extends JPanel {
+public class DashboardPanel extends JComponent implements GameObserver {
     private final JLabel status;
     private final JLabel count;
     private final Game game;
+    private final PaletteColors colors;
+    private final BoardController controller;
 
-    public DashboardPanel(Game game) {
+    public DashboardPanel(Game game, BoardController controller) {
         this.game = game;
-        PaletteColors colors = new PaletteColors();
+        this.colors = new PaletteColors();
+        this.controller = controller;
         //noinspection MagicNumber
         this.setLayout(new BorderLayout(20, 0));
         //noinspection MagicNumber
@@ -57,8 +62,7 @@ public class DashboardPanel extends JPanel {
 
         if(resp == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(this, "Game ends in an AGREED DRAW.");
-            game.agreedDrawHandling();
-            System.exit(0);
+            controller.draw();
         }
     }
 
@@ -70,12 +74,32 @@ public class DashboardPanel extends JPanel {
 
         if(conf == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(this, loser + " RESIGNED, " + winner + " WINS!");
-            game.resignHandling(loser);
-            System.exit(0);
+            controller.resign(loser);
         }
     }
 
-    public void updateInfo() {
+
+    @Override
+    public void modelChanged() {
+        updateInfo();
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setColor(colors.DASHBOARD_BG);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
+
+    }
+
+    private void updateInfo() {
         String turn = this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? "WHITE" : "BLACK";
         status.setText(turn + "'S TURN");
         status.setForeground(this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
@@ -83,9 +107,13 @@ public class DashboardPanel extends JPanel {
         int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
-        if(game.getStatus() != GameStatus.ONGOING) {
-            status.setText("GAME STATUS: " + getStringStatus(game.getStatus()));
+        if(game.getStatus() == GameStatus.ONGOING) {
+            status.setText(turn + "'S TURN");
+            status.setForeground(this.game.getCurrentPlayer().getColor() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+        } else {
+            status.setText("GAME OVER: " + getStringStatus(game.getStatus()));
             status.setForeground(Color.DARK_GRAY);
+            JOptionPane.showMessageDialog(this, getStringStatus(game.getStatus()), "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

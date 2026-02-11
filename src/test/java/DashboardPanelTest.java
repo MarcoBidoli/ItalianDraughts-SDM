@@ -1,4 +1,5 @@
 import italian_draughts.domain.*;
+import italian_draughts.gui.BoardController;
 import italian_draughts.gui.DashboardPanel;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,9 @@ public class DashboardPanelTest {
         board.placePiece(GameColor.WHITE, 7, 3);
         board.placePiece(GameColor.BLACK, 0, 0);
 
-        DashboardPanel dBP = new DashboardPanel(game);
-        dBP.updateInfo();
+        DashboardPanel dBP = new DashboardPanel(game, new BoardController(game));
+        game.addObserver(dBP);
+        dBP.modelChanged();
 
         String statusText = dBP.getStatusText();
         assertTrue(statusText.contains("WHITE"));
@@ -36,19 +38,26 @@ public class DashboardPanelTest {
         Game game = new Game(w, b);
         Board board = game.getBoard();
 
-        DashboardPanel dBP = new DashboardPanel(game);
-        dBP.updateInfo();
+        DashboardPanel dBP = new DashboardPanel(game, new BoardController(game));
+        game.addObserver(dBP);
+
+        String statusText = dBP.getStatusText();
+        assertTrue(statusText.contains("WHITE"));
 
         board.placePiece(GameColor.WHITE, 7, 1);
         board.placePiece(GameColor.WHITE, 7, 3);
         board.placePiece(GameColor.BLACK, 0, 0);
         List<Move> move = new ArrayList<>();
         move.add(new Move(7, 1, 6, 2));
-        game.processTurn(move);
 
-        dBP.updateInfo();
+        handleMove(game, move);
 
-        String statusText = dBP.getStatusText();
+        statusText = dBP.getStatusText();
         assertTrue(statusText.contains("BLACK"));
+    }
+
+    private static void handleMove(Game game, List<Move> move) {
+        game.handleSelection(move.getFirst().fromRow(), move.getFirst().fromCol());
+        game.handleSelection(move.getFirst().toRow(), move.getFirst().toCol());
     }
 }

@@ -2,34 +2,27 @@ package italian_draughts.gui;
 
 import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameObserver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class BoardPanel extends JComponent {
+public class BoardPanel extends JComponent implements GameObserver {
     private final int TILE_SIZE = 80;
     private final int OFFSET = 30;
-    private final Game game;
-    private List<List<Move>> filteredMoves = new ArrayList<>();
-    private Square selectedSquares = null;
-    private DashboardPanel dashboardPanel;
-
+    private final BoardController controller;
     private final PaletteColors colors;
+    private final Game game;
 
-    public BoardPanel(Game game, DashboardPanel dashboardPanel) {
-        this.game = game;
+    public BoardPanel(BoardController controller, Game game) {
+        this.controller = controller;
         this.colors = new PaletteColors();
-        this.dashboardPanel = dashboardPanel;
-        if (this.dashboardPanel != null) {
-            this.dashboardPanel.updateInfo();
-        }
-
+        this.game = game;
         this.setPreferredSize(new Dimension(TILE_SIZE * 8 + OFFSET, TILE_SIZE * 8 + OFFSET));
 
         this.addMouseListener(new MouseAdapter() {
@@ -38,7 +31,7 @@ public class BoardPanel extends JComponent {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
                 if (Board.onBoard(row, col)) {
-                    handleLogic(row, col);
+                    controller.actionPerformed(row, col);
                 }
             }
         });
@@ -49,48 +42,14 @@ public class BoardPanel extends JComponent {
                 int col = (e.getX() - OFFSET) / TILE_SIZE;
                 int row = e.getY() / TILE_SIZE;
 
-                List<List<Move>> currentLegalMoves = game.getCurrentLegalMoves();
+                List<List<Move>> currentLegalMoves = controller.getGameCurrentLegalMoves();
                 Stream<List<Move>> legalMovesStream = currentLegalMoves.stream();
                 boolean isSelectable = legalMovesStream
-                        .anyMatch(m -> m.getFirst().fromRow == row && m.getFirst().fromCol == col);
+                        .anyMatch(m -> m.getFirst().fromRow() == row && m.getFirst().fromCol() == col);
 
                 setCursor(isSelectable ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : Cursor.getDefaultCursor());
             }
         });
-    }
-
-    public void handleLogic(int row, int col) {
-        for (List<Move> move : filteredMoves) {
-            Move lastMove = move.getLast();
-            if (lastMove.toRow == row && lastMove.toCol == col) {
-                try {
-                    game.processTurn(new ArrayList<>(move));
-                    if (dashboardPanel != null) dashboardPanel.updateInfo();
-                    selectedSquares = null;
-                    filteredMoves = new ArrayList<>();
-                    repaint();
-
-                    checkGameOver();
-
-                    return;
-                } catch (InvalidMoveException e) {
-                    JOptionPane.showMessageDialog(this, "An error with the move has occurred!");
-                    return;
-                }
-            }
-        }
-
-        // Handle domain.Piece Selection
-        List<List<Move>> pieceMoves = game.getMovesFor(row, col);
-
-        if (!pieceMoves.isEmpty()) {
-            selectedSquares = new Square(row, col);
-            filteredMoves = pieceMoves;
-        } else {
-            selectedSquares = null;
-            filteredMoves = new ArrayList<>();
-        }
-        repaint();
     }
 
     @Override
@@ -105,6 +64,10 @@ public class BoardPanel extends JComponent {
 
         // Get all legal moves once per repaint cycle for performance
         List<List<Move>> allMoves = game.getCurrentLegalMoves();
+        Board board = game.getBoard();
+        Square selectedSquare = game.getSelectedSquare();
+        List<List<Move>> selectedPieceMoves = game.getSelectedPieceMoves();
+
 
         // Draw Wooden Margins/Frame
         g2.setColor(colors.WOOD_MARGIN);
@@ -112,46 +75,46 @@ public class BoardPanel extends JComponent {
         g2.fillRect(0, 8 * TILE_SIZE, 8 * TILE_SIZE + OFFSET, OFFSET); // Bottom horizontal bar
 
         // Iterate through the grid
-        for (int i = 0; i < 8; i++) {
+        for (int row = 0; row < 8; row++) {
             // Draw Coordinate Labels (8-1 and A-H)
-            drawCoordinates(g2, i);
-            for (int j = 0; j < 8; j++) {
-                int x = j * TILE_SIZE + OFFSET;
-                int y = i * TILE_SIZE;
+            drawCoordinates(g2, row);
+            for (int col = 0; col < 8; col++) {
+                int x = col * TILE_SIZE + OFFSET;
+                int y = row * TILE_SIZE;
 
                 // A. Draw Checkerboard Tiles
-                g2.setColor((i + j) % 2 == 0 ? colors.WOOD_DARK : colors.WOOD_LIGHT);
+                g2.setColor((row + col) % 2 == 0 ? colors.WOOD_DARK : colors.WOOD_LIGHT);
                 g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 // Create a "hit zone" visual to tell the player which pieces can move
-                drawPossibleMoves(i, j, allMoves, g2, x, y);
+                highlightPlayablePieces(row, col, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selectedSquares != null && selectedSquares.row() == i && selectedSquares.col() == j) {
+                if (selectedSquare != null && selectedSquare.row() == row && selectedSquare.col() == col) {
                     g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
 
                 // Draw the Piece (Must be drawn after highlights to appear on top)
-                Board board = game.getBoard();
-                Cell cell = board.getCell(i, j);
+                Cell cell = board.getCell(row, col);
                 if (!cell.isEmpty()) {
-                    drawPiece(g2, i, j, cell.getPiece());
+                    drawPiece(g2, row, col, cell.getPiece());
                 }
             }
         }
 
-        drawIndicators(g2, HIGHLIGHT_OVAL_SIZE);
+        drawMoveLandings(g2, selectedPieceMoves);
     }
 
-    private void drawIndicators(Graphics2D g2, int HIGHLIGHT_OVAL_SIZE) {
+    private void drawMoveLandings(Graphics2D g2, List<List<Move>> moves) {
+        final int DOT_SIZE = 20;
         // Draw suggested move indicators (Green Dots)
         g2.setColor(colors.HIGHLIGHT_MOVE);
-        for (List<Move> move : filteredMoves) {
-            Move lastMove = move.getLast();
-            int cx = lastMove.toCol * TILE_SIZE + OFFSET + TILE_SIZE / 2;
-            int cy = lastMove.toRow * TILE_SIZE + TILE_SIZE / 2;
-            g2.fillOval(cx - HIGHLIGHT_OVAL_SIZE /2, cy - HIGHLIGHT_OVAL_SIZE /2, HIGHLIGHT_OVAL_SIZE, HIGHLIGHT_OVAL_SIZE);
+        for (List<Move> seq : moves) {
+            Move lastMove = seq.getLast();
+            int cx = lastMove.toCol() * TILE_SIZE + OFFSET + TILE_SIZE / 2;
+            int cy = lastMove.toRow() * TILE_SIZE + TILE_SIZE / 2;
+            g2.fillOval(cx - DOT_SIZE / 2, cy - DOT_SIZE / 2, DOT_SIZE, DOT_SIZE);
         }
     }
 
@@ -218,39 +181,14 @@ public class BoardPanel extends JComponent {
         g2.drawPolygon(px, py, 7);
     }
 
-    private void checkGameOver() {
-        GameStatus status = game.getStatus();
-        if (status != GameStatus.ONGOING) {
-            String msg = switch (status) {
-                case GameStatus.WHITE_WINS -> "WHITE WINS!";
-                case GameStatus.BLACK_WINS -> "BLACK WINS!";
-                case GameStatus.DRAW -> "DRAW!";
-                default -> "";
-            };
-            JOptionPane.showMessageDialog(this, msg, "Game Over", JOptionPane.INFORMATION_MESSAGE);
-            System.exit(0);
-        }
-    }
-
-    public void setDashboardPanel(DashboardPanel dp) {
-        this.dashboardPanel = dp;
-        if (this.dashboardPanel != null) this.dashboardPanel.updateInfo();
-    }
-
-    public List<List<Move>> getFilteredMoves() {
-        return this.filteredMoves;
-    }
-
-    public Square getSelectedCoords() { return selectedSquares; }
-
-    private void drawPossibleMoves(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
+    private void highlightPlayablePieces(int i, int j, List<List<Move>> allMoves, Graphics2D g2, int x, int y) {
         final int currentRow = i;
         final int currentCol = j;
 
         Stream<List<Move>> allMovesStream = allMoves.stream();
         boolean isSelectable = allMovesStream.anyMatch(m -> {
             Move firstMove = m.getFirst();
-            return firstMove.fromRow == currentRow && firstMove.fromCol == currentCol;
+            return firstMove.fromRow() == currentRow && firstMove.fromCol() == currentCol;
         });
 
         if (isSelectable) {
@@ -291,4 +229,8 @@ public class BoardPanel extends JComponent {
         g2.drawString(String.valueOf((char) ('A' + i)), i * TILE_SIZE + OFFSET + TILE_SIZE / 2 - 5, 8 * TILE_SIZE + 22);
     }
 
+    @Override
+    public void modelChanged() {
+        repaint();
+    }
 }

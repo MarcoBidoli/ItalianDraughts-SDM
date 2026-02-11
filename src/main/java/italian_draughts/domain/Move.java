@@ -1,10 +1,10 @@
 package italian_draughts.domain;
 
 public class Move {
-    public int fromRow;
-    public int fromCol;
-    public int toRow;
-    public int toCol;
+    private int fromRow;
+    private int fromCol;
+    private int toRow;
+    private int toCol;
 
     public Move(int fromRow, int fromCol, int toRow, int toCol) throws IllegalArgumentException {
         if (Board.positionIsOffBoard(fromRow, fromCol))
@@ -33,5 +33,21 @@ public class Move {
         boolean matchingRows = fromRow == move.fromRow && toRow == move.toRow;
         boolean matchingCols = fromCol == move.fromCol && toCol == move.toCol;
         return matchingRows && matchingCols;
+    }
+
+    public int toRow() {
+        return toRow;
+    }
+
+    public int toCol() {
+        return toCol;
+    }
+
+    public int fromRow() {
+        return fromRow;
+    }
+
+    public int fromCol() {
+        return fromCol;
     }
 }

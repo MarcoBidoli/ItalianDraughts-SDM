@@ -51,10 +51,14 @@ public class GameTurnTest {
         board.placePiece(GameColor.WHITE, 5, 1);
         board.placePiece(GameColor.BLACK, 2, 2);
 
-        game.processTurn(List.of(new Move(5, 1, 4, 2)));
+        handleMove(game, List.of(new Move(5, 1, 4, 2)));
 
         assertEquals(b, game.getCurrentPlayer());
         assertEquals(GameStatus.ONGOING, game.getStatus());
     }
 
+    private static void handleMove(Game game, List<Move> move) {
+        game.handleSelection(move.getFirst().fromRow(), move.getFirst().fromCol());
+        game.handleSelection(move.getFirst().toRow(), move.getFirst().toCol());
+    }
 }

@@ -1,5 +1,6 @@
 package italian_draughts.app;
 import italian_draughts.domain.Board;
+import italian_draughts.gui.BoardController;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.HumanPlayer;
 import italian_draughts.domain.Player;
@@ -22,6 +23,16 @@ public class Main {
         Board gameBoard = game.getBoard();
         gameBoard.setGame();
         game.calculateLegalMoves();
+
+        BoardController controller = new BoardController(game);
+        BoardPanel board = new BoardPanel(controller, game);
+        DashboardPanel dashboard = new DashboardPanel(game, controller);
+
+        game.addObserver(board);
+        game.addObserver(dashboard);
+
+        board.modelChanged();
+        dashboard.modelChanged();
 
         JFrame frame = new JFrame("Italian Draughts");
 
@@ -48,13 +59,8 @@ public class Main {
 
         frame.setLayout(new BorderLayout());
 
-        DashboardPanel dashboardPanel = new DashboardPanel(game);
-        BoardPanel boardPanel = new BoardPanel(game, dashboardPanel);
-
-        boardPanel.setDashboardPanel(dashboardPanel);
-
-        frame.add(dashboardPanel, BorderLayout.NORTH);
-        frame.add(boardPanel, BorderLayout.SOUTH);
+        frame.add(dashboard, BorderLayout.NORTH);
+        frame.add(board, BorderLayout.SOUTH);
 
         frame.pack();
         frame.setResizable(false);

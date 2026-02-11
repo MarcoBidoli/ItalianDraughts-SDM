@@ -34,12 +34,16 @@ public class GameDrawTest {
         for (int i = 0; i < Game.MAX_QUIET_MOVES; i++) {
             int[] wFrom = whitePath[wIdx];
             int[] wTo = whitePath[(wIdx + 1) % whitePath.length];
-            game.processTurn(List.of(new Move(wFrom[0], wFrom[1], wTo[0], wTo[1])));
+
+            handleMove(game, List.of(new Move(wFrom[0], wFrom[1],wTo[0], wTo[1])));
+
             wIdx = (wIdx + 1) % whitePath.length;
 
             int[] bFrom = blackPath[bIdx];
             int[] bTo = blackPath[(bIdx + 1) % blackPath.length];
-            game.processTurn(List.of(new Move(bFrom[0], bFrom[1], bTo[0], bTo[1])));
+
+            handleMove(game, List.of(new Move(bFrom[0], bFrom[1], bTo[0], bTo[1])));
+
             bIdx = (bIdx + 1) % blackPath.length;
         }
 
@@ -67,12 +71,17 @@ public class GameDrawTest {
         // Repeat until DRAW is triggered by the repetition rule
         for (int i = 0; i < 3 && game.getStatus() == GameStatus.ONGOING; i++) {
             for (Move m : sequence) {
-                game.processTurn(List.of(m));
+                handleMove(game, List.of(m));
                 if (game.getStatus() != GameStatus.ONGOING) break;
             }
         }
 
         assertEquals(GameStatus.DRAW, game.getStatus());
+    }
+
+    private static void handleMove(Game game, List<Move> move) {
+        game.handleSelection(move.getFirst().fromRow(), move.getFirst().fromCol());
+        game.handleSelection(move.getFirst().toRow(), move.getFirst().toCol());
     }
 
 }
