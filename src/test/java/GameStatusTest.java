@@ -20,10 +20,9 @@ public class GameStatusTest {
     @Test
     void whiteWinsWhenNoBlackPiecesRemain(){
         //TODO: implementing this test
+        //Just prepare a board with no moves and check status
     }
 
-    // TODO: remove the move after Ale&Fede refactoring
-    // Just prepare a board with no moves and check status
     @Test
     public void testWinConditionWhenNoMovesAvailable() throws InvalidMoveException {
         Game game = new Game(w, b);
