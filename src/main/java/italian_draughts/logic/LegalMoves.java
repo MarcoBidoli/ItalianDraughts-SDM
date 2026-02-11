@@ -18,9 +18,12 @@ public class LegalMoves {
 
     public List<List<Move>> getSinglePieceLegalMoves(int row, int col) {
         List<List<Move>> allMoves = getLegalMoves();
-        return allMoves.stream()
-                .filter(m -> m.getFirst().fromRow() == row && m.getFirst().fromCol() == col)
-                .toList();
+        List<List<Move>> list = new ArrayList<>();
+        for (List<Move> allMove : allMoves) {
+            Move move = allMove.getFirst();
+            if (move.fromRow() == row && move.fromCol() == col) list.add(allMove);
+        }
+        return list;
     }
 
     public List<List<Move>> getLegalMoves() {
@@ -65,8 +68,10 @@ public class LegalMoves {
         if(e1.size() != e2.size())
             return false;
 
-        boolean isE1K = gameBoard.isKingAt(e1.getFirst().fromRow(), e1.getFirst().fromCol());
-        boolean isE2K = gameBoard.isKingAt(e2.getFirst().fromRow(), e2.getFirst().fromCol());
+        Move eating1 = e1.getFirst();
+        boolean isE1K = gameBoard.isKingAt(eating1.fromRow(), eating1.fromCol());
+        Move eating2 = e2.getFirst();
+        boolean isE2K = gameBoard.isKingAt(eating2.fromRow(), eating2.fromCol());
         if(isE1K != isE2K)
             return false;
 
@@ -80,8 +85,10 @@ public class LegalMoves {
                 return l;
 
             //who eats
-            boolean isE1K = gameBoard.isKingAt(e1.getFirst().fromRow(), e1.getFirst().fromCol());
-            boolean isE2K = gameBoard.isKingAt(e2.getFirst().fromRow(), e2.getFirst().fromCol());
+            Move eatingMove1 = e1.getFirst();
+            boolean isE1K = gameBoard.isKingAt(eatingMove1.fromRow(), eatingMove1.fromCol());
+            Move eatingMove2 = e2.getFirst();
+            boolean isE2K = gameBoard.isKingAt(eatingMove2.fromRow(), eatingMove2.fromCol());
             l = Boolean.compare(isE2K, isE1K);
             if (l != 0)
                 return l;

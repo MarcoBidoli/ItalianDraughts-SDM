@@ -3,7 +3,9 @@ package italian_draughts.gui;
 import italian_draughts.domain.Board;
 import italian_draughts.domain.GameColor;
 import italian_draughts.domain.GameStatus;
+import italian_draughts.domain.Player;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameController;
 import italian_draughts.logic.GameObserver;
 
 import javax.swing.*;
@@ -14,9 +16,9 @@ public class DashboardPanel extends JComponent implements GameObserver {
     private final JLabel count;
     private final Game game;
     private final PaletteColors colors;
-    private final BoardController controller;
+    private final GameController controller;
 
-    public DashboardPanel(Game game, BoardController controller) {
+    public DashboardPanel(Game game, GameController controller) {
         this.game = game;
         this.colors = new PaletteColors();
         this.controller = controller;
@@ -55,7 +57,8 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     private void handleDrawRequest() {
-        GameColor req = game.getCurrentPlayer().color();
+        Player currentPlayer = game.getCurrentPlayer();
+        GameColor req = currentPlayer.color();
         GameColor opp = (req == GameColor.WHITE) ? GameColor.BLACK : GameColor.WHITE;
 
         int resp = JOptionPane.showConfirmDialog(this, req + " asks for DRAW. " + opp + " do you agree?", "Draw request", JOptionPane.YES_NO_OPTION);
@@ -67,7 +70,8 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     private void handleResign() {
-        GameColor loser = game.getCurrentPlayer().color();
+        Player currentPlayer = game.getCurrentPlayer();
+        GameColor loser = currentPlayer.color();
         String winner = (loser == GameColor.WHITE) ? "BLACK" : "WHITE";
 
         int conf = JOptionPane.showConfirmDialog(this, loser + ", are you sure you want to call RESIGN?", "Resign", JOptionPane.YES_NO_OPTION);
@@ -100,16 +104,17 @@ public class DashboardPanel extends JComponent implements GameObserver {
     }
 
     private void updateInfo() {
-        String turn = this.game.getCurrentPlayer().color() == GameColor.WHITE ? "WHITE" : "BLACK";
+        Player currentPlayer = this.game.getCurrentPlayer();
+        String turn = (currentPlayer.color() == GameColor.WHITE) ? "WHITE" : "BLACK";
         status.setText(turn + "'S TURN");
-        status.setForeground(this.game.getCurrentPlayer().color() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+        status.setForeground(currentPlayer.color() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
         Board board = this.game.getBoard();
         int w = board.countColorPieces(GameColor.WHITE), b = board.countColorPieces(GameColor.BLACK);
         count.setText("PIECES COUNT: WHITE " + w + " | BLACK " + b);
 
         if(game.getStatus() == GameStatus.ONGOING) {
             status.setText(turn + "'S TURN");
-            status.setForeground(this.game.getCurrentPlayer().color() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
+            status.setForeground(currentPlayer.color() == GameColor.WHITE ? Color.GRAY : Color.BLACK);
         } else {
             status.setText("GAME OVER: " + getStringStatus(game.getStatus()));
             status.setForeground(Color.DARK_GRAY);

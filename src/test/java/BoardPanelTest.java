@@ -1,14 +1,12 @@
 import italian_draughts.domain.*;
-import italian_draughts.gui.BoardController;
+import italian_draughts.logic.GameController;
 import italian_draughts.gui.BoardPanel;
-import italian_draughts.gui.DashboardPanel;
 import italian_draughts.gui.PaletteColors;
 import italian_draughts.logic.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +18,7 @@ public class BoardPanelTest {
     public void showCorrectBoard() {
         PaletteColors colors = new PaletteColors();
         Game game = new Game(w, b);
-        BoardController controller = new BoardController(game);
+        GameController controller = new GameController(game);
         Board board = game.getBoard();
         board.setGame();
         BoardPanel panel = new BoardPanel(controller, game);

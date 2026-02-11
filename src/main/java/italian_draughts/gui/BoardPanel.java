@@ -2,6 +2,7 @@ package italian_draughts.gui;
 
 import italian_draughts.domain.*;
 import italian_draughts.logic.Game;
+import italian_draughts.logic.GameController;
 import italian_draughts.logic.GameObserver;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class BoardPanel extends JComponent implements GameObserver {
     private final PaletteColors colors;
     private final Game game;
 
-    public BoardPanel(BoardController controller, Game game) {
+    public BoardPanel(GameController controller, Game game) {
         this.colors = new PaletteColors();
         this.game = game;
         this.setPreferredSize(new Dimension(TILE_SIZE * 8 + OFFSET, TILE_SIZE * 8 + OFFSET));
@@ -43,7 +44,10 @@ public class BoardPanel extends JComponent implements GameObserver {
                 List<List<Move>> currentLegalMoves = controller.getGameCurrentLegalMoves();
                 Stream<List<Move>> legalMovesStream = currentLegalMoves.stream();
                 boolean isSelectable = legalMovesStream
-                        .anyMatch(m -> m.getFirst().fromRow() == row && m.getFirst().fromCol() == col);
+                        .anyMatch(m -> {
+                            Move move = m.getFirst();
+                            return move.fromRow() == row && move.fromCol() == col;
+                        });
 
                 setCursor(isSelectable ? Cursor.getPredefinedCursor(Cursor.HAND_CURSOR) : Cursor.getDefaultCursor());
             }
@@ -53,7 +57,6 @@ public class BoardPanel extends JComponent implements GameObserver {
     @SuppressWarnings("MethodWithMultipleLoops")
     @Override
     public void paintComponent(Graphics g) {
-        final int HIGHLIGHT_OVAL_SIZE = 20;
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 

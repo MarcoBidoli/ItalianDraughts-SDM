@@ -34,6 +34,7 @@ public class WinController {
         currentLegalMoves = lm.getLegalMoves();
     }
 
+    @SuppressWarnings("ChainedMethodCall")
     private boolean hasAnyPiece(Board board, Player player) {
         GameColor playerColor = player.color();
         return Board.ALL_SQUARES.stream()
