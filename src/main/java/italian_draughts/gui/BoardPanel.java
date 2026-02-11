@@ -65,7 +65,7 @@ public class BoardPanel extends JComponent implements GameObserver {
         // Get all legal moves once per repaint cycle for performance
         List<List<Move>> allMoves = game.getCurrentLegalMoves();
         Board board = game.getBoard();
-        Square selected = game.getSelectedSquare();
+        Square selectedSquare = game.getSelectedSquare();
         List<List<Move>> selectedPieceMoves = game.getSelectedPieceMoves();
 
 
@@ -90,7 +90,7 @@ public class BoardPanel extends JComponent implements GameObserver {
                 drawPossibleMoves(row, col, allMoves, g2, x, y);
 
                 // Highlight the currently selected square (Yellow overlay)
-                if (selected != null && selected.row() == row && selected.col() == col) {
+                if (selectedSquare != null && selectedSquare.row() == row && selectedSquare.col() == col) {
                     g2.setColor(colors.SELECTED_TILE);
                     g2.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
