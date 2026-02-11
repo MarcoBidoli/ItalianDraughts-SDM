@@ -30,13 +30,7 @@ public class BoardController {
     private void checkGameOver() {
         GameStatus status = game.getStatus();
         if (status != GameStatus.ONGOING) {
-            String msg = switch (status) {
-                case GameStatus.WHITE_WINS -> "WHITE WINS!";
-                case GameStatus.BLACK_WINS -> "BLACK WINS!";
-                case GameStatus.DRAW -> "DRAW!";
-                default -> "";
-            };
-            //JOptionPane.showMessageDialog(this, msg, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
             System.exit(0);
         }
     }
