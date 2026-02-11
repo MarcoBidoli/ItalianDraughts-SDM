@@ -20,8 +20,8 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(1, pieceEatings.size());
-        assertEquals(3, pieceEatings.getFirst().toRow);
-        assertEquals(1, pieceEatings.getFirst().toCol);
+        assertEquals(3, pieceEatings.getFirst().toRow());
+        assertEquals(1, pieceEatings.getFirst().toCol());
 
         Cell pieceEatenCell = board.getCell(4, 2);
         assertFalse(pieceEatenCell.isEmpty());
@@ -42,10 +42,10 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(2, pieceEatings.size());
-        assertEquals(3, pieceEatings.get(0).toRow);
-        assertEquals(1, pieceEatings.get(0).toCol);
-        assertEquals(1, pieceEatings.get(1).toRow);
-        assertEquals(3, pieceEatings.get(1).toCol);
+        assertEquals(3, pieceEatings.get(0).toRow());
+        assertEquals(1, pieceEatings.get(0).toCol());
+        assertEquals(1, pieceEatings.get(1).toRow());
+        assertEquals(3, pieceEatings.get(1).toCol());
 
         assertEquals(boardString, board.getBoardRepresentation());
     }
@@ -74,8 +74,8 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(1, pieceEatings.size());
-        assertEquals(2, pieceEatings.getFirst().toRow, "Obtained a wrong piece eaten - rows");
-        assertEquals(4, pieceEatings.getFirst().toCol, "Obtained a wrong piece eaten - cols");
+        assertEquals(2, pieceEatings.getFirst().toRow(), "Obtained a wrong piece eaten - rows");
+        assertEquals(4, pieceEatings.getFirst().toCol(), "Obtained a wrong piece eaten - cols");
     }
 
     @Test
@@ -91,13 +91,13 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(1, pieceEatings.size());
-        assertEquals(2, pieceEatings.getFirst().toRow, "Obtained a wrong piece eaten - rows");
-        assertEquals(0, pieceEatings.getFirst().toCol, "Obtained a wrong piece eaten - cols");
+        assertEquals(2, pieceEatings.getFirst().toRow(), "Obtained a wrong piece eaten - rows");
+        assertEquals(0, pieceEatings.getFirst().toCol(), "Obtained a wrong piece eaten - cols");
 
         pieceEatings = result.get(1);
         assertEquals(1, pieceEatings.size());
-        assertEquals(2, pieceEatings.getFirst().toRow);
-        assertEquals(4, pieceEatings.getFirst().toCol);
+        assertEquals(2, pieceEatings.getFirst().toRow());
+        assertEquals(4, pieceEatings.getFirst().toCol());
     }
 
     @Test
@@ -115,10 +115,10 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(2, pieceEatings.size());
-        assertEquals(3, pieceEatings.get(0).toRow, "1st Obtained a wrong piece eaten - rows");
-        assertEquals(7, pieceEatings.get(0).toCol, "1st Obtained a wrong piece eaten - cols");
-        assertEquals(1, pieceEatings.get(1).toRow, "2nd Obtained a wrong piece eaten - rows");
-        assertEquals(5, pieceEatings.get(1).toCol, "2nd Obtained a wrong piece eaten - cols");
+        assertEquals(3, pieceEatings.get(0).toRow(), "1st Obtained a wrong piece eaten - rows");
+        assertEquals(7, pieceEatings.get(0).toCol(), "1st Obtained a wrong piece eaten - cols");
+        assertEquals(1, pieceEatings.get(1).toRow(), "2nd Obtained a wrong piece eaten - rows");
+        assertEquals(5, pieceEatings.get(1).toCol(), "2nd Obtained a wrong piece eaten - cols");
     }
 
     @Test
@@ -135,10 +135,10 @@ public class EatingLegalMovesTest {
 
         List<Move> pieceEatings = result.getFirst();
         assertEquals(2, pieceEatings.size());
-        assertEquals(3, pieceEatings.get(0).toRow, "1st Obtained a wrong piece eaten - rows");
-        assertEquals(5, pieceEatings.get(0).toCol, "1st Obtained a wrong piece eaten - cols");
-        assertEquals(1, pieceEatings.get(1).toRow, "2nd Obtained a wrong piece eaten - rows");
-        assertEquals(3, pieceEatings.get(1).toCol, "2nd Obtained a wrong piece eaten - cols");
+        assertEquals(3, pieceEatings.get(0).toRow(), "1st Obtained a wrong piece eaten - rows");
+        assertEquals(5, pieceEatings.get(0).toCol(), "1st Obtained a wrong piece eaten - cols");
+        assertEquals(1, pieceEatings.get(1).toRow(), "2nd Obtained a wrong piece eaten - rows");
+        assertEquals(3, pieceEatings.get(1).toCol(), "2nd Obtained a wrong piece eaten - cols");
     }
 
     @Test
@@ -154,8 +154,8 @@ public class EatingLegalMovesTest {
             List<Move> move = result.get(i);
             assertEquals(1, move.size());
             Move first = move.getFirst();
-            assertEquals(3, first.toRow, "wrong row - " + i);
-            assertTrue(first.toCol == 5 || first.toCol == 1, "wrong column - " + i);
+            assertEquals(3, first.toRow(), "wrong row - " + i);
+            assertTrue(first.toCol() == 5 || first.toCol() == 1, "wrong column - " + i);
         }
 
         board.emptyBoard();
@@ -170,10 +170,10 @@ public class EatingLegalMovesTest {
             assertEquals(2, move.size(), "Couldn't complete eating - " + i);
             Move first = move.getFirst();
             Move second = move.get(1);
-            assertEquals(3, first.toRow);
-            assertEquals(5, first.toCol);
-            assertEquals(1, second.toRow);
-            assertTrue(second.toCol == 3 || second.toCol == 7, "wrong column - " + i);
+            assertEquals(3, first.toRow());
+            assertEquals(5, first.toCol());
+            assertEquals(1, second.toRow());
+            assertTrue(second.toCol() == 3 || second.toCol() == 7, "wrong column - " + i);
         }
     }
 }
