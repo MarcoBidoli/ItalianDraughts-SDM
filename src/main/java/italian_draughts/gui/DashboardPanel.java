@@ -62,8 +62,7 @@ public class DashboardPanel extends JComponent implements GameObserver {
 
         if(resp == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(this, "Game ends in an AGREED DRAW.");
-            game.agreedDrawHandling();
-            System.exit(0);
+            controller.draw();
         }
     }
 
